@@ -12,7 +12,7 @@ public class NoC {
     Router[][] routerMatrix;
 
     /**
-     * NoC constructor class
+     * NoC class constructor
      *
      * @param squareSize Mesh 2D X and Y axes size
      * @param NBVC       VC number per port
