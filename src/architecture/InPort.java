@@ -2,6 +2,10 @@ package architecture;
 
 import java.util.ArrayList;
 
+/**
+ * This class aims to define an Input Port which is located
+ * in one of fourth router edges
+ */
 public class InPort {
 
     ArrayList<VirtualChannel> vclist;
@@ -9,6 +13,12 @@ public class InPort {
     int id;
     int NumberofVCList;
 
+    /**
+     * InPort constructor class
+     * @param id input port ID
+     * @param NBVCLIST Number of VC per port
+     * @param NSlots size of VC buffer
+     */
     public InPort(int id, int NBVCLIST, int NSlots) {
         this.id = id;
         this.NumberofVCList = NBVCLIST;
