@@ -32,6 +32,14 @@ public class VirtualChannel {
         this.list = list;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public boolean isFree() {
+        return list.size() == 0;
+    }
+
     Boolean enqueueFlit(Flit f) {
         if (list.size() == size)
             return false;

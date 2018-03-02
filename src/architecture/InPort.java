@@ -17,9 +17,10 @@ public class InPort {
 
     /**
      * InPort constructor class
-     * @param id input port ID
+     *
+     * @param id       input port ID
      * @param NBVCLIST Number of VC per port
-     * @param NSlots size of VC buffer
+     * @param NSlots   size of VC buffer
      */
     public InPort(int id, int NBVCLIST, int NSlots) {
         this.id = id;
@@ -64,6 +65,23 @@ public class InPort {
 
     public void setNumberofVCList(int numberofVCList) {
         NumberofVCList = numberofVCList;
+    }
+
+    private int getFirstFreeVC() {
+        for (VirtualChannel channel : vclist) {
+            if (channel.isFree())
+                return channel.getId();
+        }
+
+        return -1;
+    }
+
+    public void accepteFlit(Flit flit) {
+        int freeVC = getFirstFreeVC();
+        vclist.get(freeVC).enqueueFlit(flit);
+
+        // If the entire packet has been arrived
+
     }
 
 }

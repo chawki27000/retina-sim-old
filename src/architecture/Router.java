@@ -101,9 +101,6 @@ public class Router {
         this.oDown = oDown;
     }
 
-    public void accepteFlit(Flit flit) {
-
-    }
 
     // TODO : send to next router
     public void forwardMessage(Message message) {
@@ -140,25 +137,24 @@ public class Router {
         // On X axe
         // By the West
         if (x > dx) {
-            oLeft.getDest().accepteFlit(flit);
+            oLeft.getDest().getInRight().accepteFlit(flit);
         }
 
         // By the East
         else if (x < dx) {
-            oRight.getDest().accepteFlit(flit);
+            oRight.getDest().getInLeft().accepteFlit(flit);
         }
         // On Y axe
         else {
             // By the North
             if (y > dy) {
-                oUp.getDest().accepteFlit(flit);
+                oUp.getDest().getInDown().accepteFlit(flit);
             }
             // By the South
             else if (y < dy) {
-                oDown.getDest().accepteFlit(flit);
-            }
-            // Destination Reached
-            else {
+                oDown.getDest().getInUp().accepteFlit(flit);
+            } else {
+                // Destination Reached
                 return true;
             }
         }
