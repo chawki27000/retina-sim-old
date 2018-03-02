@@ -40,4 +40,10 @@ public class Packet {
     public Flit getFlit(int index) {
         return flitList.get(index);
     }
+
+    public void setDestinationInfo(int[] dest) {
+        // Get Header Flit
+        Flit flit = flitList.get(0);
+        flit.setDestinationInfo(dest[0], dest[1]);
+    }
 }

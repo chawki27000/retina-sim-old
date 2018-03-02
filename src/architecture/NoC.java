@@ -1,5 +1,7 @@
 package architecture;
 
+import communication.Message;
+
 import java.util.ArrayList;
 
 /**
@@ -39,17 +41,18 @@ public class NoC {
      */
     private Router routerInitialisation(int NBVC, int VCSIZE, int x, int y) {
 
-        // Initialise Input routers
+        // Initialise Input ports
         InPort inUp = new InPort(0, NBVC, VCSIZE);
         InPort inRight = new InPort(1, NBVC, VCSIZE);
         InPort inDown = new InPort(2, NBVC, VCSIZE);
         InPort inLeft = new InPort(3, NBVC, VCSIZE);
 
-        // Initialise Output routers
+        // Initialise Output ports
         OutPort oUp = new OutPort(0);
         OutPort oRight = new OutPort(1);
         OutPort oDown = new OutPort(2);
         OutPort oLeft = new OutPort(3);
+
 
         return new Router(x, y, inLeft, inRight, inUp, inDown,
                 oLeft, oRight, oUp, oDown);
@@ -113,6 +116,25 @@ public class NoC {
             }
 
         }
+
+    }
+
+    /**
+     * @param source Coordinate array (x,y)
+     * @param dest Coordinate array (x,y)
+     */
+    public void sendMesssage(int[] source, int[] dest, int bits) {
+
+        // extract source and destination router coordinate
+        int sx = source[0], sy = source[1];
+        int dx = dest[0], dy = dest[1];
+
+        // New message creation
+        Message message = new Message(bits);
+        message.setDestinationInfo(dest);
+
+        // send to Local port
+        routerMatrix[sx][sy].forwardMessage(message);
 
     }
 

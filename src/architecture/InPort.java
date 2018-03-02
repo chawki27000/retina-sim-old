@@ -1,5 +1,7 @@
 package architecture;
 
+import communication.Flit;
+
 import java.util.ArrayList;
 
 /**

@@ -26,6 +26,12 @@ public class Message {
         }
     }
 
+    public void setDestinationInfo(int[] dest) {
+        for (Packet packet : packetList) {
+            packet.setDestinationInfo(dest);
+        }
+    }
+
     public ArrayList<Packet> getPacketList() {
         return packetList;
     }

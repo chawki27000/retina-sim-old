@@ -1,6 +1,12 @@
 package architecture;
 
 
+import communication.Flit;
+import communication.Message;
+import communication.Packet;
+
+import java.util.ArrayList;
+
 public class Router {
 
     int x, y;
@@ -93,6 +99,71 @@ public class Router {
 
     public void setoDown(OutPort oDown) {
         this.oDown = oDown;
+    }
+
+    public void accepteFlit(Flit flit) {
+
+    }
+
+    // TODO : send to next router
+    public void forwardMessage(Message message) {
+
+        int dx, dy;
+
+        // Slicing message in several packets
+        ArrayList<Packet> packetList = message.getPacketList();
+
+
+        for (Packet packet : packetList) {
+            // Slicing each packet in several flits
+            ArrayList<Flit> flitList = packet.getFlitList();
+
+            // Extract header flit information
+            dx = flitList.get(0).getDx();
+            dy = flitList.get(0).getDy();
+
+            for (Flit flit : flitList) {
+                // To Output port
+                nextDestination(flit, new int[]{dx, dy});
+            }
+        }
+
+
+    }
+
+    // TODO : compute next desination
+    private boolean nextDestination(Flit flit, int[] dest) {
+
+        // dest router coordinate
+        int dx = dest[0], dy = dest[1];
+
+        // On X axe
+        // By the West
+        if (x > dx) {
+            oLeft.getDest().accepteFlit(flit);
+        }
+
+        // By the East
+        else if (x < dx) {
+            oRight.getDest().accepteFlit(flit);
+        }
+        // On Y axe
+        else {
+            // By the North
+            if (y > dy) {
+                oUp.getDest().accepteFlit(flit);
+            }
+            // By the South
+            else if (y < dy) {
+                oDown.getDest().accepteFlit(flit);
+            }
+            // Destination Reached
+            else {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
