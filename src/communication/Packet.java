@@ -33,6 +33,10 @@ public class Packet {
         return id;
     }
 
+    public Flit getHeaderFlit() {
+        return flitList.get(0);
+    }
+
     public ArrayList<Flit> getFlitList() {
         return flitList;
     }

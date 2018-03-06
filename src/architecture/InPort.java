@@ -67,7 +67,7 @@ public class InPort {
         NumberofVCList = numberofVCList;
     }
 
-    private int getFirstFreeVC() {
+    public int getFirstFreeVC() {
         for (VirtualChannel channel : vclist) {
             if (channel.isFree())
                 return channel.getId();
@@ -76,11 +76,15 @@ public class InPort {
         return -1;
     }
 
-    public void accepteFlit(Flit flit) {
-        int freeVC = getFirstFreeVC();
+    public void accepteFlit(Flit flit, int freeVC) {
+
         vclist.get(freeVC).enqueueFlit(flit);
 
         // If the entire packet has been arrived
+        // we assume NSlots has the same size as number of flits by packet
+//        if ()
+        // TODO : fire an instruction to actual node
+        // TODO : in the case of when a messahe has not reached its dest
 
     }
 

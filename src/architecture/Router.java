@@ -112,47 +112,79 @@ public class Router {
 
 
         for (Packet packet : packetList) {
-            // Slicing each packet in several flits
-            ArrayList<Flit> flitList = packet.getFlitList();
+            // Get header flit to extract Dest router
+            Flit headerFlit = packet.getHeaderFlit();
 
             // Extract header flit information
-            dx = flitList.get(0).getDx();
-            dy = flitList.get(0).getDy();
+            dx = headerFlit.getDx();
+            dy = headerFlit.getDy();
 
-            for (Flit flit : flitList) {
-                // To Output port
-                nextDestination(flit, new int[]{dx, dy});
-            }
+
+            // To Output port
+            nextDestination(packet, new int[]{dx, dy});
         }
 
 
     }
 
     // TODO : compute next desination
-    private boolean nextDestination(Flit flit, int[] dest) {
+    private boolean nextDestination(Packet packet, int[] dest) {
 
         // dest router coordinate
         int dx = dest[0], dy = dest[1];
+        // Free VC ID
+        int freeVC = 0;
+
+        // Slicing each packet in several flits
+        ArrayList<Flit> flitList = packet.getFlitList();
 
         // On X axe
         // By the West
         if (x > dx) {
-            oLeft.getDest().getInRight().accepteFlit(flit);
+            // Get the free VC among VCs Input Port
+            freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+            // SENDING
+            for (Flit flit : flitList) {
+
+                oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+            }
         }
 
         // By the East
         else if (x < dx) {
-            oRight.getDest().getInLeft().accepteFlit(flit);
+            // Get the free VC among VCs Input Port
+            freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+            // SENDING
+            for (Flit flit : flitList) {
+
+                oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+            }
         }
         // On Y axe
         else {
             // By the North
             if (y > dy) {
-                oUp.getDest().getInDown().accepteFlit(flit);
+                // Get the free VC among VCs Input Port
+                freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+                // SENDING
+                for (Flit flit : flitList) {
+
+                    oUp.getDest().getInDown().accepteFlit(flit, freeVC);
+                }
             }
             // By the South
             else if (y < dy) {
-                oDown.getDest().getInUp().accepteFlit(flit);
+                // Get the free VC among VCs Input Port
+                freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+                // SENDING
+                for (Flit flit : flitList) {
+
+                    oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+                }
             } else {
                 // Destination Reached
                 return true;
