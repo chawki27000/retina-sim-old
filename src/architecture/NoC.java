@@ -134,7 +134,7 @@ public class NoC {
         message.setDestinationInfo(dest);
 
         // send to Local port
-        routerMatrix[sx][sy].forwardMessage(message);
+        routerMatrix[sx][sy].sendMessage(message);
 
     }
 

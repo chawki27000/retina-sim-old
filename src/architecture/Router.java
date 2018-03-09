@@ -101,37 +101,41 @@ public class Router {
         this.oDown = oDown;
     }
 
-
-    // TODO : send to next router
-    public void forwardMessage(Message message) {
-
-        int dx, dy;
+    /**
+     * Sending message function
+     * It's the function which can initiate a sending data
+     * from a router to another
+     * @param message
+     */
+    public void sendMessage(Message message) {
 
         // Slicing message in several packets
         ArrayList<Packet> packetList = message.getPacketList();
 
-
         for (Packet packet : packetList) {
-            // Get header flit to extract Dest router
-            Flit headerFlit = packet.getHeaderFlit();
-
-            // Extract header flit information
-            dx = headerFlit.getDx();
-            dy = headerFlit.getDy();
-
 
             // To Output port
-            nextDestination(packet, new int[]{dx, dy});
+            nextDestination(packet);
         }
-
 
     }
 
-    // TODO : compute next desination
-    private boolean nextDestination(Packet packet, int[] dest) {
+    /**
+     * Send a packet to its next router
+     * @param packet
+     * @return
+     */
+    private boolean nextDestination(Packet packet) {
 
-        // dest router coordinate
-        int dx = dest[0], dy = dest[1];
+        int dx, dy;
+
+        // Get header flit to extract Dest router
+        Flit headerFlit = packet.getHeaderFlit();
+
+        // Extract header flit information
+        dx = headerFlit.getDx();
+        dy = headerFlit.getDy();
+
         // Free VC ID
         int freeVC = 0;
 
@@ -192,6 +196,53 @@ public class Router {
         }
 
         return false;
+    }
+
+    /**
+     * Forward a packet when it's will arrive in a router
+     */
+    public void packetForward() {
+
+        Packet arrived = null;
+
+        // check if a VC buffer is full
+        if (inLeft.getFirstFullVC() != null) {
+            arrived = packetBuilding(inLeft.getFirstFullVC());
+        }
+
+        if (inRight.getFirstFullVC() != null) {
+            arrived = packetBuilding(inRight.getFirstFullVC());
+        }
+
+        if (inUp.getFirstFullVC() != null) {
+            arrived = packetBuilding(inUp.getFirstFullVC());
+        }
+
+        if (inDown.getFirstFullVC() != null) {
+            arrived = packetBuilding(inDown.getFirstFullVC());
+        }
+
+        nextDestination(arrived);
+
+    }
+
+    /**
+     * Rebuild a packet when the virtual channel that's contain him
+     * will be full
+     * @param channel
+     * @return
+     */
+    private Packet packetBuilding(VirtualChannel channel) {
+        // Get packet id
+        int id = channel.getList().get(0).getPacketID();
+        Packet packet = new Packet(id);
+        Flit tmp;
+
+        tmp = channel.getList().get(0);
+        packet.addFlit(tmp);
+        channel.dequeueFlit(tmp);
+
+        return packet;
     }
 
 }

@@ -5,7 +5,7 @@ public class Flit {
     FlitType type;
 
     // Only Header Flit
-    int dx, dy;
+    int dx, dy, packetID;
 
     public Flit(FlitType type) {
         this.type = type;
@@ -18,10 +18,11 @@ public class Flit {
     /*
     Only Header Flit
      */
-    public void setDestinationInfo(int dx, int dy) {
+    public void setDestinationInfo(int dx, int dy, int packetID) {
         if (type == FlitType.HEAD) {
             this.dx = dx;
             this.dy = dy;
+            this.packetID = packetID;
         }
     }
 
@@ -31,5 +32,9 @@ public class Flit {
 
     public int getDy() {
         return dy;
+    }
+
+    public int getPacketID() {
+        return packetID;
     }
 }

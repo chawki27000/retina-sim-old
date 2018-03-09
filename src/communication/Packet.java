@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Packet {
 
-    static int FlitDefaultSize = 16;
+    public static int FlitDefaultSize = 16;
 
     int id;
     ArrayList<Flit> flitList = new ArrayList<>();
@@ -48,6 +48,10 @@ public class Packet {
     public void setDestinationInfo(int[] dest) {
         // Get Header Flit
         Flit flit = flitList.get(0);
-        flit.setDestinationInfo(dest[0], dest[1]);
+        flit.setDestinationInfo(dest[0], dest[1], id);
+    }
+
+    public void addFlit(Flit flit) {
+        flitList.add(flit);
     }
 }

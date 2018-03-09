@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Message {
 
-    static int packetDefaultSize = 64;
+    public static int packetDefaultSize = 64;
 
     ArrayList<Packet> packetList = new ArrayList<>();
     int size;

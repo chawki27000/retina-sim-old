@@ -1,6 +1,9 @@
 package architecture;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import communication.Flit;
+import communication.Message;
+import communication.Packet;
 
 import java.util.ArrayList;
 
@@ -76,15 +79,18 @@ public class InPort {
         return -1;
     }
 
+    public VirtualChannel getFirstFullVC() {
+        for (VirtualChannel channel: vclist) {
+            if(channel.getSize() ==
+                    Message.packetDefaultSize / Packet.FlitDefaultSize)
+                return channel;
+        }
+        return null;
+    }
+
     public void accepteFlit(Flit flit, int freeVC) {
 
         vclist.get(freeVC).enqueueFlit(flit);
-
-        // If the entire packet has been arrived
-        // we assume NSlots has the same size as number of flits by packet
-//        if ()
-        // TODO : fire an instruction to actual node
-        // TODO : in the case of when a messahe has not reached its dest
 
     }
 
