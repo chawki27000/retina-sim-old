@@ -33,6 +33,10 @@ public class Router {
         return x;
     }
 
+    public int getY() {
+        return y;
+    }
+
     public void setX(int x) {
         this.x = x;
     }
@@ -105,6 +109,7 @@ public class Router {
      * Sending message function
      * It's the function which can initiate a sending data
      * from a router to another
+     *
      * @param message
      */
     public void sendMessage(Message message) {
@@ -122,6 +127,7 @@ public class Router {
 
     /**
      * Send a packet to its next router
+     *
      * @param packet
      * @return
      */
@@ -136,6 +142,9 @@ public class Router {
         dx = headerFlit.getDx();
         dy = headerFlit.getDy();
 
+        System.out.println("Sending packet : " + packet.getId() + " From : (" +
+                x + "," + y + ")" + " TO : (" + dx + "," + dy + ")");
+
         // Free VC ID
         int freeVC = 0;
 
@@ -144,8 +153,10 @@ public class Router {
 
         // On X axe
         // By the West
-        if (x > dx) {
+        if (x < dx) {
+            System.out.println("By West");
             // Get the free VC among VCs Input Port
+            System.out.println("next router : "+oLeft.getDest().getX() + " " + oLeft.getDest().getY());
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
             // SENDING
@@ -156,7 +167,8 @@ public class Router {
         }
 
         // By the East
-        else if (x < dx) {
+        else if (x > dx) {
+            System.out.println("By East");
             // Get the free VC among VCs Input Port
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
@@ -169,7 +181,8 @@ public class Router {
         // On Y axe
         else {
             // By the North
-            if (y > dy) {
+            if (y < dy) {
+                System.out.println("By North");
                 // Get the free VC among VCs Input Port
                 freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
@@ -180,7 +193,8 @@ public class Router {
                 }
             }
             // By the South
-            else if (y < dy) {
+            else if (y > dy) {
+                System.out.println("By South");
                 // Get the free VC among VCs Input Port
                 freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
@@ -229,6 +243,7 @@ public class Router {
     /**
      * Rebuild a packet when the virtual channel that's contain him
      * will be full
+     *
      * @param channel
      * @return
      */

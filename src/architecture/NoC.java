@@ -12,6 +12,7 @@ public class NoC {
 
     // TODO : work on NoC initialisation
     Router[][] routerMatrix;
+    int squareSize;
 
     /**
      * NoC class constructor
@@ -22,12 +23,18 @@ public class NoC {
      */
     public NoC(int squareSize, int NBVC, int VCSIZE) {
 
+        this.squareSize = squareSize;
+        routerMatrix = new Router[squareSize][squareSize];
+
         // Routers instantiation
         for (int i = 0; i < squareSize; i++) {
             for (int j = 0; j < squareSize; j++) {
                 routerMatrix[i][j] = routerInitialisation(NBVC, VCSIZE, i, j);
             }
         }
+
+        // NoC Building
+        routerLink();
     }
 
     /**
@@ -61,10 +68,8 @@ public class NoC {
     /**
      * This function links the routers between them
      * according to Mesh 2D topology
-     *
-     * @param squareSize Mesh 2D X and Y axes size
      */
-    private void routerLink(int squareSize) {
+    private void routerLink() {
 
         // construct temporary arrayList
         ArrayList<Router> temporaryList = new ArrayList<>();
@@ -87,7 +92,7 @@ public class NoC {
             int idDown = id + squareSize;
 
             // Link
-            if (idUp > 0) {
+            if (idUp >= 0) {
                 temporaryRouter = temporaryList.get(idUp);
                 temporaryList.get(i).getoUp().setDest(temporaryRouter);
             } else {
@@ -108,7 +113,7 @@ public class NoC {
                 temporaryList.get(i).getoRight().setDest(null);
             }
 
-            if (idLeft % squareSize != 1) {
+            if (id % squareSize != 0) {
                 temporaryRouter = temporaryList.get(idLeft);
                 temporaryList.get(i).getoLeft().setDest(temporaryRouter);
             } else {
@@ -121,7 +126,7 @@ public class NoC {
 
     /**
      * @param source Coordinate array (x,y)
-     * @param dest Coordinate array (x,y)
+     * @param dest   Coordinate array (x,y)
      */
     public void sendMesssage(int[] source, int[] dest, int bits) {
 

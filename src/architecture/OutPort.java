@@ -16,4 +16,8 @@ public class OutPort {
     public void setDest(Router dest) {
         this.dest = dest;
     }
+
+    public int getId() {
+        return id;
+    }
 }
