@@ -11,6 +11,6 @@ public class Main {
         int[] src = new int[]{0,0};
         int[] dest = new int[]{2,2};
 
-        noc.sendMesssage(src, dest, 2048);
+        noc.sendMesssage(src, dest, 128);
     }
 }

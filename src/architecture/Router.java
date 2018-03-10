@@ -156,13 +156,13 @@ public class Router {
         if (x < dx) {
             System.out.println("By West");
             // Get the free VC among VCs Input Port
-            System.out.println("next router : "+oLeft.getDest().getX() + " " + oLeft.getDest().getY());
-            freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+            System.out.println("next router : "+oRight.getDest().getX() + " " + oRight.getDest().getY());
+            freeVC = oRight.getDest().getInRight().getFirstFreeVC();
 
             // SENDING
             for (Flit flit : flitList) {
 
-                oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+                oRight.getDest().getInRight().accepteFlit(flit, freeVC);
             }
         }
 
@@ -175,7 +175,7 @@ public class Router {
             // SENDING
             for (Flit flit : flitList) {
 
-                oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+                oLeft.getDest().getInLeft().accepteFlit(flit, freeVC);
             }
         }
         // On Y axe
@@ -184,7 +184,7 @@ public class Router {
             if (y < dy) {
                 System.out.println("By North");
                 // Get the free VC among VCs Input Port
-                freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+                freeVC = oUp.getDest().getInRight().getFirstFreeVC();
 
                 // SENDING
                 for (Flit flit : flitList) {
@@ -196,7 +196,7 @@ public class Router {
             else if (y > dy) {
                 System.out.println("By South");
                 // Get the free VC among VCs Input Port
-                freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+                freeVC = oDown.getDest().getInRight().getFirstFreeVC();
 
                 // SENDING
                 for (Flit flit : flitList) {
