@@ -3,15 +3,17 @@ package architecture;
 import java.util.ArrayList;
 
 import communication.Flit;
+import psimjava.Process;
 
-public class VirtualChannel {
+public class VirtualChannel extends Process {
 
-    int id;
+    int idx;
     int size;
     ArrayList<Flit> list;
 
-    public VirtualChannel(int id, int size) {
-        this.id = id;
+    public VirtualChannel(int idx, int size) {
+        super(String.valueOf(idx));
+        this.idx = idx;
         this.size = size;
         list = new ArrayList<Flit>();
     }
@@ -32,8 +34,8 @@ public class VirtualChannel {
         this.list = list;
     }
 
-    public int getId() {
-        return id;
+    public int getIdx() {
+        return idx;
     }
 
     public boolean isFree() {
@@ -52,5 +54,10 @@ public class VirtualChannel {
             return false;
         list.remove(f);
         return true;
+    }
+
+    @Override
+    protected void Main_body() {
+
     }
 }

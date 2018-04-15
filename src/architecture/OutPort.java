@@ -1,12 +1,15 @@
 package architecture;
 
-public class OutPort {
+import psimjava.Process;
 
-    int id;
+public class OutPort extends Process {
+
+    int idx;
     Router dest;
 
-    public OutPort(int id) {
-        this.id = id;
+    public OutPort(int idx) {
+        super(String.valueOf(idx));
+        this.idx = idx;
     }
 
     public Router getDest() {
@@ -17,7 +20,12 @@ public class OutPort {
         this.dest = dest;
     }
 
-    public int getId() {
-        return id;
+    public int getIdx() {
+        return idx;
+    }
+
+    @Override
+    protected void Main_body() {
+
     }
 }

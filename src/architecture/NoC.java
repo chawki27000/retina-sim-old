@@ -1,6 +1,7 @@
 package architecture;
 
 import communication.Message;
+import psimjava.Process;
 
 import java.util.ArrayList;
 
@@ -8,10 +9,10 @@ import java.util.ArrayList;
  * This class aims to create and instantiate
  * a 2D NoC with all its components
  */
-public class NoC {
+public class NoC extends Process {
 
     // TODO : work on NoC initialisation
-    Router[][] routerMatrix;
+    public static Router[][] routerMatrix;
     int squareSize;
 
     /**
@@ -21,7 +22,8 @@ public class NoC {
      * @param NBVC       VC number per port
      * @param VCSIZE     size of VC buffer
      */
-    public NoC(int squareSize, int NBVC, int VCSIZE) {
+    public NoC(String name, int squareSize, int NBVC, int VCSIZE) {
+        super(name);
 
         this.squareSize = squareSize;
         routerMatrix = new Router[squareSize][squareSize];
@@ -61,7 +63,8 @@ public class NoC {
         OutPort oLeft = new OutPort(3);
 
 
-        return new Router(x, y, inLeft, inRight, inUp, inDown,
+        return new Router(x + " " + y, x, y,
+                inLeft, inRight, inUp, inDown,
                 oLeft, oRight, oUp, oDown);
     }
 
@@ -124,23 +127,21 @@ public class NoC {
 
     }
 
-    /**
-     * @param source Coordinate array (x,y)
-     * @param dest   Coordinate array (x,y)
-     */
-    public void sendMesssage(int[] source, int[] dest, int bits) {
+    public Router getRouter(int x, int y) {
+        return routerMatrix[x][y];
+    }
 
-        // extract source and destination router coordinate
-        int sx = source[0], sy = source[1];
-        int dx = dest[0], dy = dest[1];
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    protected void Main_body() {
+        System.out.println(get_name() + " created at: "+get_clock());
+        for (int i = 0; i < squareSize; i++) {
+            for (int j = 0; j < squareSize; j++) {
+                routerMatrix[i][j].start();
+            }
+        }
 
-        // New message creation
-        Message message = new Message(bits);
-        message.setDestinationInfo(dest);
-
-        // send to Local port
-        routerMatrix[sx][sy].sendMessage(message);
-
+        terminate();
     }
 
 }

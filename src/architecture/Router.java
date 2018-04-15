@@ -4,18 +4,28 @@ package architecture;
 import communication.Flit;
 import communication.Message;
 import communication.Packet;
+import psimjava.Process;
+import simulation_gen.NocSim;
 
 import java.util.ArrayList;
 
-public class Router {
+public class Router extends Process {
+
+    // Process attribute
+    private int x_dest = -1;
+    private int y_dest = -1;
+    private int bits_send = 0;
 
     int x, y;
-    InPort inLeft, inRight, inUp, inDown;
-    OutPort oLeft, oRight, oUp, oDown;
+    public static InPort inLeft, inRight, inUp, inDown;
+    public OutPort oLeft, oRight, oUp, oDown;
 
-    public Router(int x, int y, InPort inLeft, InPort inRight, InPort inUp,
-                  InPort inDown, OutPort oLeft, OutPort oRight, OutPort oUp,
+    public Router(String name, int x, int y, InPort inLeft,
+                  InPort inRight, InPort inUp,
+                  InPort inDown, OutPort oLeft,
+                  OutPort oRight, OutPort oUp,
                   OutPort oDown) {
+        super(name);
         this.x = x;
         this.y = y;
         this.inLeft = inLeft;
@@ -26,6 +36,7 @@ public class Router {
         this.oRight = oRight;
         this.oUp = oUp;
         this.oDown = oDown;
+
     }
 
 
@@ -110,9 +121,13 @@ public class Router {
      * It's the function which can initiate a sending data
      * from a router to another
      *
-     * @param message
+     * @param bits
      */
-    public void sendMessage(Message message) {
+    public void sendMessage(int bits, int[] dest) {
+
+        // New message creation
+        Message message = new Message(bits);
+        message.setDestinationInfo(dest);
 
         // Slicing message in several packets
         ArrayList<Packet> packetList = message.getPacketList();
@@ -156,7 +171,7 @@ public class Router {
         if (x < dx) {
             System.out.println("By West");
             // Get the free VC among VCs Input Port
-            System.out.println("next router : "+oRight.getDest().getX() + " " + oRight.getDest().getY());
+            System.out.println("next router : " + oRight.getDest().getX() + " " + oRight.getDest().getY());
             freeVC = oRight.getDest().getInRight().getFirstFreeVC();
 
             // SENDING
@@ -215,30 +230,30 @@ public class Router {
     /**
      * Forward a packet when it's will arrive in a router
      */
-    public void packetForward() {
-
-        Packet arrived = null;
-
-        // check if a VC buffer is full
-        if (inLeft.getFirstFullVC() != null) {
-            arrived = packetBuilding(inLeft.getFirstFullVC());
-        }
-
-        if (inRight.getFirstFullVC() != null) {
-            arrived = packetBuilding(inRight.getFirstFullVC());
-        }
-
-        if (inUp.getFirstFullVC() != null) {
-            arrived = packetBuilding(inUp.getFirstFullVC());
-        }
-
-        if (inDown.getFirstFullVC() != null) {
-            arrived = packetBuilding(inDown.getFirstFullVC());
-        }
-
-        nextDestination(arrived);
-
-    }
+//    public void packetForward() {
+//
+//        Packet arrived = null;
+//
+//        // check if a VC buffer is full
+//        if (inLeft.getFirstFullVC() != null) {
+//            arrived = packetBuilding(inLeft.getFirstFullVC());
+//        }
+//
+//        if (inRight.getFirstFullVC() != null) {
+//            arrived = packetBuilding(inRight.getFirstFullVC());
+//        }
+//
+//        if (inUp.getFirstFullVC() != null) {
+//            arrived = packetBuilding(inUp.getFirstFullVC());
+//        }
+//
+//        if (inDown.getFirstFullVC() != null) {
+//            arrived = packetBuilding(inDown.getFirstFullVC());
+//        }
+//
+//        nextDestination(arrived);
+//
+//    }
 
     /**
      * Rebuild a packet when the virtual channel that's contain him
@@ -248,7 +263,7 @@ public class Router {
      * @return
      */
     private Packet packetBuilding(VirtualChannel channel) {
-        // Get packet id
+        // Get packet idx
         int id = channel.getList().get(0).getPacketID();
         Packet packet = new Packet(id);
         Flit tmp;
@@ -260,4 +275,34 @@ public class Router {
         return packet;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void setSendingInfo(int x, int y, int bits) {
+        x_dest = x;
+        y_dest = y;
+        bits_send = bits;
+    }
+
+
+    @Override
+    protected void Main_body() {
+        System.out.println("Router " + get_name() + " created at: " + get_clock());
+
+        while (get_clock() < NocSim.simPeriod) {
+
+            if (x_dest > -1 && y_dest > -1) {
+                reactivate(this);
+
+                System.out.println("Router " + get_name() + " send at: " + get_clock());
+                sendMessage(bits_send, new int[]{x_dest, y_dest});
+
+
+            }
+            else {
+                deactivate(this);
+            }
+
+        }
+        terminate();
+
+    }
 }

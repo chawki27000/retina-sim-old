@@ -10,7 +10,7 @@ public class Message {
     int size;
 
     /**
-     * Message class contructor
+     * Message class constructor
      * It build a message and all inner packets
      *
      * @param size Message size

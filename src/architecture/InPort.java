@@ -1,9 +1,9 @@
 package architecture;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import communication.Flit;
 import communication.Message;
 import communication.Packet;
+import psimjava.Process;
 
 import java.util.ArrayList;
 
@@ -11,22 +11,24 @@ import java.util.ArrayList;
  * This class aims to define an Input Port which is located
  * in one of fourth router edges
  */
-public class InPort {
+public class InPort extends Process {
 
     ArrayList<VirtualChannel> vclist;
     Router src;
-    int id;
+    int idx;
     int NumberofVCList;
 
     /**
      * InPort constructor class
      *
-     * @param id       input port ID
+     * @param idx      input port ID
      * @param NBVCLIST Number of VC per port
      * @param NSlots   size of VC buffer
      */
-    public InPort(int id, int NBVCLIST, int NSlots) {
-        this.id = id;
+    public InPort(int idx, int NBVCLIST, int NSlots) {
+        super(String.valueOf(idx));
+
+        this.idx = idx;
         this.NumberofVCList = NBVCLIST;
         vclist = new ArrayList<VirtualChannel>();
         for (int i = 0; i < NumberofVCList; i++) {
@@ -54,12 +56,12 @@ public class InPort {
         this.src = src;
     }
 
-    public int getId() {
-        return id;
+    public int getIdx() {
+        return idx;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdx(int id) {
+        this.idx = id;
     }
 
     public int getNumberofVCList() {
@@ -73,15 +75,15 @@ public class InPort {
     public int getFirstFreeVC() {
         for (VirtualChannel channel : vclist) {
             if (channel.isFree())
-                return channel.getId();
+                return channel.getIdx();
         }
 
         return -1;
     }
 
     public VirtualChannel getFirstFullVC() {
-        for (VirtualChannel channel: vclist) {
-            if(channel.getSize() ==
+        for (VirtualChannel channel : vclist) {
+            if (channel.getSize() ==
                     Message.packetDefaultSize / Packet.FlitDefaultSize)
                 return channel;
         }
@@ -94,4 +96,11 @@ public class InPort {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @Override
+    protected void Main_body() {
+        System.out.println("InPort " + get_name() + " created at: " + get_clock());
+
+        terminate();
+    }
 }
