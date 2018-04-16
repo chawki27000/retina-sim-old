@@ -1,7 +1,7 @@
 package architecture;
 
-import communication.Message;
 import psimjava.Process;
+import simulation_gen.NocSim;
 
 import java.util.ArrayList;
 
@@ -134,13 +134,10 @@ public class NoC extends Process {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void Main_body() {
-        System.out.println(get_name() + " created at: "+get_clock());
-        for (int i = 0; i < squareSize; i++) {
-            for (int j = 0; j < squareSize; j++) {
-                routerMatrix[i][j].start();
-            }
-        }
+        System.out.println(get_name() + " activated at: "+get_clock());
 
+        routerMatrix[0][0].start();
+        routerMatrix[0][0].sendMessage(128, new int[]{1,0});
         terminate();
     }
 

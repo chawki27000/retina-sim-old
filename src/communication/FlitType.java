@@ -3,7 +3,8 @@ package communication;
 public enum FlitType {
 
     HEAD("Header"),
-    DATA("Data");
+    DATA("Data"),
+    TAIL("Tail");
 
     private String type = "";
 

@@ -2,8 +2,8 @@ package architecture;
 
 public class OutPort {
 
-    int idx;
-    Router dest;
+    private int idx;
+    private Router dest;
 
     public OutPort(int idx) {
         this.idx = idx;

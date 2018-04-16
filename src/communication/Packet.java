@@ -22,8 +22,10 @@ public class Packet {
         int numberOfFlit = Message.packetDefaultSize / Packet.FlitDefaultSize;
 
         for (int i = 0; i < numberOfFlit; i++) {
-            if (i == 0) // Header Flit
+            if (i == 0) // Head Flit
                 flitList.add(new Flit(FlitType.HEAD));
+            else if (i == numberOfFlit - 1) // Tail  Flit
+                flitList.add(new Flit(FlitType.TAIL));
             else // Data Flit
                 flitList.add(new Flit(FlitType.DATA));
         }

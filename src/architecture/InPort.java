@@ -12,10 +12,10 @@ import java.util.ArrayList;
  */
 public class InPort {
 
-    ArrayList<VirtualChannel> vclist;
-    Router src;
-    int idx;
-    int NumberofVCList;
+    private ArrayList<VirtualChannel> vclist;
+    private Router src;
+    private int idx;
+    private int NumberofVCList;
 
     /**
      * InPort constructor class

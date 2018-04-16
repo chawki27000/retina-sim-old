@@ -1,6 +1,7 @@
 package architecture;
 
 
+import communication.Direction;
 import communication.Flit;
 import communication.Message;
 import communication.Packet;
@@ -130,7 +131,7 @@ public class Router extends Process {
         for (Packet packet : packetList) {
 
             // To Output port
-            nextDestination(packet);
+            sendPacket(packet);
         }
 
     }
@@ -141,7 +142,7 @@ public class Router extends Process {
      * @param packet
      * @return
      */
-    private boolean nextDestination(Packet packet) {
+    private boolean sendPacket(Packet packet) {
 
         int dx, dy;
 
@@ -155,64 +156,49 @@ public class Router extends Process {
         System.out.println("Sending packet : " + packet.getId() + " From : (" +
                 x + "," + y + ")" + " TO : (" + dx + "," + dy + ")");
 
-        // Free VC ID
-        int freeVC = 0;
 
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
 
         // On X axe
         // By the West
-        if (x < dx) {
+        if (y > dy) {
             System.out.println("By West");
-            // Get the free VC among VCs Input Port
-            System.out.println("next router : " + oRight.getDest().getX() + " " + oRight.getDest().getY());
-            freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
-            // SENDING
             for (Flit flit : flitList) {
-
-                oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+                sendFlit(flit, Direction.WEST);
             }
+
         }
 
         // By the East
-        else if (x > dx) {
-            System.out.println("By West");
-            // Get the free VC among VCs Input Port
-            freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
+        else if (y < dy) {
+            System.out.println("By East");
 
-            // SENDING
             for (Flit flit : flitList) {
-
-                oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+                sendFlit(flit, Direction.EAST);
             }
+
         }
         // On Y axe
         else {
             // By the North
-            if (y > dy) {
+            if (x > dx) {
                 System.out.println("By North");
-                // Get the free VC among VCs Input Port
-                freeVC = oUp.getDest().getInRight().getFirstFreeVC();
 
-                // SENDING
                 for (Flit flit : flitList) {
-
-                    oUp.getDest().getInDown().accepteFlit(flit, freeVC);
+                    sendFlit(flit, Direction.NORTH);
                 }
+
             }
             // By the South
-            else if (y < dy) {
+            else if (x < dx) {
                 System.out.println("By South");
-                // Get the free VC among VCs Input Port
-                freeVC = oDown.getDest().getInRight().getFirstFreeVC();
 
-                // SENDING
                 for (Flit flit : flitList) {
-
-                    oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+                    sendFlit(flit, Direction.SOUTH);
                 }
+
             } else {
                 // Destination Reached
                 return true;
@@ -222,34 +208,65 @@ public class Router extends Process {
         return false;
     }
 
+    public void sendFlit(Flit flit, Direction direction) {
+
+        // Free VC ID
+        int freeVC = 0;
+
+        if (direction == Direction.WEST) {
+            System.out.println("Flit " + flit.getType() + " sended in WEST");
+            freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+            oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+
+        } else if (direction == Direction.EAST) {
+            System.out.println("Flit " + flit.getType() + " sended in EAST");
+            freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
+
+            oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+
+
+        } else if (direction == Direction.NORTH) {
+            System.out.println("Flit " + flit.getType() + " sended in NORTH");
+            freeVC = oUp.getDest().getInRight().getFirstFreeVC();
+
+
+            oUp.getDest().getInDown().accepteFlit(flit, freeVC);
+
+
+        } else if (direction == Direction.SOUTH) {
+            System.out.println("Flit " + flit.getType() + " sended in SOUTH");
+            freeVC = oDown.getDest().getInRight().getFirstFreeVC();
+
+            oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void Main_body() {
-        System.out.println("Router " + get_name() + " created at: " + get_clock());
-        double startTime = get_clock();
+
+        System.out.println("Router " + get_name() + " activated at: " + get_clock());
 
         while (get_clock() < NocSim.simPeriod) {
 
             // Non empty buffer testing (for flit forwarding)
             if (inLeft.getFirstNonEmptyVC() != null) {
                 System.out.println("Router " + get_name() + " inLeft Non Empty");
-            }
-            else if (inUp.getFirstNonEmptyVC() != null) {
+
+            } else if (inUp.getFirstNonEmptyVC() != null) {
                 System.out.println("Router " + get_name() + " inUp Non Empty");
-            }
-            else if (inRight.getFirstNonEmptyVC() != null){
+            } else if (inRight.getFirstNonEmptyVC() != null) {
                 System.out.println("Router " + get_name() + " inRight Non Empty");
-            }
-            else if (inDown.getFirstNonEmptyVC() != null){
+            } else if (inDown.getFirstNonEmptyVC() != null) {
                 System.out.println("Router " + get_name() + " inDown Non Empty");
-            }
-            else {
-                delay(1d);
+            } else {
                 System.out.println("Router " + get_name() + " deactivate at: " + get_clock());
                 deactivate(this);
             }
+            delay(125d);
         }
     }
 }

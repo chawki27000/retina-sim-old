@@ -54,7 +54,6 @@ public class NocSim extends Process {
 
         System.out.println("Simulation clock: "+ StaticSync.get_clock());
 
-
         System.exit(0);
     }
 }
