@@ -1,14 +1,11 @@
 package architecture;
 
-import psimjava.Process;
-
-public class OutPort extends Process {
+public class OutPort {
 
     int idx;
     Router dest;
 
     public OutPort(int idx) {
-        super(String.valueOf(idx));
         this.idx = idx;
     }
 
@@ -24,8 +21,4 @@ public class OutPort extends Process {
         return idx;
     }
 
-    @Override
-    protected void Main_body() {
-
-    }
 }

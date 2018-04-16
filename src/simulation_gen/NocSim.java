@@ -1,7 +1,6 @@
 package simulation_gen;
 
 import architecture.NoC;
-import architecture.Router;
 import psimjava.Process;
 import psimjava.Simulation;
 import psimjava.Squeue;
@@ -15,8 +14,11 @@ public class NocSim extends Process {
     // Passive Object
     public static Squeue sending_queue;
 
-    // Simulation Constant
+    // Event Cost
     public static double simPeriod = 125d; // simulation period
+    public static double meanFlitSending = 30;
+
+    // Simulation Constant
     public static int sendingBufferSize = 15;
 
     private static Simulation sim;
@@ -31,10 +33,7 @@ public class NocSim extends Process {
         sim = new Simulation("Network-on-Chip System Simulator");
 
         // Network-On-Chip Instantiation
-        noc = new NoC("NoC",2,8, 12);
-
-        // Initial sending
-        noc.getRouter(0,0).setSendingInfo(1,1,128);
+        noc = new NoC("NoC",2,1, 12);
 
         // starting NoC Process
         noc.start();

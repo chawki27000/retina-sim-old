@@ -3,7 +3,6 @@ package architecture;
 import communication.Flit;
 import communication.Message;
 import communication.Packet;
-import psimjava.Process;
 
 import java.util.ArrayList;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
  * This class aims to define an Input Port which is located
  * in one of fourth router edges
  */
-public class InPort extends Process {
+public class InPort {
 
     ArrayList<VirtualChannel> vclist;
     Router src;
@@ -26,11 +25,11 @@ public class InPort extends Process {
      * @param NSlots   size of VC buffer
      */
     public InPort(int idx, int NBVCLIST, int NSlots) {
-        super(String.valueOf(idx));
 
         this.idx = idx;
         this.NumberofVCList = NBVCLIST;
         vclist = new ArrayList<VirtualChannel>();
+
         for (int i = 0; i < NumberofVCList; i++) {
             vclist.add(new VirtualChannel(i, NSlots));
         }
@@ -81,11 +80,10 @@ public class InPort extends Process {
         return -1;
     }
 
-    public VirtualChannel getFirstFullVC() {
-        for (VirtualChannel channel : vclist) {
-            if (channel.getSize() ==
-                    Message.packetDefaultSize / Packet.FlitDefaultSize)
-                return channel;
+    public VirtualChannel getFirstNonEmptyVC() {
+        for (VirtualChannel vc : vclist) {
+            if (!vc.isFree())
+                return vc;
         }
         return null;
     }
@@ -96,11 +94,4 @@ public class InPort extends Process {
 
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    protected void Main_body() {
-        System.out.println("InPort " + get_name() + " created at: " + get_clock());
-
-        terminate();
-    }
 }

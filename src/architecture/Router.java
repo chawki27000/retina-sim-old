@@ -11,14 +11,9 @@ import java.util.ArrayList;
 
 public class Router extends Process {
 
-    // Process attribute
-    private int x_dest = -1;
-    private int y_dest = -1;
-    private int bits_send = 0;
-
     int x, y;
-    public static InPort inLeft, inRight, inUp, inDown;
-    public OutPort oLeft, oRight, oUp, oDown;
+    private InPort inLeft, inRight, inUp, inDown;
+    private OutPort oLeft, oRight, oUp, oDown;
 
     public Router(String name, int x, int y, InPort inLeft,
                   InPort inRight, InPort inUp,
@@ -172,31 +167,31 @@ public class Router extends Process {
             System.out.println("By West");
             // Get the free VC among VCs Input Port
             System.out.println("next router : " + oRight.getDest().getX() + " " + oRight.getDest().getY());
-            freeVC = oRight.getDest().getInRight().getFirstFreeVC();
-
-            // SENDING
-            for (Flit flit : flitList) {
-
-                oRight.getDest().getInRight().accepteFlit(flit, freeVC);
-            }
-        }
-
-        // By the East
-        else if (x > dx) {
-            System.out.println("By East");
-            // Get the free VC among VCs Input Port
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
 
             // SENDING
             for (Flit flit : flitList) {
 
-                oLeft.getDest().getInLeft().accepteFlit(flit, freeVC);
+                oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+            }
+        }
+
+        // By the East
+        else if (x > dx) {
+            System.out.println("By West");
+            // Get the free VC among VCs Input Port
+            freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
+
+            // SENDING
+            for (Flit flit : flitList) {
+
+                oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
             }
         }
         // On Y axe
         else {
             // By the North
-            if (y < dy) {
+            if (y > dy) {
                 System.out.println("By North");
                 // Get the free VC among VCs Input Port
                 freeVC = oUp.getDest().getInRight().getFirstFreeVC();
@@ -208,7 +203,7 @@ public class Router extends Process {
                 }
             }
             // By the South
-            else if (y > dy) {
+            else if (y < dy) {
                 System.out.println("By South");
                 // Get the free VC among VCs Input Port
                 freeVC = oDown.getDest().getInRight().getFirstFreeVC();
@@ -227,82 +222,34 @@ public class Router extends Process {
         return false;
     }
 
-    /**
-     * Forward a packet when it's will arrive in a router
-     */
-//    public void packetForward() {
-//
-//        Packet arrived = null;
-//
-//        // check if a VC buffer is full
-//        if (inLeft.getFirstFullVC() != null) {
-//            arrived = packetBuilding(inLeft.getFirstFullVC());
-//        }
-//
-//        if (inRight.getFirstFullVC() != null) {
-//            arrived = packetBuilding(inRight.getFirstFullVC());
-//        }
-//
-//        if (inUp.getFirstFullVC() != null) {
-//            arrived = packetBuilding(inUp.getFirstFullVC());
-//        }
-//
-//        if (inDown.getFirstFullVC() != null) {
-//            arrived = packetBuilding(inDown.getFirstFullVC());
-//        }
-//
-//        nextDestination(arrived);
-//
-//    }
-
-    /**
-     * Rebuild a packet when the virtual channel that's contain him
-     * will be full
-     *
-     * @param channel
-     * @return
-     */
-    private Packet packetBuilding(VirtualChannel channel) {
-        // Get packet idx
-        int id = channel.getList().get(0).getPacketID();
-        Packet packet = new Packet(id);
-        Flit tmp;
-
-        tmp = channel.getList().get(0);
-        packet.addFlit(tmp);
-        channel.dequeueFlit(tmp);
-
-        return packet;
-    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void setSendingInfo(int x, int y, int bits) {
-        x_dest = x;
-        y_dest = y;
-        bits_send = bits;
-    }
-
 
     @Override
     protected void Main_body() {
         System.out.println("Router " + get_name() + " created at: " + get_clock());
+        double startTime = get_clock();
 
         while (get_clock() < NocSim.simPeriod) {
 
-            if (x_dest > -1 && y_dest > -1) {
-                reactivate(this);
-
-                System.out.println("Router " + get_name() + " send at: " + get_clock());
-                sendMessage(bits_send, new int[]{x_dest, y_dest});
-
-
+            // Non empty buffer testing (for flit forwarding)
+            if (inLeft.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inLeft Non Empty");
+            }
+            else if (inUp.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inUp Non Empty");
+            }
+            else if (inRight.getFirstNonEmptyVC() != null){
+                System.out.println("Router " + get_name() + " inRight Non Empty");
+            }
+            else if (inDown.getFirstNonEmptyVC() != null){
+                System.out.println("Router " + get_name() + " inDown Non Empty");
             }
             else {
+                delay(1d);
+                System.out.println("Router " + get_name() + " deactivate at: " + get_clock());
                 deactivate(this);
             }
-
         }
-        terminate();
-
     }
 }

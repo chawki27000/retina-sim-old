@@ -1,18 +1,16 @@
 package architecture;
 
+import communication.Flit;
+
 import java.util.ArrayList;
 
-import communication.Flit;
-import psimjava.Process;
-
-public class VirtualChannel extends Process {
+public class VirtualChannel {
 
     int idx;
     int size;
     ArrayList<Flit> list;
 
     public VirtualChannel(int idx, int size) {
-        super(String.valueOf(idx));
         this.idx = idx;
         this.size = size;
         list = new ArrayList<Flit>();
@@ -54,10 +52,5 @@ public class VirtualChannel extends Process {
             return false;
         list.remove(f);
         return true;
-    }
-
-    @Override
-    protected void Main_body() {
-
     }
 }
