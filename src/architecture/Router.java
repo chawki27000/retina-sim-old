@@ -234,12 +234,31 @@ public class Router extends Process {
         }
     }
 
+    private void forwardFlit(Flit f) {
+        // getting the first information if it's a Header
+        if (f.getType() == FlitType.HEAD) {
+            x_dest = f.getDx();
+            y_dest = f.getDx();
+        }
+
+        // Get Direction and Forward
+        Direction direction = getDirection(x_dest, y_dest);
+
+        if (direction == null) {
+            System.out.println("Destination Reached");
+        } else {
+            // Sending
+            sendFlit(f, direction);
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     protected void Main_body() {
 
+        Flit flit;
         System.out.println("Router " + get_name() + " activated at: " + get_clock());
 
         if (x_dest > -1 && y_dest > -1) {
@@ -252,44 +271,45 @@ public class Router extends Process {
             e.printStackTrace();
         }
 
-        // Non empty buffer testing (for flit forwarding)
         if (inLeft.getFirstNonEmptyVC() != null) {
             System.out.println("Router " + get_name() + " inLeft Non Empty");
 
-
-            Flit flit;
             while (!inLeft.getVclist().get(0).getList().isEmpty()) {
-
                 flit = inLeft.getVclist().get(0).dequeueFlit();
-
-                // getting the first information if it's a Header
-                if (flit.getType() == FlitType.HEAD) {
-                    x_dest = flit.getDx();
-                    y_dest = flit.getDx();
-                }
-
-                // Get Direction and Forward
-                Direction direction = getDirection(x_dest, y_dest);
-
-                // Sending
-                sendFlit(flit, direction);
-
+                forwardFlit(flit);
             }
 
             deactivate(this);
 
         } else if (inUp.getFirstNonEmptyVC() != null) {
             System.out.println("Router " + get_name() + " inUp Non Empty");
+            while (!inUp.getVclist().get(0).getList().isEmpty()) {
+                flit = inUp.getVclist().get(0).dequeueFlit();
+                forwardFlit(flit);
+            }
+
+            deactivate(this);
         } else if (inRight.getFirstNonEmptyVC() != null) {
             System.out.println("Router " + get_name() + " inRight Non Empty");
+            while (!inRight.getVclist().get(0).getList().isEmpty()) {
+                flit = inRight.getVclist().get(0).dequeueFlit();
+                forwardFlit(flit);
+            }
+
+            deactivate(this);
         } else if (inDown.getFirstNonEmptyVC() != null) {
             System.out.println("Router " + get_name() + " inDown Non Empty");
+            while (!inDown.getVclist().get(0).getList().isEmpty()) {
+                flit = inDown.getVclist().get(0).dequeueFlit();
+                forwardFlit(flit);
+            }
+
+            deactivate(this);
         } else {
             System.out.println("Router " + get_name() + " deactivated at: " + get_clock());
             deactivate(this);
         }
-
-        delay(1d);
+        
 
     }
 }
