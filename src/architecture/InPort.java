@@ -90,7 +90,7 @@ public class InPort {
 
     public void accepteFlit(Flit flit, int freeVC) {
 
-        vclist.get(freeVC).enqueueFlit(flit);
+        vclist.get(0).enqueueFlit(flit);
 
     }
 

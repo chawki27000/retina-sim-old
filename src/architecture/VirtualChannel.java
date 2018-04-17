@@ -40,17 +40,20 @@ public class VirtualChannel {
         return list.size() == 0;
     }
 
-    Boolean enqueueFlit(Flit f) {
+    public Boolean enqueueFlit(Flit f) {
         if (list.size() == size)
             return false;
         list.add(f);
         return true;
     }
 
-    Boolean dequeueFlit(Flit f) {
+    public Flit dequeueFlit() {
+        Flit f;
         if (list.size() == 0)
-            return false;
+            return null;
+
+        f = list.get(0);
         list.remove(f);
-        return true;
+        return f;
     }
 }

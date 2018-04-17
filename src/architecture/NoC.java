@@ -136,8 +136,18 @@ public class NoC extends Process {
     protected void Main_body() {
         System.out.println(get_name() + " activated at: "+get_clock());
 
-        routerMatrix[0][0].start();
-        routerMatrix[0][0].sendMessage(128, new int[]{1,0});
+        routerMatrix[0][0].x_dest = 1;
+        routerMatrix[0][0].y_dest = 1;
+        routerMatrix[0][0].bits = 64;
+
+        // Routers instantiation
+        for (int i = 0; i < squareSize; i++) {
+            for (int j = 0; j < squareSize; j++) {
+                routerMatrix[i][j].start();
+            }
+        }
+
+
         terminate();
     }
 

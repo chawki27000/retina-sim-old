@@ -1,16 +1,16 @@
 package architecture;
 
 
-import communication.Direction;
-import communication.Flit;
-import communication.Message;
-import communication.Packet;
+import communication.*;
 import psimjava.Process;
 import simulation_gen.NocSim;
 
 import java.util.ArrayList;
 
 public class Router extends Process {
+
+    // Active Object attribute
+    public int x_dest, y_dest, bits;
 
     int x, y;
     private InPort inLeft, inRight, inUp, inDown;
@@ -160,55 +160,23 @@ public class Router extends Process {
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
 
-        // On X axe
-        // By the West
-        if (y > dy) {
-            System.out.println("By West");
+        // Get Routing Direction
+        Direction direction = getDirection(dx, dy);
 
-            for (Flit flit : flitList) {
-                sendFlit(flit, Direction.WEST);
-            }
-
+        if (direction == null) {
+            System.out.println("Destination Reached");
+            return true;
         }
 
-        // By the East
-        else if (y < dy) {
-            System.out.println("By East");
-
-            for (Flit flit : flitList) {
-                sendFlit(flit, Direction.EAST);
-            }
-
+        for (Flit flit : flitList) {
+            sendFlit(flit, direction);
         }
-        // On Y axe
-        else {
-            // By the North
-            if (x > dx) {
-                System.out.println("By North");
 
-                for (Flit flit : flitList) {
-                    sendFlit(flit, Direction.NORTH);
-                }
-
-            }
-            // By the South
-            else if (x < dx) {
-                System.out.println("By South");
-
-                for (Flit flit : flitList) {
-                    sendFlit(flit, Direction.SOUTH);
-                }
-
-            } else {
-                // Destination Reached
-                return true;
-            }
-        }
 
         return false;
     }
 
-    public void sendFlit(Flit flit, Direction direction) {
+    private void sendFlit(Flit flit, Direction direction) {
 
         // Free VC ID
         int freeVC = 0;
@@ -225,11 +193,9 @@ public class Router extends Process {
 
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
-
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
             freeVC = oUp.getDest().getInRight().getFirstFreeVC();
-
 
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
@@ -242,6 +208,32 @@ public class Router extends Process {
         }
     }
 
+    private Direction getDirection(int dx, int dy) {
+        // On X axe
+        // By the West
+        if (y > dy) {
+            return Direction.WEST;
+        }
+        // By the East
+        else if (y < dy) {
+            return Direction.EAST;
+        }
+        // On Y axe
+        else {
+            // By the North
+            if (x > dx) {
+                return Direction.NORTH;
+            }
+            // By the South
+            else if (x < dx) {
+                return Direction.SOUTH;
+            } else {
+                // Destination Reached
+                return null;
+            }
+        }
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -250,23 +242,54 @@ public class Router extends Process {
 
         System.out.println("Router " + get_name() + " activated at: " + get_clock());
 
-        while (get_clock() < NocSim.simPeriod) {
-
-            // Non empty buffer testing (for flit forwarding)
-            if (inLeft.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inLeft Non Empty");
-
-            } else if (inUp.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inUp Non Empty");
-            } else if (inRight.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inRight Non Empty");
-            } else if (inDown.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inDown Non Empty");
-            } else {
-                System.out.println("Router " + get_name() + " deactivate at: " + get_clock());
-                deactivate(this);
-            }
-            delay(125d);
+        if (x_dest > -1 && y_dest > -1) {
+            sendMessage(bits, new int[]{x_dest, y_dest});
         }
+
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Non empty buffer testing (for flit forwarding)
+        if (inLeft.getFirstNonEmptyVC() != null) {
+            System.out.println("Router " + get_name() + " inLeft Non Empty");
+
+
+            Flit flit;
+            while (!inLeft.getVclist().get(0).getList().isEmpty()) {
+
+                flit = inLeft.getVclist().get(0).dequeueFlit();
+
+                // getting the first information if it's a Header
+                if (flit.getType() == FlitType.HEAD) {
+                    x_dest = flit.getDx();
+                    y_dest = flit.getDx();
+                }
+
+                // Get Direction and Forward
+                Direction direction = getDirection(x_dest, y_dest);
+
+                // Sending
+                sendFlit(flit, direction);
+
+            }
+
+            deactivate(this);
+
+        } else if (inUp.getFirstNonEmptyVC() != null) {
+            System.out.println("Router " + get_name() + " inUp Non Empty");
+        } else if (inRight.getFirstNonEmptyVC() != null) {
+            System.out.println("Router " + get_name() + " inRight Non Empty");
+        } else if (inDown.getFirstNonEmptyVC() != null) {
+            System.out.println("Router " + get_name() + " inDown Non Empty");
+        } else {
+            System.out.println("Router " + get_name() + " deactivated at: " + get_clock());
+            deactivate(this);
+        }
+
+        delay(1d);
+
     }
 }
