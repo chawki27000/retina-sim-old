@@ -259,57 +259,71 @@ public class Router extends Process {
     protected void Main_body() {
 
         Flit flit;
-        System.out.println("Router " + get_name() + " activated at: " + get_clock());
+
 
         if (x_dest > -1 && y_dest > -1) {
             sendMessage(bits, new int[]{x_dest, y_dest});
         }
 
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        if (inLeft.getFirstNonEmptyVC() != null) {
-            System.out.println("Router " + get_name() + " inLeft Non Empty");
+        while (get_clock() < NocSim.simPeriod) {
 
-            while (!inLeft.getVclist().get(0).getList().isEmpty()) {
-                flit = inLeft.getVclist().get(0).dequeueFlit();
-                forwardFlit(flit);
+            System.out.println("Router " + get_name() + " activated at: " + get_clock());
+
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
-            deactivate(this);
 
-        } else if (inUp.getFirstNonEmptyVC() != null) {
-            System.out.println("Router " + get_name() + " inUp Non Empty");
-            while (!inUp.getVclist().get(0).getList().isEmpty()) {
-                flit = inUp.getVclist().get(0).dequeueFlit();
-                forwardFlit(flit);
+            if (inLeft.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inLeft Non Empty");
+
+                while (!inLeft.getVclist().get(0).getList().isEmpty()) {
+                    flit = inLeft.getVclist().get(0).dequeueFlit();
+                    forwardFlit(flit);
+                }
+
+
+            } else if (inUp.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inUp Non Empty");
+                while (!inUp.getVclist().get(0).getList().isEmpty()) {
+                    flit = inUp.getVclist().get(0).dequeueFlit();
+                    forwardFlit(flit);
+                }
+
+            } else if (inRight.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inRight Non Empty");
+                while (!inRight.getVclist().get(0).getList().isEmpty()) {
+                    flit = inRight.getVclist().get(0).dequeueFlit();
+                    forwardFlit(flit);
+                }
+
+            } else if (inDown.getFirstNonEmptyVC() != null) {
+                System.out.println("Router " + get_name() + " inDown Non Empty");
+                while (!inDown.getVclist().get(0).getList().isEmpty()) {
+                    flit = inDown.getVclist().get(0).dequeueFlit();
+                    forwardFlit(flit);
+                }
+
+            } else {
             }
 
-            deactivate(this);
-        } else if (inRight.getFirstNonEmptyVC() != null) {
-            System.out.println("Router " + get_name() + " inRight Non Empty");
-            while (!inRight.getVclist().get(0).getList().isEmpty()) {
-                flit = inRight.getVclist().get(0).dequeueFlit();
-                forwardFlit(flit);
+            // Self Handling
+            NocSim.router_queue.into(this);
+
+            if (NocSim.router_queue.full()) {
+                System.out.println("Is full");
+                reactivate(NocSim.noc);
+                Thread.yield();
             }
 
-            deactivate(this);
-        } else if (inDown.getFirstNonEmptyVC() != null) {
-            System.out.println("Router " + get_name() + " inDown Non Empty");
-            while (!inDown.getVclist().get(0).getList().isEmpty()) {
-                flit = inDown.getVclist().get(0).dequeueFlit();
-                forwardFlit(flit);
-            }
-
-            deactivate(this);
-        } else {
             System.out.println("Router " + get_name() + " deactivated at: " + get_clock());
             deactivate(this);
         }
-        
+
+
 
     }
 }

@@ -134,10 +134,12 @@ public class NoC extends Process {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
     protected void Main_body() {
-        System.out.println(get_name() + " activated at: "+get_clock());
 
-        routerMatrix[0][0].x_dest = 1;
-        routerMatrix[0][0].y_dest = 1;
+        Router r;
+        System.out.println(get_name() + " activated at: " + get_clock());
+
+        routerMatrix[0][0].x_dest = 2;
+        routerMatrix[0][0].y_dest = 2;
         routerMatrix[0][0].bits = 64;
 
         // Routers instantiation
@@ -147,6 +149,18 @@ public class NoC extends Process {
             }
         }
 
+
+        while (get_clock() < NocSim.simPeriod) {
+
+            System.out.println("- - REACRIVATE - -");
+            if (NocSim.router_queue.empty()) {
+                deactivate(this);
+            } else {
+                r = (Router) NocSim.router_queue.out(); // dequeu
+                reactivate(r);
+                Thread.yield();
+            }
+        }
 
         terminate();
     }

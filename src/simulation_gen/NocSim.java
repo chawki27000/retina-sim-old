@@ -12,14 +12,14 @@ public class NocSim extends Process {
     public static NoC noc;
 
     // Passive Object
-    public static Squeue sending_queue;
+    public static Squeue router_queue;
 
     // Event Cost
     public static double simPeriod = 125d; // simulation period
     public static double meanFlitSending = 30;
 
     // Simulation Constant
-    public static int sendingBufferSize = 15;
+    public static int sendingBufferSize = 9;
 
     private static Simulation sim;
 
@@ -33,17 +33,13 @@ public class NocSim extends Process {
         sim = new Simulation("Network-on-Chip System Simulator");
 
         // Network-On-Chip Instantiation
-        noc = new NoC("NoC", 2, 1, 12);
+        noc = new NoC("NoC", 3, 1, 12);
 
         // starting NoC Process
         noc.start();
 
         // Sending Queue Instantiation
-        sending_queue = new Squeue("SendingQueue", sendingBufferSize);
-
-        // Sender and Receiver coordinates
-        int[] src = new int[]{0, 0};
-        int[] dest = new int[]{1, 1};
+        router_queue = new Squeue("SendingQueue", sendingBufferSize);
 
     }
 
