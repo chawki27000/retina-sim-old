@@ -1,8 +1,6 @@
 package architecture;
 
 import communication.Flit;
-import communication.Message;
-import communication.Packet;
 
 import java.util.ArrayList;
 

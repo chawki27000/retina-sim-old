@@ -2,12 +2,11 @@ package architecture;
 
 
 import communication.*;
-import psimjava.Process;
 import simulation_gen.NocSim;
 
 import java.util.ArrayList;
 
-public class Router extends Process {
+public class Router {
 
     // Active Object attribute
     public int x_dest, y_dest, bits;
@@ -21,7 +20,7 @@ public class Router extends Process {
                   InPort inDown, OutPort oLeft,
                   OutPort oRight, OutPort oUp,
                   OutPort oDown) {
-        super(name);
+
         this.x = x;
         this.y = y;
         this.inLeft = inLeft;
@@ -252,78 +251,4 @@ public class Router extends Process {
         }
     }
 
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    protected void Main_body() {
-
-        Flit flit;
-
-
-        if (x_dest > -1 && y_dest > -1) {
-            sendMessage(bits, new int[]{x_dest, y_dest});
-        }
-
-
-        while (get_clock() < NocSim.simPeriod) {
-
-            System.out.println("Router " + get_name() + " activated at: " + get_clock());
-
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-            if (inLeft.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inLeft Non Empty");
-
-                while (!inLeft.getVclist().get(0).getList().isEmpty()) {
-                    flit = inLeft.getVclist().get(0).dequeueFlit();
-                    forwardFlit(flit);
-                }
-
-
-            } else if (inUp.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inUp Non Empty");
-                while (!inUp.getVclist().get(0).getList().isEmpty()) {
-                    flit = inUp.getVclist().get(0).dequeueFlit();
-                    forwardFlit(flit);
-                }
-
-            } else if (inRight.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inRight Non Empty");
-                while (!inRight.getVclist().get(0).getList().isEmpty()) {
-                    flit = inRight.getVclist().get(0).dequeueFlit();
-                    forwardFlit(flit);
-                }
-
-            } else if (inDown.getFirstNonEmptyVC() != null) {
-                System.out.println("Router " + get_name() + " inDown Non Empty");
-                while (!inDown.getVclist().get(0).getList().isEmpty()) {
-                    flit = inDown.getVclist().get(0).dequeueFlit();
-                    forwardFlit(flit);
-                }
-
-            } else {
-            }
-
-            // Self Handling
-            NocSim.router_queue.into(this);
-
-            if (NocSim.router_queue.full()) {
-                System.out.println("Is full");
-                reactivate(NocSim.noc);
-                Thread.yield();
-            }
-
-            System.out.println("Router " + get_name() + " deactivated at: " + get_clock());
-            deactivate(this);
-        }
-
-
-
-    }
 }

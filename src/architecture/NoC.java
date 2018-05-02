@@ -1,6 +1,5 @@
 package architecture;
 
-import psimjava.Process;
 import simulation_gen.NocSim;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
  * This class aims to create and instantiate
  * a 2D NoC with all its components
  */
-public class NoC extends Process {
+public class NoC {
 
     // TODO : work on NoC initialisation
     public static Router[][] routerMatrix;
@@ -23,7 +22,6 @@ public class NoC extends Process {
      * @param VCSIZE     size of VC buffer
      */
     public NoC(String name, int squareSize, int NBVC, int VCSIZE) {
-        super(name);
 
         this.squareSize = squareSize;
         routerMatrix = new Router[squareSize][squareSize];
@@ -129,40 +127,6 @@ public class NoC extends Process {
 
     public Router getRouter(int x, int y) {
         return routerMatrix[x][y];
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @Override
-    protected void Main_body() {
-
-        Router r;
-        System.out.println(get_name() + " activated at: " + get_clock());
-
-        routerMatrix[0][0].x_dest = 2;
-        routerMatrix[0][0].y_dest = 2;
-        routerMatrix[0][0].bits = 64;
-
-        // Routers instantiation
-        for (int i = 0; i < squareSize; i++) {
-            for (int j = 0; j < squareSize; j++) {
-                routerMatrix[i][j].start();
-            }
-        }
-
-
-        while (get_clock() < NocSim.simPeriod) {
-
-            System.out.println("- - REACRIVATE - -");
-            if (NocSim.router_queue.empty()) {
-                deactivate(this);
-            } else {
-                r = (Router) NocSim.router_queue.out(); // dequeu
-                reactivate(r);
-                Thread.yield();
-            }
-        }
-
-        terminate();
     }
 
 }
