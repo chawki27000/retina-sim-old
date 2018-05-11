@@ -2,7 +2,6 @@ package architecture;
 
 
 import communication.*;
-import simulation_gen.NocSim;
 
 import java.util.ArrayList;
 

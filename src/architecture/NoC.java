@@ -1,7 +1,5 @@
 package architecture;
 
-import simulation_gen.NocSim;
-
 import java.util.ArrayList;
 
 /**
