@@ -58,10 +58,12 @@ public class NoC {
         OutPort oDown = new OutPort(2);
         OutPort oLeft = new OutPort(3);
 
+        PE pe = new PE();
+
 
         return new Router(x + " " + y, x, y,
                 inLeft, inRight, inUp, inDown,
-                oLeft, oRight, oUp, oDown);
+                oLeft, oRight, oUp, oDown, pe);
     }
 
     /**

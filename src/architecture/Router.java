@@ -2,6 +2,9 @@ package architecture;
 
 
 import communication.*;
+import simulation.Event;
+import simulation.EventType;
+import simulation_gen.Simulator;
 
 import java.util.ArrayList;
 
@@ -13,12 +16,13 @@ public class Router {
     int x, y;
     private InPort inLeft, inRight, inUp, inDown;
     private OutPort oLeft, oRight, oUp, oDown;
+    public PE pe;
 
     public Router(String name, int x, int y, InPort inLeft,
                   InPort inRight, InPort inUp,
                   InPort inDown, OutPort oLeft,
                   OutPort oRight, OutPort oUp,
-                  OutPort oDown) {
+                  OutPort oDown, PE pe) {
 
         this.x = x;
         this.y = y;
@@ -30,6 +34,7 @@ public class Router {
         this.oRight = oRight;
         this.oUp = oUp;
         this.oDown = oDown;
+        this.pe = pe;
 
     }
 
@@ -135,7 +140,7 @@ public class Router {
     }
 
     /**
-     * Send a packet to its next router
+     * prepare a packet to its next router
      *
      * @param packet
      * @return
@@ -161,23 +166,29 @@ public class Router {
         // Get Routing Direction
         Direction direction = getDirection(dx, dy);
 
-        if (direction == null) {
-            System.out.println("Destination Reached");
-            return true;
-        }
 
         for (Flit flit : flitList) {
-            sendFlit(flit, direction);
+            pe.pushFlit(flit);
+            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this, direction);
+            Simulator.eventList.push(event);
         }
 
 
         return false;
     }
 
-    private void sendFlit(Flit flit, Direction direction) {
+    public void sendFlit(Flit flit, Direction direction) {
+
+        if (direction == null) {
+            System.out.println("Destination Reached");
+            return;
+        }
 
         // Free VC ID
         int freeVC = 0;
+
+        Event event;
+
 
         if (direction == Direction.WEST) {
             System.out.println("Flit " + flit.getType() + " sended in WEST");
@@ -185,11 +196,20 @@ public class Router {
 
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
+            // Event Simulation Push
+            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oLeft.getDest(), direction);
+            Simulator.eventList.push(event);
+
+
         } else if (direction == Direction.EAST) {
             System.out.println("Flit " + flit.getType() + " sended in EAST");
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
 
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+
+            // Event Simulation Push
+            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oRight.getDest(), direction);
+            Simulator.eventList.push(event);
 
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
@@ -197,12 +217,20 @@ public class Router {
 
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
+            // Event Simulation Push
+            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oUp.getDest(), direction);
+            Simulator.eventList.push(event);
+
 
         } else if (direction == Direction.SOUTH) {
             System.out.println("Flit " + flit.getType() + " sended in SOUTH");
             freeVC = oDown.getDest().getInRight().getFirstFreeVC();
 
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+
+            // Event Simulation Push
+            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oDown.getDest(), direction);
+            Simulator.eventList.push(event);
         }
     }
 

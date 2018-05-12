@@ -6,7 +6,11 @@ import java.util.Comparator;
 
 public class EventList {
 
-    private ArrayList<Event> eventQueue = new ArrayList<Event>();
+    private ArrayList<Event> eventQueue;
+
+    public EventList() {
+        this.eventQueue = new ArrayList<Event>();
+    }
 
     public void push(Event event) {
         eventQueue.add(event);
@@ -38,10 +42,10 @@ public class EventList {
 
     @Override
     public String toString() {
-        String str = "EventList : [ ";
+        String str = "EventList : [ \n";
 
         for (Event t : eventQueue) {
-            str += ", " + t + "\n";
+            str += t + "\n";
         }
         str += " ]";
 

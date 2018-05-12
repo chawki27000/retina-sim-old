@@ -1,5 +1,7 @@
 package communication;
 
+import simulation_gen.Simulator;
+
 import java.util.ArrayList;
 
 public class Packet {
@@ -23,11 +25,11 @@ public class Packet {
 
         for (int i = 0; i < numberOfFlit; i++) {
             if (i == 0) // Head Flit
-                flitList.add(new Flit(FlitType.HEAD));
+                flitList.add(new Flit(FlitType.HEAD, Simulator.clock));
             else if (i == numberOfFlit - 1) // Tail  Flit
-                flitList.add(new Flit(FlitType.TAIL));
+                flitList.add(new Flit(FlitType.TAIL, Simulator.clock));
             else // Data Flit
-                flitList.add(new Flit(FlitType.DATA));
+                flitList.add(new Flit(FlitType.DATA, Simulator.clock));
         }
     }
 
