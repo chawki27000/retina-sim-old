@@ -5,6 +5,7 @@ import communication.*;
 import simulation.Event;
 import simulation.EventType;
 import simulation_gen.Simulator;
+import simulation_gen.Trace;
 
 import java.util.ArrayList;
 
@@ -156,6 +157,7 @@ public class Router {
         dx = headerFlit.getDx();
         dy = headerFlit.getDy();
 
+
         System.out.println("Sending packet : " + packet.getId() + " From : (" +
                 x + "," + y + ")" + " TO : (" + dx + "," + dy + ")");
 
@@ -163,13 +165,14 @@ public class Router {
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
 
-        // Get Routing Direction
-        Direction direction = getDirection(dx, dy);
-
-
+        // Flit preparation
         for (Flit flit : flitList) {
+            // Flit pushing in PE
             pe.pushFlit(flit);
-            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this, direction);
+            // set coordinates in others flit
+            flit.setDxDy(dx, dy);
+            // Event pushing
+            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this);
             Simulator.eventList.push(event);
         }
 
@@ -177,7 +180,14 @@ public class Router {
         return false;
     }
 
-    public void sendFlit(Flit flit, Direction direction) {
+    public void sendFlit(Flit flit) {
+
+        int dx, dy;
+        dx = flit.getDx();
+        dy = flit.getDy();
+
+        // Get Routing Direction
+        Direction direction = getDirection(dx, dy);
 
         if (direction == null) {
             System.out.println("Destination Reached");
@@ -185,10 +195,9 @@ public class Router {
         }
 
         // Free VC ID
-        int freeVC = 0;
+        int freeVC;
 
         Event event;
-
 
         if (direction == Direction.WEST) {
             System.out.println("Flit " + flit.getType() + " sended in WEST");
@@ -196,8 +205,12 @@ public class Router {
 
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
+            // Tracing
+            Trace t = new Trace(this, oLeft.getDest(), Simulator.clock);
+            Simulator.traceList.add(t);
+
             // Event Simulation Push
-            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oLeft.getDest(), direction);
+            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oLeft.getDest(), Direction.EAST);
             Simulator.eventList.push(event);
 
 
@@ -207,8 +220,12 @@ public class Router {
 
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
+            // Tracing
+            Trace t = new Trace(this, oRight.getDest(), Simulator.clock);
+            Simulator.traceList.add(t);
+
             // Event Simulation Push
-            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oRight.getDest(), direction);
+            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oRight.getDest(), Direction.WEST);
             Simulator.eventList.push(event);
 
         } else if (direction == Direction.NORTH) {
@@ -217,8 +234,12 @@ public class Router {
 
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
+            // Tracing
+            Trace t = new Trace(this, oUp.getDest(), Simulator.clock);
+            Simulator.traceList.add(t);
+
             // Event Simulation Push
-            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oUp.getDest(), direction);
+            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oUp.getDest(), Direction.SOUTH);
             Simulator.eventList.push(event);
 
 
@@ -228,8 +249,12 @@ public class Router {
 
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);
 
+            // Tracing
+            Trace t = new Trace(this, oDown.getDest(), Simulator.clock);
+            Simulator.traceList.add(t);
+
             // Event Simulation Push
-            event = new Event(EventType.SEND_FLIT, Simulator.clock + 1, oDown.getDest(), direction);
+            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oDown.getDest(), Direction.NORTH);
             Simulator.eventList.push(event);
         }
     }
@@ -274,7 +299,6 @@ public class Router {
             System.out.println("Destination Reached");
         } else {
             // Sending
-            sendFlit(f, direction);
         }
     }
 

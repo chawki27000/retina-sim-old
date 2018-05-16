@@ -6,19 +6,24 @@ import communication.Flit;
 import simulation.Event;
 import simulation.EventList;
 
+import java.util.ArrayList;
+
 public class Simulator {
 
     public static EventList eventList;
     private int simulationPeriod;
     public static int clock;
+    public static ArrayList<Trace> traceList;
 
     public Simulator(int simulationPeriod) {
         this.simulationPeriod = simulationPeriod;
         clock = 0;
+        traceList = new ArrayList<>();
     }
 
     public void simulate() {
 
+        Flit flit = null;
         while (!eventList.isEmpty() && clock < simulationPeriod) {
 
             Event curr_ev = eventList.pull();
@@ -26,11 +31,10 @@ public class Simulator {
 
             Router router = curr_ev.getRouter();
 
-
             switch (curr_ev.getEventType()) {
 
                 case MESSAGE_SEND:
-                    router.sendMessage(64, new int[]{2,2});
+                    router.sendMessage(128, new int[]{2, 2});
                     break;
 
                 case SEND_FLIT:
@@ -38,10 +42,26 @@ public class Simulator {
                         break;
                     }
 
-                    Flit flit = router.pe.pullFlit();
+                    flit = router.pe.pullFlit();
 
+                    router.sendFlit(flit);
+                    clock++; // ## clock ##
+                    break;
+
+                case FORWARD_FLIT:
+                    // get the direction
                     Direction direction = curr_ev.getDirection();
-                    router.sendFlit(flit, direction);
+
+                    if (direction == Direction.EAST)
+                        flit = router.getInRight().getVclist().get(0).dequeueFlit();
+                    else if (direction == Direction.WEST)
+                        flit = router.getInLeft().getVclist().get(0).dequeueFlit();
+                    else if (direction == Direction.NORTH)
+                        flit = router.getInUp().getVclist().get(0).dequeueFlit();
+                    else if (direction == Direction.SOUTH)
+                        flit = router.getInDown().getVclist().get(0).dequeueFlit();
+
+                    router.sendFlit(flit);
                     clock++; // ## clock ##
                     break;
 

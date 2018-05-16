@@ -6,7 +6,7 @@ public class Flit {
 
     private int timeBegin, timeEnd;
     // Only Header Flit
-    int dx, dy, packetID;
+    private int dx, dy, packetID;
 
     public Flit(FlitType type, int timeBegin) {
         this.type = type;
@@ -54,5 +54,13 @@ public class Flit {
 
     public int getPacketID() {
         return packetID;
+    }
+
+    /*
+    Only Body and Tail Flit
+     */
+    public void setDxDy(int dx, int dy) {
+        this.dx = dx;
+        this.dy = dy;
     }
 }

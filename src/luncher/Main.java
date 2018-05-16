@@ -5,6 +5,9 @@ import simulation.Event;
 import simulation.EventList;
 import simulation.EventType;
 import simulation_gen.Simulator;
+import simulation_gen.Trace;
+
+import java.util.ArrayList;
 
 public class Main {
 
@@ -17,7 +20,7 @@ public class Main {
         Simulator.eventList = new EventList();
 
         // Event Creatiion
-        Event ev_1 = new Event(EventType.MESSAGE_SEND, 0, noc.getRouter(0,0));
+        Event ev_1 = new Event(EventType.MESSAGE_SEND, 0, noc.getRouter(0, 0));
 
         // Event pushing
         Simulator.eventList.push(ev_1);
@@ -26,5 +29,11 @@ public class Main {
 
         Simulator s = new Simulator(40);
         s.simulate();
+
+        // Traces Printing
+        System.out.println("- - - TRACE - - -");
+        for (Trace t : Simulator.traceList) {
+            System.out.println(t);
+        }
     }
 }

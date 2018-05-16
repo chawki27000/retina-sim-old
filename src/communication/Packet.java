@@ -49,6 +49,9 @@ public class Packet {
         return flitList.get(index);
     }
 
+    /*
+    Header Flit Only
+     */
     public void setDestinationInfo(int[] dest) {
         // Get Header Flit
         Flit flit = flitList.get(0);
