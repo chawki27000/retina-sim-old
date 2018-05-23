@@ -1,0 +1,7 @@
+noc:
+  dimension: 3
+  numberOfVC: 1
+  VCBufferSize: 10
+
+simulation:
+  period: 40

@@ -1,20 +1,24 @@
 package launcher;
 
 import architecture.NoC;
+import config.Parse;
 import simulation.Event;
 import simulation.EventList;
 import simulation.EventType;
 import simulation_gen.Simulator;
 import simulation_gen.Trace;
 
-import java.util.ArrayList;
-
 public class Main {
 
     public static void main(String[] args) {
 
+        // Parsing config file
+        Parse parse = new Parse();
+
         // NoC initialisation
-        NoC noc = new NoC("Network-On-Chip", 3, 1, 10);
+        NoC noc = new NoC("Network-On-Chip", parse.getDimension()
+                , parse.getNumberOfVC()
+                , parse.getVCBufferSize());
 
         // EventList initialisation
         Simulator.eventList = new EventList();
@@ -27,7 +31,7 @@ public class Main {
 
         System.out.println(Simulator.eventList);
 
-        Simulator s = new Simulator(40);
+        Simulator s = new Simulator(parse.getPeriod());
         s.simulate();
 
         // Traces Printing
