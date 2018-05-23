@@ -1,4 +1,4 @@
-package luncher;
+package launcher;
 
 import architecture.NoC;
 import simulation.Event;
