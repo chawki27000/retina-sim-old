@@ -16,7 +16,7 @@ public class Trace {
 
     @Override
     public String toString() {
-        return "Sent Flit from Router (" + src.getY() + "," + src.getY() + ") to (" +
-                dest.getY() + "," + dest.getY() + ") at : " + time;
+        return "Sent Flit from Router (" + src.getX() + "," + src.getY() + ") to (" +
+                dest.getX() + "," + dest.getY() + ") at : " + time;
     }
 }

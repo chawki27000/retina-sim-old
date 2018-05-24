@@ -129,4 +129,16 @@ public class NoC {
         return routerMatrix[x][y];
     }
 
+    @Override
+    public String toString() {
+        String str = "";
+
+        for (int i = 0; i < squareSize; i++) {
+            for (int j = 0; j < squareSize; j++) {
+                str += routerMatrix[i][j].toString() + "\n";
+            }
+        }
+
+        return str;
+    }
 }
