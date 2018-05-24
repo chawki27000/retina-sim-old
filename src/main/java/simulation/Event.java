@@ -7,21 +7,31 @@ public class Event implements Comparable<Event> {
 
     private EventType eventType;
     private int time;
-    private Router router;
+    private Router router_src;
+    private int[] router_dest;
+    private int message;
 
     // Flit case
     private Direction direction;
 
-    public Event(EventType eventType, int time, Router router) {
+    public Event(EventType eventType, int time, Router router_src) {
         this.eventType = eventType;
         this.time = time;
-        this.router = router;
+        this.router_src = router_src;
     }
 
-    public Event(EventType eventType, int time, Router router, Direction direction) {
+    public Event(EventType eventType, int time, Router router_src, int[] router_dest, int message) {
         this.eventType = eventType;
         this.time = time;
-        this.router = router;
+        this.router_src = router_src;
+        this.router_dest = router_dest;
+        this.message = message;
+    }
+
+    public Event(EventType eventType, int time, Router router_src, Direction direction) {
+        this.eventType = eventType;
+        this.time = time;
+        this.router_src = router_src;
         this.direction = direction;
     }
 
@@ -37,8 +47,16 @@ public class Event implements Comparable<Event> {
         return time;
     }
 
-    public Router getRouter() {
-        return router;
+    public Router getRouter_src() {
+        return router_src;
+    }
+
+    public int[] getRouter_dest() {
+        return router_dest;
+    }
+
+    public int getMessageSize() {
+        return message;
     }
 
     @Override
@@ -51,7 +69,7 @@ public class Event implements Comparable<Event> {
 
     @Override
     public String toString() {
-        return "EventType : " + eventType + ", Router : (" + router.getX() +
-                "," + router.getY() + "), Time : " + time;
+        return "EventType : " + eventType + ", Router : (" + router_src.getX() +
+                "," + router_src.getY() + "), Time : " + time;
     }
 }

@@ -1,4 +1,4 @@
-package config;
+package input;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -7,15 +7,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Map;
 
-public class Parse {
+public class ConfigParse {
 
-    public String absPath = System.getProperty("user.dir") + "/src/main/java/config/config.yml";
+    private String absPath = System.getProperty("user.dir") + "/src/main/java/input/config.yml";
     private int dimension;
     private int numberOfVC;
     private int VCBufferSize;
     private int period;
 
-    public Parse() {
+    public ConfigParse() {
 
         Yaml yaml = new Yaml();
 

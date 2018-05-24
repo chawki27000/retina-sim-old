@@ -15,6 +15,9 @@ public class Simulator {
     public static int clock;
     public static ArrayList<Trace> traceList;
 
+    private int message;
+    private int[] dest;
+
     public Simulator(int simulationPeriod) {
         this.simulationPeriod = simulationPeriod;
         clock = 0;
@@ -29,12 +32,14 @@ public class Simulator {
             Event curr_ev = eventList.pull();
             eventList.removeEvent(curr_ev);
 
-            Router router = curr_ev.getRouter();
+            Router router = curr_ev.getRouter_src();
 
             switch (curr_ev.getEventType()) {
 
                 case MESSAGE_SEND:
-                    router.sendMessage(128, new int[]{2, 2});
+                    message = curr_ev.getMessageSize();
+                    dest = curr_ev.getRouter_dest();
+                    router.sendMessage(message, dest);
                     break;
 
                 case SEND_FLIT:

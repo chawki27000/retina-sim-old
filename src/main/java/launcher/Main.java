@@ -1,7 +1,9 @@
 package launcher;
 
 import architecture.NoC;
-import config.Parse;
+import architecture.Router;
+import input.ConfigParse;
+import input.ScenarioParse;
 import simulation.Event;
 import simulation.EventList;
 import simulation.EventType;
@@ -13,25 +15,29 @@ public class Main {
     public static void main(String[] args) {
 
         // Parsing config file
-        Parse parse = new Parse();
+        ConfigParse configParse = new ConfigParse();
 
         // NoC initialisation
-        NoC noc = new NoC("Network-On-Chip", parse.getDimension()
-                , parse.getNumberOfVC()
-                , parse.getVCBufferSize());
+        NoC noc = new NoC("Network-On-Chip",
+                configParse.getDimension(),
+                configParse.getNumberOfVC(),
+                configParse.getVCBufferSize());
 
         // EventList initialisation
         Simulator.eventList = new EventList();
 
-        // Event Creatiion
-        Event ev_1 = new Event(EventType.MESSAGE_SEND, 0, noc.getRouter(0, 0));
+        // Event Creation
+        Event ev_1 = new Event(EventType.MESSAGE_SEND, 0,
+                noc.getRouter(0, 0),
+                new int[]{2, 2},
+                64);
 
         // Event pushing
         Simulator.eventList.push(ev_1);
 
         System.out.println(Simulator.eventList);
 
-        Simulator s = new Simulator(parse.getPeriod());
+        Simulator s = new Simulator(configParse.getPeriod());
         s.simulate();
 
         // Traces Printing
