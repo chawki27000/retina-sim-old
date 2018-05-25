@@ -5,6 +5,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import simulation.Event;
+import simulation.EventType;
+import simulation_gen.Simulator;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -16,6 +19,8 @@ public class ScenarioParse {
 
     private JSONObject jsonObjectL1;
     private JSONObject jsonObjectL2;
+    private JSONObject jsonObjectSrc;
+    private JSONObject jsonObjectDest;
     private JSONArray jsonArrayL1;
 
 
@@ -38,7 +43,26 @@ public class ScenarioParse {
             Iterator<?> iteratorscroll = jsonArrayL1.iterator();
             while (iteratorscroll.hasNext()) {
                 jsonObjectL2 = (JSONObject) iteratorscroll.next();
-                System.out.println(String.valueOf(jsonObjectL2));
+
+                jsonObjectSrc = (JSONObject) jsonObjectL2.get("src");
+                jsonObjectDest = (JSONObject) jsonObjectL2.get("dest");
+
+                // Event Creation
+                int time = ((Long) jsonObjectL2.get("time")).intValue();
+                int message = ((Long) jsonObjectL2.get("message")).intValue();
+                int srx_x = ((Long) jsonObjectSrc.get("x")).intValue();
+                int srx_y = ((Long) jsonObjectSrc.get("y")).intValue();
+                int dest_x = ((Long) jsonObjectDest.get("x")).intValue();
+                int dest_y = ((Long) jsonObjectDest.get("y")).intValue();
+
+                Event ev = new Event(EventType.MESSAGE_SEND,
+                        time,
+                        noc.getRouter(srx_x, srx_y),
+                        new int[]{dest_x, dest_y},
+                        message);
+
+                // Event pushing
+                Simulator.eventList.push(ev);
             }
 
 

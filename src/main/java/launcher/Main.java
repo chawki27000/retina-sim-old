@@ -1,7 +1,6 @@
 package launcher;
 
 import architecture.NoC;
-import architecture.Router;
 import input.ConfigParse;
 import input.ScenarioParse;
 import simulation.Event;
@@ -26,24 +25,18 @@ public class Main {
         // EventList initialisation
         Simulator.eventList = new EventList();
 
-        // Event Creation
-        Event ev_1 = new Event(EventType.MESSAGE_SEND, 0,
-                noc.getRouter(0, 0),
-                new int[]{2, 2},
-                64);
-
-        // Event pushing
-        Simulator.eventList.push(ev_1);
+        // Parsing scenario file
+        ScenarioParse scenarioParse = new ScenarioParse(noc);
 
         System.out.println(Simulator.eventList);
 
-        Simulator s = new Simulator(configParse.getPeriod());
-        s.simulate();
-
-        // Traces Printing
-        System.out.println("- - - TRACE - - -");
-        for (Trace t : Simulator.traceList) {
-            System.out.println(t);
-        }
+//        Simulator s = new Simulator(configParse.getPeriod());
+//        s.simulate();
+//
+//        // Traces Printing
+//        System.out.println("- - - TRACE - - -");
+//        for (Trace t : Simulator.traceList) {
+//            System.out.println(t);
+//        }
     }
 }
