@@ -1,4 +1,4 @@
-package input;
+package simulation_gen;
 
 import org.yaml.snakeyaml.Yaml;
 

@@ -1,4 +1,4 @@
-package input;
+package simulation_gen;
 
 import architecture.NoC;
 import org.json.simple.JSONArray;

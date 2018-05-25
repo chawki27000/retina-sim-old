@@ -1,13 +1,10 @@
 package launcher;
 
 import architecture.NoC;
-import input.ConfigParse;
-import input.ScenarioParse;
-import simulation.Event;
+import simulation_gen.ConfigParse;
+import simulation_gen.ScenarioParse;
 import simulation.EventList;
-import simulation.EventType;
 import simulation_gen.Simulator;
-import simulation_gen.Trace;
 
 public class Main {
 
