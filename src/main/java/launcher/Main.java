@@ -5,6 +5,7 @@ import simulation_gen.ConfigParse;
 import simulation_gen.ScenarioParse;
 import simulation.EventList;
 import simulation_gen.Simulator;
+import simulation_gen.Trace;
 
 public class Main {
 
@@ -27,13 +28,13 @@ public class Main {
 
         System.out.println(Simulator.eventList);
 
-//        Simulator s = new Simulator(configParse.getPeriod());
-//        s.simulate();
-//
-//        // Traces Printing
-//        System.out.println("- - - TRACE - - -");
-//        for (Trace t : Simulator.traceList) {
-//            System.out.println(t);
-//        }
+        Simulator s = new Simulator(configParse.getPeriod());
+        s.simulate();
+
+        // Traces Printing
+        System.out.println("- - - TRACE - - -");
+        for (Trace t : Simulator.traceList) {
+            System.out.println(t);
+        }
     }
 }

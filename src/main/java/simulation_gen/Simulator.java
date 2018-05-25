@@ -40,6 +40,7 @@ public class Simulator {
                     message = curr_ev.getMessageSize();
                     dest = curr_ev.getRouter_dest();
                     router.sendMessage(message, dest);
+                    clock++; // ## clock ##
                     break;
 
                 case SEND_FLIT:

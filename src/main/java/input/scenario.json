@@ -2,22 +2,22 @@
   "scenario":
   [
     {
-      "src": {"x": 0, "y": 0},
-      "dest": {"x": 0, "y": 1},
-      "message": 128,
+      "src": {"x": 2, "y": 2},
+      "dest": {"x": 1, "y": 1},
+      "message": 64,
       "time": 0
     },
     {
-      "src": {"x": 1, "y": 1},
-      "dest": {"x": 1, "y": 2},
-      "message": 64,
+      "src": {"x": 0, "y": 0},
+      "dest": {"x": 1, "y": 1},
+      "message": 128,
       "time": 1
     },
     {
-      "src": {"x": 2, "y": 2},
-      "dest": {"x": 1, "y": 1},
-      "message": 256,
+      "src": {"x": 1, "y": 1},
+      "dest": {"x": 0, "y": 2},
+      "message": 128,
       "time": 2
-    }
+    },
   ]
 }
