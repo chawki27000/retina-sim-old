@@ -34,24 +34,30 @@ public class Simulator {
 
             Router router = curr_ev.getRouter_src();
 
+            clock = curr_ev.getTime();
+
             switch (curr_ev.getEventType()) {
 
                 case MESSAGE_SEND:
                     message = curr_ev.getMessageSize();
                     dest = curr_ev.getRouter_dest();
                     router.sendMessage(message, dest);
-                    clock++; // ## clock ##
                     break;
 
-                case SEND_FLIT:
-                    if (router.pe.isEmpty()) {
+                case SEND_HEAD_FLIT:
+                    if (router.isSendingBufferEmpty()) {
                         break;
                     }
 
-                    flit = router.pe.pullFlit();
+                    flit = router.sendingBufferPull();
 
                     router.sendFlit(flit);
-                    clock++; // ## clock ##
+                    break;
+
+                case SEND_BODY_FLIT:
+                    break;
+
+                case SEND_TAIL_FLIT:
                     break;
 
                 case FORWARD_FLIT:
@@ -68,10 +74,6 @@ public class Simulator {
                         flit = router.getInDown().getVclist().get(0).dequeueFlit();
 
                     router.sendFlit(flit);
-                    clock++; // ## clock ##
-                    break;
-
-                case RECEIVE_FLIT:
                     break;
 
                 default:
