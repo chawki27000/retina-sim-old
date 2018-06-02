@@ -14,6 +14,8 @@ public class Router {
     // Active Object attribute
     public int x_dest, y_dest, bits;
 
+    private ArrayList<Flit> sendingBuffer;
+
     int x, y;
     private InPort inLeft, inRight, inUp, inDown;
     private OutPort oLeft, oRight, oUp, oDown;
@@ -36,6 +38,9 @@ public class Router {
         this.oUp = oUp;
         this.oDown = oDown;
         this.pe = pe;
+
+        // Sending Buffer Initialisation
+        sendingBuffer = new ArrayList<>();
 
     }
 
@@ -168,11 +173,11 @@ public class Router {
         // Flit preparation
         for (Flit flit : flitList) {
             // Flit pushing in PE
-            pe.pushFlit(flit);
+            sendingBuffer.add(flit);
             // set coordinates in others flit
             flit.setDxDy(dx, dy);
             // Event pushing
-            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this);
+            Event event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock, this);
             Simulator.eventList.push(event);
         }
 
@@ -300,5 +305,18 @@ public class Router {
         } else {
             // Sending
         }
+    }
+
+    public boolean isSendingBufferEmpty() {
+        return sendingBuffer.isEmpty();
+    }
+
+    public Flit sendingBufferPull() {
+        if (sendingBuffer.isEmpty())
+            return null;
+
+        Flit flit = sendingBuffer.get(0);
+        sendingBuffer.remove(flit);
+        return flit;
     }
 }
