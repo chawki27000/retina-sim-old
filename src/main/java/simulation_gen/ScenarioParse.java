@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 public class ScenarioParse {
 
-    private String absPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
 
     private JSONObject jsonObjectL1;
     private JSONObject jsonObjectL2;
@@ -24,14 +23,14 @@ public class ScenarioParse {
     private JSONArray jsonArrayL1;
 
 
-    public ScenarioParse(NoC noc) {
+    public ScenarioParse(NoC noc, String scenarioPath) {
 
         JSONParser parser = new JSONParser();
 
         Object obj = null;
         try {
             // File parsing
-            obj = parser.parse(new FileReader(absPath));
+            obj = parser.parse(new FileReader(scenarioPath));
 
             // Object level 1 (whole)
             jsonObjectL1 = (JSONObject) obj;

@@ -9,19 +9,18 @@ import java.util.Map;
 
 public class ConfigParse {
 
-    private String absPath = System.getProperty("user.dir") + "/src/main/java/input/config.yml";
     private int dimension;
     private int numberOfVC;
     private int VCBufferSize;
     private int period;
 
-    public ConfigParse() {
+    public ConfigParse(String configPath) {
 
         Yaml yaml = new Yaml();
 
         Map<String, Map<String, Integer>> values = null;
         try {
-            values = yaml.load(new FileInputStream(new File(absPath)));
+            values = yaml.load(new FileInputStream(new File(configPath)));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

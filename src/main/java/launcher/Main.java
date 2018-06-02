@@ -11,8 +11,12 @@ public class Main {
 
     public static void main(String[] args) {
 
+        // Files Relative Path
+        String configPath = System.getProperty("user.dir") + "/src/main/java/input/config.yml";
+        String scenarioPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
+
         // Parsing config file
-        ConfigParse configParse = new ConfigParse();
+        ConfigParse configParse = new ConfigParse(configPath);
 
         // NoC initialisation
         NoC noc = new NoC("Network-On-Chip",
@@ -24,7 +28,7 @@ public class Main {
         Simulator.eventList = new EventList();
 
         // Parsing scenario file
-        ScenarioParse scenarioParse = new ScenarioParse(noc);
+        ScenarioParse scenarioParse = new ScenarioParse(noc, scenarioPath);
 
         System.out.println(Simulator.eventList);
 
