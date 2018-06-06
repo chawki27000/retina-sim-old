@@ -3,7 +3,6 @@ package simulation_gen;
 import architecture.Router;
 import communication.Direction;
 import communication.Flit;
-import communication.FlitType;
 import simulation.Event;
 import simulation.EventList;
 
@@ -49,7 +48,7 @@ public class Simulator {
                     router.sendMessage(message, dest);
                     break;
 
-                case SEND_HEAD_FLIT:
+                case SEND_FLIT:
                     if (router.isSendingBufferEmpty()) {
                         break;
                     }
@@ -58,12 +57,6 @@ public class Simulator {
 
                     router.sendHeadFlit(flit);
 
-                    break;
-
-                case SEND_BODY_FLIT:
-                    break;
-
-                case SEND_TAIL_FLIT:
                     break;
 
                 case FORWARD_FLIT:

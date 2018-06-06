@@ -9,7 +9,7 @@ import simulation_gen.Trace;
 
 import java.util.ArrayList;
 
-public class Router {
+public class Router implements Routing {
 
     // Active Object attribute
     public int x_dest, y_dest, bits;
@@ -177,7 +177,7 @@ public class Router {
             // set coordinates in others flit
             flit.setDxDy(dx, dy);
             // Event pushing
-            Event event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock, this);
+            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this);
             Simulator.eventList.push(event);
         }
 
@@ -192,7 +192,7 @@ public class Router {
         dy = flit.getDy();
 
         // Get Routing Direction
-        Direction direction = getDirection(dx, dy);
+        Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
             System.out.println("Destination Reached");
@@ -265,7 +265,7 @@ public class Router {
         dy = flit.getDy();
 
         // Get Routing Direction
-        Direction direction = getDirection(dx, dy);
+        Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
             System.out.println("Destination Reached");
@@ -338,7 +338,7 @@ public class Router {
         System.out.println("VC FREE : "+freeVC);
     }
 
-    private Direction getDirection(int dx, int dy) {
+    public Direction getRoutingDirection(int dx, int dy) {
         // On X axe
         // By the West
         if (y > dy) {
@@ -372,7 +372,7 @@ public class Router {
         }
 
         // Get Direction and Forward
-        Direction direction = getDirection(x_dest, y_dest);
+        Direction direction = getRoutingDirection(x_dest, y_dest);
 
         if (direction == null) {
             System.out.println("Destination Reached");
