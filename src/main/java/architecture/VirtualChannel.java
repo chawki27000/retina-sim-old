@@ -8,11 +8,13 @@ public class VirtualChannel {
 
     int idx;
     int size;
+    boolean hold;
     ArrayList<Flit> list;
 
     public VirtualChannel(int idx, int size) {
         this.idx = idx;
         this.size = size;
+        this.hold = false;
         list = new ArrayList<Flit>();
     }
 
@@ -37,7 +39,7 @@ public class VirtualChannel {
     }
 
     public boolean isFree() {
-        return list.size() == 0;
+        return !hold;
     }
 
     public Boolean enqueueFlit(Flit f) {

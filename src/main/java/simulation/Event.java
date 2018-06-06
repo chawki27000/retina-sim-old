@@ -13,6 +13,7 @@ public class Event implements Comparable<Event> {
 
     // Flit case
     private Direction direction;
+    private int vcAllotted;
 
     public Event(EventType eventType, int time, Router router_src) {
         this.eventType = eventType;
@@ -28,11 +29,12 @@ public class Event implements Comparable<Event> {
         this.message = message;
     }
 
-    public Event(EventType eventType, int time, Router router_src, Direction direction) {
+    public Event(EventType eventType, int time, Router router_src, Direction direction, int vcAllotted) {
         this.eventType = eventType;
         this.time = time;
         this.router_src = router_src;
         this.direction = direction;
+        this.vcAllotted = vcAllotted;
     }
 
     public Direction getDirection() {
@@ -57,6 +59,10 @@ public class Event implements Comparable<Event> {
 
     public int getMessageSize() {
         return message;
+    }
+
+    public int getVcAllotted() {
+        return vcAllotted;
     }
 
     @Override
