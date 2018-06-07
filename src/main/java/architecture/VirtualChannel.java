@@ -6,15 +6,15 @@ import java.util.ArrayList;
 
 public class VirtualChannel {
 
-    int idx;
-    int size;
-    boolean hold;
-    ArrayList<Flit> list;
+    private int idx;
+    private int size;
+    private boolean lock;
+    private ArrayList<Flit> list;
 
     public VirtualChannel(int idx, int size) {
         this.idx = idx;
         this.size = size;
-        this.hold = false;
+        this.lock = false;
         list = new ArrayList<Flit>();
     }
 
@@ -39,7 +39,15 @@ public class VirtualChannel {
     }
 
     public boolean isFree() {
-        return !hold;
+        return !lock;
+    }
+
+    public void lockAllottedVC() {
+        lock = true;
+    }
+
+    public void releaseAllottedVC() {
+        lock = false;
     }
 
     public Boolean enqueueFlit(Flit f) {

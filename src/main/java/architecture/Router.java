@@ -208,7 +208,7 @@ public class Router implements Routing {
             oLeft.getDest().getInRight().accepteFlit(flit, vcAllotted);
 
             // Tracing
-            Trace t = new Trace(this, oLeft.getDest(), vcAllotted, Simulator.clock);
+            Trace t = new Trace(flit, this, oLeft.getDest(), vcAllotted, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -222,7 +222,7 @@ public class Router implements Routing {
             oRight.getDest().getInLeft().accepteFlit(flit, vcAllotted);
 
             // Tracing
-            Trace t = new Trace(this, oRight.getDest(), vcAllotted, Simulator.clock);
+            Trace t = new Trace(flit, this, oRight.getDest(), vcAllotted, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -235,7 +235,7 @@ public class Router implements Routing {
             oUp.getDest().getInDown().accepteFlit(flit, vcAllotted);
 
             // Tracing
-            Trace t = new Trace(this, oUp.getDest(), vcAllotted, Simulator.clock);
+            Trace t = new Trace(flit, this, oUp.getDest(), vcAllotted, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -249,7 +249,7 @@ public class Router implements Routing {
             oDown.getDest().getInUp().accepteFlit(flit, vcAllotted);
 
             // Tracing
-            Trace t = new Trace(this, oDown.getDest(), vcAllotted, Simulator.clock);
+            Trace t = new Trace(flit, this, oDown.getDest(), vcAllotted, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -284,7 +284,7 @@ public class Router implements Routing {
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
             // Tracing
-            Trace t = new Trace(this, oLeft.getDest(), freeVC, Simulator.clock);
+            Trace t = new Trace(flit, this, oLeft.getDest(), freeVC, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -299,7 +299,7 @@ public class Router implements Routing {
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
             // Tracing
-            Trace t = new Trace(this, oRight.getDest(), freeVC, Simulator.clock);
+            Trace t = new Trace(flit, this, oRight.getDest(), freeVC, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -308,12 +308,12 @@ public class Router implements Routing {
 
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
-            freeVC = oUp.getDest().getInRight().getFirstFreeVC();
+            freeVC = oUp.getDest().getInDown().getFirstFreeVC();
 
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
             // Tracing
-            Trace t = new Trace(this, oUp.getDest(), freeVC, Simulator.clock);
+            Trace t = new Trace(flit, this, oUp.getDest(), freeVC, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
@@ -323,19 +323,28 @@ public class Router implements Routing {
 
         } else if (direction == Direction.SOUTH) {
             System.out.println("Flit " + flit.getType() + " sended in SOUTH");
-            freeVC = oDown.getDest().getInRight().getFirstFreeVC();
+            freeVC = oDown.getDest().getInUp().getFirstFreeVC();
 
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);
 
             // Tracing
-            Trace t = new Trace(this, oDown.getDest(), freeVC, Simulator.clock);
+            Trace t = new Trace(flit, this, oDown.getDest(), freeVC, Simulator.clock);
             Simulator.traceList.add(t);
 
             // Event Simulation Push
             event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oDown.getDest(), Direction.NORTH, freeVC);
             Simulator.eventList.push(event);
         }
-        System.out.println("VC FREE : "+freeVC);
+
+        // hold VC from the head flit
+        if (flit.getType() == FlitType.HEAD) {
+            oDown.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
+            System.out.println("VC : (" + freeVC + ") has been locked");
+        }
+//        else if (flit.getType() == FlitType.TAIL) {
+//            oDown.getDest().getInRight().getVclist().get(freeVC).releaseAllottedVC();
+//            System.out.println("VC : (" + freeVC + ") has been released");
+//        }
     }
 
     public Direction getRoutingDirection(int dx, int dy) {
@@ -364,22 +373,6 @@ public class Router implements Routing {
         }
     }
 
-    private void forwardFlit(Flit f) {
-        // getting the first information if it's a Header
-        if (f.getType() == FlitType.HEAD) {
-            x_dest = f.getDx();
-            y_dest = f.getDx();
-        }
-
-        // Get Direction and Forward
-        Direction direction = getRoutingDirection(x_dest, y_dest);
-
-        if (direction == null) {
-            System.out.println("Destination Reached");
-        } else {
-            // Sending
-        }
-    }
 
     public boolean isSendingBufferEmpty() {
         return sendingBuffer.isEmpty();
