@@ -2,8 +2,8 @@ package communication;
 
 public enum FlitType {
 
-    HEAD("Header"),
-    DATA("Data"),
+    HEAD("Head"),
+    BODY("Body"),
     TAIL("Tail");
 
     private String type = "";

@@ -46,7 +46,7 @@ public class Simulator {
                 case MESSAGE_SEND:
                     message = curr_ev.getMessageSize();
                     dest = curr_ev.getRouter_dest();
-                    router.sendMessage(message, dest);
+                    router.sendMessage(message, dest, clock);
                     break;
 
                 case SEND_HEAD_FLIT:
@@ -71,9 +71,33 @@ public class Simulator {
 
                     }
 
-                    router.sendHeadFlit(flit);
+                    router.sendHeadFlit(flit, clock + 1);
 
                     break;
+
+                case SEND_BODY_FLIT:
+                    // get the direction
+                    direction = curr_ev.getDirection();
+
+                    // get Allotted VC
+                    vcAllotted = curr_ev.getVcAllotted();
+
+                    // Getting Flit
+                    if (direction == null) {
+                        flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
+                    } else {
+                        if (direction == Direction.EAST)
+                            flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.WEST)
+                            flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.NORTH)
+                            flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.SOUTH)
+                            flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
+
+                    }
+
+                    router.sendFlit(flit, vcAllotted, clock + 1);
 
                 default:
                     break;

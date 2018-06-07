@@ -29,7 +29,7 @@ public class Packet {
             else if (i == numberOfFlit - 1) // Tail  Flit
                 flitList.add(new Flit(FlitType.TAIL, Simulator.clock));
             else // Data Flit
-                flitList.add(new Flit(FlitType.DATA, Simulator.clock));
+                flitList.add(new Flit(FlitType.BODY, Simulator.clock));
         }
     }
 
