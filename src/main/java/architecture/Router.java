@@ -248,7 +248,12 @@ public class Router implements Routing {
 
         if (direction == Direction.WEST) {
             System.out.println("Flit " + flit.getType() + " sended in WEST");
+
+            // Getting the first free VC
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
+
+            // Lock the VC
+            oLeft.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
 
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
@@ -263,7 +268,12 @@ public class Router implements Routing {
 
         } else if (direction == Direction.EAST) {
             System.out.println("Flit " + flit.getType() + " sended in EAST");
+
+            // Getting the first free VC
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
+
+            // Lock the VC
+            oRight.getDest().getInLeft().getVclist().get(freeVC).lockAllottedVC();
 
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
@@ -277,7 +287,12 @@ public class Router implements Routing {
 
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
+
+            // Getting the first free VC
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
+
+            // Lock the VC
+            oUp.getDest().getInDown().getVclist().get(freeVC).lockAllottedVC();
 
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
@@ -292,7 +307,12 @@ public class Router implements Routing {
 
         } else if (direction == Direction.SOUTH) {
             System.out.println("Flit " + flit.getType() + " sended in SOUTH");
+
+            // Getting the first free VC
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
+
+            // Lock the VC
+            oDown.getDest().getInUp().getVclist().get(freeVC).lockAllottedVC();
 
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);
 
