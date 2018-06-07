@@ -190,10 +190,6 @@ public class Router implements Routing {
             Trace t = new Trace(flit, this, oLeft.getDest(), vcAllotted, time);
             Simulator.traceList.add(t);
 
-            // Event Simulation Push
-            event = new Event(EventType.SEND_BODY_FLIT, time, oLeft.getDest(), Direction.EAST, vcAllotted);
-            Simulator.eventList.push(event);
-
 
         } else if (direction == Direction.EAST) {
             System.out.println("Flit " + flit.getType() + " sended in EAST");
@@ -204,9 +200,6 @@ public class Router implements Routing {
             Trace t = new Trace(flit, this, oRight.getDest(), vcAllotted, time);
             Simulator.traceList.add(t);
 
-            // Event Simulation Push
-            event = new Event(EventType.SEND_BODY_FLIT, time, oRight.getDest(), Direction.WEST, vcAllotted);
-            Simulator.eventList.push(event);
 
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
@@ -216,10 +209,6 @@ public class Router implements Routing {
             // Tracing
             Trace t = new Trace(flit, this, oUp.getDest(), vcAllotted, time);
             Simulator.traceList.add(t);
-
-            // Event Simulation Push
-            event = new Event(EventType.SEND_BODY_FLIT, time, oUp.getDest(), Direction.SOUTH, vcAllotted);
-            Simulator.eventList.push(event);
 
 
         } else if (direction == Direction.SOUTH) {
@@ -231,9 +220,6 @@ public class Router implements Routing {
             Trace t = new Trace(flit, this, oDown.getDest(), vcAllotted, time);
             Simulator.traceList.add(t);
 
-            // Event Simulation Push
-            event = new Event(EventType.SEND_BODY_FLIT, time, oDown.getDest(), Direction.NORTH, vcAllotted);
-            Simulator.eventList.push(event);
         }
     }
 
@@ -254,8 +240,6 @@ public class Router implements Routing {
         // Free VC ID
         int freeVC = -1;
 
-        Event event;
-
         if (direction == Direction.WEST) {
             System.out.println("Flit " + flit.getType() + " sended in WEST");
 
@@ -272,8 +256,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.SEND_HEAD_FLIT, time, oLeft.getDest(), Direction.EAST, freeVC);
-            Simulator.eventList.push(event);
+            NextEvents(time, oLeft.getDest(), Direction.EAST, freeVC);
 
 
         } else if (direction == Direction.EAST) {
@@ -292,8 +275,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.SEND_HEAD_FLIT, time, oRight.getDest(), Direction.WEST, freeVC);
-            Simulator.eventList.push(event);
+            NextEvents(time, oRight.getDest(), Direction.WEST, freeVC);
 
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
@@ -311,8 +293,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.SEND_HEAD_FLIT, time, oUp.getDest(), Direction.SOUTH, freeVC);
-            Simulator.eventList.push(event);
+            NextEvents(time, oUp.getDest(), Direction.SOUTH, freeVC);
 
 
         } else if (direction == Direction.SOUTH) {
@@ -331,8 +312,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.SEND_HEAD_FLIT, time, oDown.getDest(), Direction.NORTH, freeVC);
-            Simulator.eventList.push(event);
+            NextEvents(time, oDown.getDest(), Direction.NORTH, freeVC);
         }
 
     }
@@ -363,4 +343,27 @@ public class Router implements Routing {
         }
     }
 
+    public void NextEvents(int time, Router router, Direction direction, int vcAllotted) {
+
+        int nbflit = Message.packetDefaultSize / Packet.FlitDefaultSize;
+        Event event = null;
+        int clock = time;
+
+        for (int i = 0; i < nbflit; i++) {
+            if (i == 0)
+                event = new Event(EventType.SEND_HEAD_FLIT, clock, router, direction, vcAllotted);
+            else if (i == nbflit - 1)
+                event = new Event(EventType.SEND_TAIL_FLIT, clock, router, direction, vcAllotted);
+            else
+                event = new Event(EventType.SEND_BODY_FLIT, clock, router, direction, vcAllotted);
+
+            Simulator.eventList.push(event);
+            clock++;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Router (" + x + "," + y+")";
+    }
 }

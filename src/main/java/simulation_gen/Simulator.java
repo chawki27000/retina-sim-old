@@ -99,6 +99,9 @@ public class Simulator {
 
                     router.sendFlit(flit, vcAllotted, clock + 1);
 
+                case SEND_TAIL_FLIT:
+                    break;
+
                 default:
                     break;
             }

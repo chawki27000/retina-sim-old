@@ -21,7 +21,7 @@ public class Trace {
 
     @Override
     public String toString() {
-        return "Sent "+flit.getType()+" Flit from Router (" + src.getX() + "," + src.getY() + ") to (" +
-                dest.getX() + "," + dest.getY() + ") on VC (" + vcAllotted + ") at : " + time;
+        return "Sent "+flit.getType()+" Flit from " + src + " to " +
+                dest + " on VC (" + vcAllotted + ") at : " + time;
     }
 }

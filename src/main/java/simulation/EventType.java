@@ -6,5 +6,4 @@ public enum EventType {
     SEND_HEAD_FLIT,
     SEND_BODY_FLIT,
     SEND_TAIL_FLIT,
-    FORWARD_FLIT,
 }
