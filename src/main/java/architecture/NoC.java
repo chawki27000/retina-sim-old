@@ -52,6 +52,9 @@ public class NoC {
         InPort inDown = new InPort(2, NBVC, VCSIZE);
         InPort inLeft = new InPort(3, NBVC, VCSIZE);
 
+        // Local Inport with a specific parameters
+        InPort inLocal = new InPort(4, 1, 40);
+
         // Initialise Output ports
         OutPort oUp = new OutPort(0);
         OutPort oRight = new OutPort(1);
@@ -62,7 +65,7 @@ public class NoC {
 
 
         return new Router(x + " " + y, x, y,
-                inLeft, inRight, inUp, inDown,
+                inLeft, inRight, inUp, inDown, inLocal,
                 oLeft, oRight, oUp, oDown, pe);
     }
 

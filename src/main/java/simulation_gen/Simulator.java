@@ -29,6 +29,7 @@ public class Simulator {
         // local variable
         Flit flit = null;
         int vcAllotted = -1;
+        Direction direction;
 
         // Simulation Loop
         while (!eventList.isEmpty() && clock < simulationPeriod) {
@@ -48,34 +49,29 @@ public class Simulator {
                     router.sendMessage(message, dest);
                     break;
 
-                case SEND_FLIT:
-                    if (router.isSendingBufferEmpty()) {
-                        break;
-                    }
-
-                    flit = router.sendingBufferPull();
-
-                    router.sendHeadFlit(flit);
-
-                    break;
-
-                case FORWARD_FLIT:
+                case SEND_HEAD_FLIT:
                     // get the direction
-                    Direction direction = curr_ev.getDirection();
+                    direction = curr_ev.getDirection();
 
                     // get Allotted VC
                     vcAllotted = curr_ev.getVcAllotted();
 
-                    if (direction == Direction.EAST)
-                        flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
-                    else if (direction == Direction.WEST)
-                        flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
-                    else if (direction == Direction.NORTH)
-                        flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
-                    else if (direction == Direction.SOUTH)
-                        flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
+                    // Getting Flit
+                    if (direction == null) {
+                        flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
+                    } else {
+                        if (direction == Direction.EAST)
+                            flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.WEST)
+                            flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.NORTH)
+                            flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
+                        else if (direction == Direction.SOUTH)
+                            flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
 
-                    router.sendFlit(flit, vcAllotted);
+                    }
+
+                    router.sendHeadFlit(flit);
 
                     break;
 

@@ -14,18 +14,16 @@ public class Router implements Routing {
     // Active Object attribute
     public int x_dest, y_dest, bits;
 
-    private ArrayList<Flit> sendingBuffer;
-
     int x, y;
-    private InPort inLeft, inRight, inUp, inDown;
+    private InPort inLeft, inRight, inUp, inDown, inLocal;
     private OutPort oLeft, oRight, oUp, oDown;
     public PE pe;
 
     public Router(String name, int x, int y, InPort inLeft,
                   InPort inRight, InPort inUp,
-                  InPort inDown, OutPort oLeft,
-                  OutPort oRight, OutPort oUp,
-                  OutPort oDown, PE pe) {
+                  InPort inDown, InPort inLocal,
+                  OutPort oLeft, OutPort oRight,
+                  OutPort oUp, OutPort oDown, PE pe) {
 
         this.x = x;
         this.y = y;
@@ -37,13 +35,10 @@ public class Router implements Routing {
         this.oRight = oRight;
         this.oUp = oUp;
         this.oDown = oDown;
+        this.inLocal = inLocal;
         this.pe = pe;
 
-        // Sending Buffer Initialisation
-        sendingBuffer = new ArrayList<>();
-
     }
-
 
     public int getX() {
         return x;
@@ -53,72 +48,43 @@ public class Router implements Routing {
         return y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
     public InPort getInLeft() {
         return inLeft;
-    }
-
-    public void setInLeft(InPort inLeft) {
-        this.inLeft = inLeft;
     }
 
     public InPort getInRight() {
         return inRight;
     }
 
-    public void setInRight(InPort inRight) {
-        this.inRight = inRight;
-    }
 
     public InPort getInUp() {
         return inUp;
     }
 
-    public void setInUp(InPort inUp) {
-        this.inUp = inUp;
+    public InPort getInLocal() {
+        return inLocal;
     }
+
 
     public InPort getInDown() {
         return inDown;
-    }
-
-    public void setInDown(InPort inDown) {
-        this.inDown = inDown;
     }
 
     public OutPort getoLeft() {
         return oLeft;
     }
 
-    public void setoLeft(OutPort oLeft) {
-        this.oLeft = oLeft;
-    }
 
     public OutPort getoRight() {
         return oRight;
-    }
-
-    public void setoRight(OutPort oRight) {
-        this.oRight = oRight;
     }
 
     public OutPort getoUp() {
         return oUp;
     }
 
-    public void setoUp(OutPort oUp) {
-        this.oUp = oUp;
-    }
-
     public OutPort getoDown() {
         return oDown;
-    }
-
-    public void setoDown(OutPort oDown) {
-        this.oDown = oDown;
     }
 
     /**
@@ -172,14 +138,17 @@ public class Router implements Routing {
 
         // Flit preparation
         for (Flit flit : flitList) {
-            // Flit pushing in PE
-            sendingBuffer.add(flit);
+
+            // Flit pushing in local Inport into VC 0
+            inLocal.getVclist().get(0).enqueueFlit(flit);
+
             // set coordinates in others flit
             flit.setDxDy(dx, dy);
-            // Event pushing
-            Event event = new Event(EventType.SEND_FLIT, Simulator.clock, this);
-            Simulator.eventList.push(event);
         }
+
+        // Event pushing
+        Event event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock, this, (Direction) null, 0);
+        Simulator.eventList.push(event);
 
 
         return false;
@@ -288,7 +257,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oLeft.getDest(), Direction.EAST, freeVC);
+            event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock + 1, oLeft.getDest(), Direction.EAST, freeVC);
             Simulator.eventList.push(event);
 
 
@@ -303,7 +272,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oRight.getDest(), Direction.WEST, freeVC);
+            event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock + 1, oRight.getDest(), Direction.WEST, freeVC);
             Simulator.eventList.push(event);
 
         } else if (direction == Direction.NORTH) {
@@ -317,7 +286,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oUp.getDest(), Direction.SOUTH, freeVC);
+            event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock + 1, oUp.getDest(), Direction.SOUTH, freeVC);
             Simulator.eventList.push(event);
 
 
@@ -332,19 +301,10 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            event = new Event(EventType.FORWARD_FLIT, Simulator.clock + 1, oDown.getDest(), Direction.NORTH, freeVC);
+            event = new Event(EventType.SEND_HEAD_FLIT, Simulator.clock + 1, oDown.getDest(), Direction.NORTH, freeVC);
             Simulator.eventList.push(event);
         }
 
-        // hold VC from the head flit
-        if (flit.getType() == FlitType.HEAD) {
-            oDown.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
-            System.out.println("VC : (" + freeVC + ") has been locked");
-        }
-//        else if (flit.getType() == FlitType.TAIL) {
-//            oDown.getDest().getInRight().getVclist().get(freeVC).releaseAllottedVC();
-//            System.out.println("VC : (" + freeVC + ") has been released");
-//        }
     }
 
     public Direction getRoutingDirection(int dx, int dy) {
@@ -373,17 +333,4 @@ public class Router implements Routing {
         }
     }
 
-
-    public boolean isSendingBufferEmpty() {
-        return sendingBuffer.isEmpty();
-    }
-
-    public Flit sendingBufferPull() {
-        if (sendingBuffer.isEmpty())
-            return null;
-
-        Flit flit = sendingBuffer.get(0);
-        sendingBuffer.remove(flit);
-        return flit;
-    }
 }
