@@ -71,8 +71,10 @@ public class Simulator {
 
                     }
 
+
                     router.sendHeadFlit(flit, clock + 1);
 
+                    System.out.println(flit.afficherHashMap());
                     break;
 
                 case SEND_BODY_FLIT:
@@ -97,7 +99,7 @@ public class Simulator {
 
                     }
 
-                    router.sendFlit(flit, vcAllotted, clock + 1);
+                    router.sendFlit(flit, clock + 1);
 
                 case SEND_TAIL_FLIT:
                     break;

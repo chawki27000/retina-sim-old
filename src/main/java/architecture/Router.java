@@ -164,7 +164,7 @@ public class Router implements Routing {
         return false;
     }
 
-    public void sendFlit(Flit flit, int vcAllotted, int time) {
+    public void sendFlit(Flit flit, int time) {
 
         int dx, dy;
         dx = flit.getDx();
@@ -184,6 +184,10 @@ public class Router implements Routing {
         if (direction == Direction.WEST) {
             System.out.println("Flit " + flit.getType() + " sended in WEST");
 
+            // getting VC Allotted from Head Flit
+            Packet packet = flit.getPacket();
+            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
+
             oLeft.getDest().getInRight().accepteFlit(flit, vcAllotted);
 
             // Tracing
@@ -193,6 +197,10 @@ public class Router implements Routing {
 
         } else if (direction == Direction.EAST) {
             System.out.println("Flit " + flit.getType() + " sended in EAST");
+
+            // getting VC Allotted from Head Flit
+            Packet packet = flit.getPacket();
+            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
 
             oRight.getDest().getInLeft().accepteFlit(flit, vcAllotted);
 
@@ -204,6 +212,10 @@ public class Router implements Routing {
         } else if (direction == Direction.NORTH) {
             System.out.println("Flit " + flit.getType() + " sended in NORTH");
 
+            // getting VC Allotted from Head Flit
+            Packet packet = flit.getPacket();
+            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
+
             oUp.getDest().getInDown().accepteFlit(flit, vcAllotted);
 
             // Tracing
@@ -213,6 +225,10 @@ public class Router implements Routing {
 
         } else if (direction == Direction.SOUTH) {
             System.out.println("Flit " + flit.getType() + " sended in SOUTH");
+
+            // getting VC Allotted from Head Flit
+            Packet packet = flit.getPacket();
+            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
 
             oDown.getDest().getInUp().accepteFlit(flit, vcAllotted);
 
@@ -249,7 +265,11 @@ public class Router implements Routing {
             // Lock the VC
             oLeft.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
 
+            // Flit Sending
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+
+            // History writing
+            flit.addVCAllotted(oLeft.getDest(), freeVC);
 
             // Tracing
             Trace t = new Trace(flit, this, oLeft.getDest(), freeVC, time);
@@ -268,7 +288,11 @@ public class Router implements Routing {
             // Lock the VC
             oRight.getDest().getInLeft().getVclist().get(freeVC).lockAllottedVC();
 
+            // Flit Sending
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+
+            // History writing
+            flit.addVCAllotted(oRight.getDest(), freeVC);
 
             // Tracing
             Trace t = new Trace(flit, this, oRight.getDest(), freeVC, time);
@@ -286,7 +310,11 @@ public class Router implements Routing {
             // Lock the VC
             oUp.getDest().getInDown().getVclist().get(freeVC).lockAllottedVC();
 
+            // Flit Sending
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
+
+            // History writing
+            flit.addVCAllotted(oUp.getDest(), freeVC);
 
             // Tracing
             Trace t = new Trace(flit, this, oUp.getDest(), freeVC, time);
@@ -305,7 +333,11 @@ public class Router implements Routing {
             // Lock the VC
             oDown.getDest().getInUp().getVclist().get(freeVC).lockAllottedVC();
 
+            // Flit Sending
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+
+            // History writing
+            flit.addVCAllotted(oDown.getDest(), freeVC);
 
             // Tracing
             Trace t = new Trace(flit, this, oDown.getDest(), freeVC, time);
