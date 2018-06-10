@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Message {
 
     public static int packetDefaultSize = 64;
+    public static int packetNum = 0;
 
     ArrayList<Packet> packetList = new ArrayList<>();
     int size;
@@ -22,8 +23,10 @@ public class Message {
         int numberOfPacket = size / Message.packetDefaultSize;
 
         for (int i = 0; i < numberOfPacket; i++) {
-            packetList.add(new Packet(i));
+            packetList.add(new Packet(packetNum));
         }
+
+        packetNum++;
     }
 
     public void setDestinationInfo(int[] dest) {

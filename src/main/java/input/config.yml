@@ -1,6 +1,6 @@
 noc:
   dimension: 3
-  numberOfVC: 1
+  numberOfVC: 10
   VCBufferSize: 10
 
 simulation:

@@ -1,5 +1,9 @@
 package communication;
 
+import architecture.Router;
+
+import java.util.HashMap;
+
 public class Flit {
 
     FlitType type;
@@ -7,10 +11,12 @@ public class Flit {
     private int timeBegin, timeEnd;
     // Only Header Flit
     private int dx, dy, packetID;
+    private HashMap<Router, Integer> vcAllotedMap = new HashMap<Router, Integer>();
 
-    public Flit(FlitType type, int timeBegin) {
+    public Flit(FlitType type, int packetID, int timeBegin) {
         this.type = type;
         this.timeBegin = timeBegin;
+        this.packetID = packetID;
     }
 
     public FlitType getType() {
@@ -44,6 +50,20 @@ public class Flit {
         }
     }
 
+    /*
+    Only Header Flit
+    */
+    public void addVCAllotted(Router router, int vcAllotted) {
+        vcAllotedMap.putIfAbsent(router, vcAllotted);
+    }
+
+    /*
+    Only Header Flit
+    */
+    public int getVCAllottedFromRouter(Router router) {
+        return vcAllotedMap.get(router);
+    }
+
     public int getDx() {
         return dx;
     }
@@ -62,5 +82,11 @@ public class Flit {
     public void setDxDy(int dx, int dy) {
         this.dx = dx;
         this.dy = dy;
+    }
+
+
+    @Override
+    public String toString() {
+        return type + " Flit (Packet " + packetID + ")";
     }
 }

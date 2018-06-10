@@ -21,7 +21,7 @@ public class Trace {
 
     @Override
     public String toString() {
-        return "Sent "+flit.getType()+" Flit from " + src + " to " +
+        return "Sent " + flit + " from " + src + " to " +
                 dest + " on VC (" + vcAllotted + ") at : " + time;
     }
 }
