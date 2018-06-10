@@ -3,6 +3,7 @@ package architecture;
 import communication.Flit;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * This class aims to define an Input Port which is located
@@ -70,12 +71,13 @@ public class InPort {
     }
 
     public int getFirstFreeVC() {
-        for (VirtualChannel channel : vclist) {
-            if (channel.isFree())
-                return channel.getIdx();
-        }
-
-        return -1;
+//        for (VirtualChannel channel : vclist) {
+//            if (channel.isFree())
+//                return channel.getIdx();
+//        }
+//
+//        return -1;
+        return new Random().nextInt(10);
     }
 
     public VirtualChannel getFirstNonEmptyVC() {
