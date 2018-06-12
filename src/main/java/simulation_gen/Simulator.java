@@ -58,20 +58,7 @@ public class Simulator {
                     vcAllotted = curr_ev.getVcAllotted();
 
                     // Getting Flit
-                    if (direction == null) {
-                        flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
-                    } else {
-                        if (direction == Direction.EAST)
-                            flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.WEST)
-                            flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.NORTH)
-                            flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.SOUTH)
-                            flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
-
-                    }
-
+                    flit = dequeueFlit(router, vcAllotted, direction);
 
                     router.sendHeadFlit(flit, clock + 1);
 
@@ -86,29 +73,36 @@ public class Simulator {
                     vcAllotted = curr_ev.getVcAllotted();
 
                     // Getting Flit
-                    if (direction == null) {
-                        flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
-                    } else {
-                        if (direction == Direction.EAST)
-                            flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.WEST)
-                            flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.NORTH)
-                            flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
-                        else if (direction == Direction.SOUTH)
-                            flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
-
-                    }
-
+                    flit = dequeueFlit(router, vcAllotted, direction);
 
                     router.sendFlit(flit, clock + 1);
 
                     if (flit.getType() == FlitType.TAIL)
-                        System.out.println("FREE THE VC : "+vcAllotted);
+                        System.out.println("FREE THE VC : " + vcAllotted);
 
                 default:
                     break;
             }
         }
+    }
+
+    private Flit dequeueFlit(Router router, int vcAllotted, Direction direction) {
+        Flit flit = null;
+
+        if (direction == null) {
+            flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
+        } else {
+            if (direction == Direction.EAST)
+                flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
+            else if (direction == Direction.WEST)
+                flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
+            else if (direction == Direction.NORTH)
+                flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
+            else if (direction == Direction.SOUTH)
+                flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
+
+        }
+
+        return flit;
     }
 }
