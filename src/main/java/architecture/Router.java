@@ -150,10 +150,8 @@ public class Router implements Routing {
             // Event pushing
             if (flit.getType() == FlitType.HEAD)
                 event = new Event(EventType.SEND_HEAD_FLIT, clock, this, (Direction) null, 0);
-            else if (flit.getType() == FlitType.BODY)
-                event = new Event(EventType.SEND_BODY_FLIT, clock, this, (Direction) null, 0);
-            else if (flit.getType() == FlitType.TAIL)
-                event = new Event(EventType.SEND_TAIL_FLIT, clock, this, (Direction) null, 0);
+            else if (flit.getType() == FlitType.BODY || flit.getType() == FlitType.TAIL)
+                event = new Event(EventType.SEND_BODY_TAIL_FLIT, clock, this, (Direction) null, 0);
 
             Simulator.eventList.push(event);
 
@@ -384,10 +382,8 @@ public class Router implements Routing {
         for (int i = 0; i < nbflit; i++) {
             if (i == 0)
                 event = new Event(EventType.SEND_HEAD_FLIT, clock, router, direction, vcAllotted);
-            else if (i == nbflit - 1)
-                event = new Event(EventType.SEND_TAIL_FLIT, clock, router, direction, vcAllotted);
             else
-                event = new Event(EventType.SEND_BODY_FLIT, clock, router, direction, vcAllotted);
+                event = new Event(EventType.SEND_BODY_TAIL_FLIT, clock, router, direction, vcAllotted);
 
             Simulator.eventList.push(event);
             clock++;
@@ -396,6 +392,6 @@ public class Router implements Routing {
 
     @Override
     public String toString() {
-        return "Router (" + x + "," + y+")";
+        return "Router (" + x + "," + y + ")";
     }
 }

@@ -3,6 +3,7 @@ package simulation_gen;
 import architecture.Router;
 import communication.Direction;
 import communication.Flit;
+import communication.FlitType;
 import simulation.Event;
 import simulation.EventList;
 
@@ -77,7 +78,7 @@ public class Simulator {
                     System.out.println(flit.afficherHashMap());
                     break;
 
-                case SEND_BODY_FLIT:
+                case SEND_BODY_TAIL_FLIT:
                     // get the direction
                     direction = curr_ev.getDirection();
 
@@ -99,10 +100,11 @@ public class Simulator {
 
                     }
 
+
                     router.sendFlit(flit, clock + 1);
 
-                case SEND_TAIL_FLIT:
-                    break;
+                    if (flit.getType() == FlitType.TAIL)
+                        System.out.println("FREE THE VC : "+vcAllotted);
 
                 default:
                     break;
