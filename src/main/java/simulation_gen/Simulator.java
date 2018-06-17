@@ -77,8 +77,6 @@ public class Simulator {
 
                     router.sendFlit(flit, clock + 1);
 
-                    if (flit.getType() == FlitType.TAIL)
-                        System.out.println("FREE THE VC : " + vcAllotted);
 
                 default:
                     break;
@@ -102,6 +100,9 @@ public class Simulator {
                 flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
 
         }
+
+        if (flit.getType() == FlitType.TAIL)
+            router.getInRight().getVclist().get(vcAllotted).releaseAllottedVC();
 
         return flit;
     }
