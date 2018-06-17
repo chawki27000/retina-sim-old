@@ -2,6 +2,7 @@ package architecture;
 
 
 import communication.*;
+import output.FileWriter;
 import simulation.Event;
 import simulation.EventType;
 import simulation_gen.Simulator;
@@ -263,6 +264,8 @@ public class Router implements Routing {
             // Lock the VC
             oLeft.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
 
+            FileWriter.log(direction + " VC (" + freeVC + ") of " + oLeft.getDest() + " LOCKED by " + flit + " at : " + time);
+
             // Flit Sending
             oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
@@ -286,6 +289,8 @@ public class Router implements Routing {
             // Lock the VC
             oRight.getDest().getInLeft().getVclist().get(freeVC).lockAllottedVC();
 
+            FileWriter.log(direction + " VC (" + freeVC + ") of " + oRight.getDest() + " LOCKED by " + flit + " at : " + time);
+
             // Flit Sending
             oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
@@ -307,6 +312,8 @@ public class Router implements Routing {
 
             // Lock the VC
             oUp.getDest().getInDown().getVclist().get(freeVC).lockAllottedVC();
+
+            FileWriter.log(direction + " VC (" + freeVC + ") of " + oUp.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
             oUp.getDest().getInDown().accepteFlit(flit, freeVC);
@@ -330,6 +337,8 @@ public class Router implements Routing {
 
             // Lock the VC
             oDown.getDest().getInUp().getVclist().get(freeVC).lockAllottedVC();
+
+            FileWriter.log(direction + " VC (" + freeVC + ") of " + oDown.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
             oDown.getDest().getInUp().accepteFlit(flit, freeVC);

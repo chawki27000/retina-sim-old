@@ -4,6 +4,7 @@ import architecture.Router;
 import communication.Direction;
 import communication.Flit;
 import communication.FlitType;
+import output.FileWriter;
 import simulation.Event;
 import simulation.EventList;
 
@@ -58,7 +59,7 @@ public class Simulator {
                     vcAllotted = curr_ev.getVcAllotted();
 
                     // Getting Flit
-                    flit = dequeueFlit(router, vcAllotted, direction);
+                    flit = dequeueFlit(router, vcAllotted, direction, clock);
 
                     router.sendHeadFlit(flit, clock + 1);
 
@@ -73,7 +74,7 @@ public class Simulator {
                     vcAllotted = curr_ev.getVcAllotted();
 
                     // Getting Flit
-                    flit = dequeueFlit(router, vcAllotted, direction);
+                    flit = dequeueFlit(router, vcAllotted, direction, clock);
 
                     router.sendFlit(flit, clock + 1);
 
@@ -84,7 +85,7 @@ public class Simulator {
         }
     }
 
-    private Flit dequeueFlit(Router router, int vcAllotted, Direction direction) {
+    private Flit dequeueFlit(Router router, int vcAllotted, Direction direction, int time) {
         Flit flit = null;
 
         if (direction == null) {
@@ -101,9 +102,29 @@ public class Simulator {
 
         }
 
-        if (flit.getType() == FlitType.TAIL)
-            router.getInRight().getVclist().get(vcAllotted).releaseAllottedVC();
+        if (flit.getType() == FlitType.TAIL) {
+            releaseVC(router, vcAllotted, direction);
+
+            if (direction != null)
+                FileWriter.log(direction + " VC (" + vcAllotted + ") of " + router + " RELEASED by " + flit + " at : " + time);
+        }
 
         return flit;
+    }
+
+    private void releaseVC(Router router, int vcAllotted, Direction direction) {
+
+        if (direction == null) {
+            return;
+        } else {
+            if (direction == Direction.EAST)
+                router.getInRight().getVclist().get(vcAllotted).releaseAllottedVC();
+            else if (direction == Direction.WEST)
+                router.getInLeft().getVclist().get(vcAllotted).releaseAllottedVC();
+            else if (direction == Direction.NORTH)
+                router.getInUp().getVclist().get(vcAllotted).releaseAllottedVC();
+            else if (direction == Direction.SOUTH)
+                router.getInDown().getVclist().get(vcAllotted).releaseAllottedVC();
+        }
     }
 }
