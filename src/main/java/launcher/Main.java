@@ -40,19 +40,20 @@ public class Main {
         // Output File Preparing
         FileWriter fileWriter = new FileWriter(logPath, resultPath);
 
-        System.out.println(Simulator.eventList);
-
         // START SIMULATING
+        System.out.println("Simulation : Start");
         Simulator s = new Simulator(configParse.getPeriod());
         s.simulate();
+        System.out.println("Simulation : End");
+
+        // Traces Writing
+        FileWriter.log("\n");
+        FileWriter.log("- - - - - - - - - - - - TRACE - - - - - - - - - - - -");
+        for (Trace t : Simulator.traceList) {
+            FileWriter.log(t.toString());
+        }
 
         // Close Output File Writer
         fileWriter.close();
-
-        // Traces Printing
-        System.out.println("- - - TRACE - - -");
-        for (Trace t : Simulator.traceList) {
-            System.out.println(t);
-        }
     }
 }

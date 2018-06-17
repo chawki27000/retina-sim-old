@@ -63,7 +63,6 @@ public class Simulator {
 
                     router.sendHeadFlit(flit, clock + 1);
 
-                    System.out.println(flit.afficherHashMap());
                     break;
 
                 case SEND_BODY_TAIL_FLIT:

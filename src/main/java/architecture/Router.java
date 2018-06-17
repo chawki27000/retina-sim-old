@@ -132,7 +132,7 @@ public class Router implements Routing {
         dy = headerFlit.getDy();
 
 
-        System.out.println("Sending packet : " + packet.getId() + " From : (" +
+        FileWriter.log("Sending packet : " + packet.getId() + " From : (" +
                 x + "," + y + ")" + " TO : (" + dx + "," + dy + ")");
 
 
@@ -173,7 +173,7 @@ public class Router implements Routing {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println("Destination Reached");
+            FileWriter.log(flit + " : Destination Reached");
             return;
         }
 
@@ -181,7 +181,7 @@ public class Router implements Routing {
         Event event;
 
         if (direction == Direction.WEST) {
-            System.out.println("Flit " + flit.getType() + " sended in WEST");
+            FileWriter.log(flit + " : sent in WEST");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
@@ -195,7 +195,7 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.EAST) {
-            System.out.println("Flit " + flit.getType() + " sended in EAST");
+            FileWriter.log(flit + " : sent in EAST");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
@@ -209,7 +209,7 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.NORTH) {
-            System.out.println("Flit " + flit.getType() + " sended in NORTH");
+            FileWriter.log(flit + " : sent in NORTH");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
@@ -223,7 +223,7 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.SOUTH) {
-            System.out.println("Flit " + flit.getType() + " sended in SOUTH");
+            FileWriter.log(flit + " : sent in SOUTH");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
@@ -248,7 +248,7 @@ public class Router implements Routing {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println("Destination Reached");
+            FileWriter.log(flit + " : Destination Reached");
             return;
         }
 
@@ -256,7 +256,7 @@ public class Router implements Routing {
         int freeVC = -1;
 
         if (direction == Direction.WEST) {
-            System.out.println("Flit " + flit.getType() + " sended in WEST");
+            FileWriter.log(flit + " : sent in WEST");
 
             // Getting the first free VC
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
@@ -281,7 +281,7 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.EAST) {
-            System.out.println("Flit " + flit.getType() + " sended in EAST");
+            FileWriter.log(flit + " : sent in EAST");
 
             // Getting the first free VC
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
@@ -305,7 +305,7 @@ public class Router implements Routing {
             NextEvents(time, oRight.getDest(), Direction.WEST, freeVC);
 
         } else if (direction == Direction.NORTH) {
-            System.out.println("Flit " + flit.getType() + " sended in NORTH");
+            FileWriter.log(flit + " : sent in NORTH");
 
             // Getting the first free VC
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
@@ -330,7 +330,7 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.SOUTH) {
-            System.out.println("Flit " + flit.getType() + " sended in SOUTH");
+            FileWriter.log(flit + " : sent in SOUTH");
 
             // Getting the first free VC
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
