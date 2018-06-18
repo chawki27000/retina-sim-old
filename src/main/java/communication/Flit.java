@@ -98,6 +98,6 @@ public class Flit {
 
     @Override
     public String toString() {
-        return type + " Flit (Packet " + packetID + ")";
+        return type + " Flit (Packet " + packet.getId() + ")";
     }
 }

@@ -71,13 +71,12 @@ public class InPort {
     }
 
     public int getFirstFreeVC() {
-//        for (VirtualChannel channel : vclist) {
-//            if (channel.isFree())
-//                return channel.getIdx();
-//        }
-//
-//        return -1;
-        return new Random().nextInt(10);
+        for (VirtualChannel channel : vclist) {
+            if (channel.isFree())
+                return channel.getIdx();
+        }
+
+        return -1;
     }
 
     public VirtualChannel getFirstNonEmptyVC() {
