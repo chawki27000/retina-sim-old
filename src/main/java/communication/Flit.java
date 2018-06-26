@@ -64,7 +64,7 @@ public class Flit {
     Only Header Flit
     */
     public int getVCAllottedFromRouter(Router router) {
-        return vcAllottedMap.get(router);
+        return vcAllottedMap.getOrDefault(router, -1);
     }
 
     public String afficherHashMap() {
