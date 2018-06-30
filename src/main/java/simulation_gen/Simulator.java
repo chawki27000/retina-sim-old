@@ -32,6 +32,7 @@ public class Simulator {
         Flit flit = null;
         int vcAllotted = -1;
         Direction direction;
+        boolean result;
 
         // Simulation Loop
         while (!eventList.isEmpty() && clock < simulationPeriod) {
@@ -61,7 +62,15 @@ public class Simulator {
                     // Getting Flit
                     flit = dequeueFlit(router, vcAllotted, direction, clock);
 
-                    router.sendHeadFlit(flit, clock + 1);
+                    result = router.sendHeadFlit(flit, clock + 1);
+                    if (result) {
+                        if (removeFlit(flit, router, vcAllotted, direction))
+                            System.out.println(flit + " : REMOVED");
+                        else
+                            System.out.println(flit + " : NOT REMOVED");
+                    } else {
+                        System.out.println(flit + " : NOT REMOVED");
+                    }
 
                     break;
 
@@ -82,6 +91,25 @@ public class Simulator {
                     break;
             }
         }
+    }
+
+    private boolean removeFlit(Flit flit, Router router, int vcAllotted, Direction direction) {
+        boolean ret = false;
+
+        if (direction == null) {
+            ret = router.getInLocal().getVclist().get(vcAllotted).removeFlit(flit);
+        } else {
+            if (direction == Direction.EAST)
+                ret = router.getInRight().getVclist().get(vcAllotted).removeFlit(flit);
+            else if (direction == Direction.WEST)
+                ret = router.getInLeft().getVclist().get(vcAllotted).removeFlit(flit);
+            else if (direction == Direction.NORTH)
+                ret = router.getInUp().getVclist().get(vcAllotted).removeFlit(flit);
+            else if (direction == Direction.SOUTH)
+                ret = router.getInDown().getVclist().get(vcAllotted).removeFlit(flit);
+
+        }
+        return ret;
     }
 
     private Flit dequeueFlit(Router router, int vcAllotted, Direction direction, int time) {

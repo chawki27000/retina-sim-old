@@ -254,7 +254,7 @@ public class Router implements Routing {
         }
     }
 
-    public void sendHeadFlit(Flit flit, int time) {
+    public boolean sendHeadFlit(Flit flit, int time) {
 
         int dx, dy;
         dx = flit.getDx();
@@ -265,7 +265,7 @@ public class Router implements Routing {
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
-            return;
+            return true;
         }
 
         // Free VC ID
@@ -278,7 +278,7 @@ public class Router implements Routing {
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             // Lock the VC
@@ -307,7 +307,7 @@ public class Router implements Routing {
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             // Lock the VC
@@ -335,7 +335,7 @@ public class Router implements Routing {
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             // Lock the VC
@@ -364,7 +364,7 @@ public class Router implements Routing {
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             // Lock the VC
@@ -386,6 +386,7 @@ public class Router implements Routing {
             NextEvents(time, oDown.getDest(), Direction.NORTH, freeVC);
         }
 
+        return true;
     }
 
     public Direction getRoutingDirection(int dx, int dy) {
