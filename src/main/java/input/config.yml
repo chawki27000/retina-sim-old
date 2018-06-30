@@ -2,6 +2,7 @@ noc:
   dimension: 3
   numberOfVC: 10
   VCBufferSize: 10
+  quantum: 1
 
 simulation:
   period: 400
