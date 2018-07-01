@@ -73,4 +73,14 @@ public class VirtualChannel {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        String str = "[ ";
+        for (Flit f : list) {
+            str += f.toString() + "  ";
+        }
+        str += " ]";
+        return str;
+    }
 }

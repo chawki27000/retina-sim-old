@@ -163,7 +163,7 @@ public class Router implements Routing {
         return false;
     }
 
-    public void sendFlit(Flit flit, int time) {
+    public boolean sendFlit(Flit flit, int time) {
 
         int dx, dy;
         dx = flit.getDx();
@@ -174,7 +174,7 @@ public class Router implements Routing {
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
-            return;
+            return true;
         }
 
 
@@ -188,7 +188,7 @@ public class Router implements Routing {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
             if (vcAllotted < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             oLeft.getDest().getInRight().accepteFlit(flit, vcAllotted);
@@ -206,7 +206,7 @@ public class Router implements Routing {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
             if (vcAllotted < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             oRight.getDest().getInLeft().accepteFlit(flit, vcAllotted);
@@ -224,7 +224,7 @@ public class Router implements Routing {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
             if (vcAllotted < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             oUp.getDest().getInDown().accepteFlit(flit, vcAllotted);
@@ -242,7 +242,7 @@ public class Router implements Routing {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
             if (vcAllotted < 0) {
                 System.out.println(flit + " : Blocking");
-                return;
+                return false;
             }
 
             oDown.getDest().getInUp().accepteFlit(flit, vcAllotted);
@@ -252,6 +252,7 @@ public class Router implements Routing {
             Simulator.traceList.add(t);
 
         }
+        return true;
     }
 
     public boolean sendHeadFlit(Flit flit, int time) {
