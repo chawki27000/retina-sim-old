@@ -47,10 +47,10 @@ public class Main {
         System.out.println("Simulation : End");
 
         // Traces Writing
-        FileWriter.log("\n");
-        FileWriter.log("- - - - - - - - - - - - TRACE - - - - - - - - - - - -");
+        System.out.println("\n");
+        System.out.println("- - - - - - - - - - - - TRACE - - - - - - - - - - - -");
         for (Trace t : Simulator.traceList) {
-            FileWriter.log(t.toString());
+            System.out.println(t.toString());
         }
 
         // Close Output File Writer

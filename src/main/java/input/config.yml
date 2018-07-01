@@ -1,6 +1,6 @@
 noc:
   dimension: 3
-  numberOfVC: 10
+  numberOfVC: 1
   VCBufferSize: 10
   quantum: 1
 

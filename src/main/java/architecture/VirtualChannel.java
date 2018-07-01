@@ -63,7 +63,24 @@ public class VirtualChannel {
             return null;
 
         f = list.get(0);
-        list.remove(f);
         return f;
+    }
+
+    public boolean removeFlit(Flit f) {
+        if (list.contains(f)) {
+            list.remove(f);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        String str = "[ ";
+        for (Flit f : list) {
+            str += f.toString() + "  ";
+        }
+        str += " ]";
+        return str;
     }
 }

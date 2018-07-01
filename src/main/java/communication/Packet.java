@@ -25,11 +25,11 @@ public class Packet {
 
         for (int i = 0; i < numberOfFlit; i++) {
             if (i == 0) // Head Flit
-                flitList.add(new Flit(FlitType.HEAD, this, Simulator.clock));
+                flitList.add(new Flit(i, FlitType.HEAD, this, Simulator.clock));
             else if (i == numberOfFlit - 1) // Tail  Flit
-                flitList.add(new Flit(FlitType.TAIL, this, Simulator.clock));
+                flitList.add(new Flit(i, FlitType.TAIL, this, Simulator.clock));
             else // Data Flit
-                flitList.add(new Flit(FlitType.BODY, this, Simulator.clock));
+                flitList.add(new Flit(i, FlitType.BODY, this, Simulator.clock));
         }
     }
 
