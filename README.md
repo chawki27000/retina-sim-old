@@ -1,6 +1,6 @@
 # Retina Sim
 
-A Real-Time NoC simulator (Not ready yet)
+A Real-Time NoC simulator
 
 ## Configuration
 
@@ -51,5 +51,9 @@ $ mvn clean compile exec:java
 
 ## Authors
 
-* **Houssam Eddine ZAHAF** - *Initial work*
-* **Chawki BENCHEHIDA** - *Initial work*
+* **Houssam Eddine ZAHAF** - [CRIStAL](https://www.cristal.univ-lille.fr) - Université de Lille
+* **Chawki BENCHEHIDA** - [LAPECI Lab](http://lapeci.org/) - Université d'Oran 1
+* **Mohammed Kamel BENHAOUA** - [LAPECI Lab](http://lapeci.org/) - Université d'Oran 1
+
+## Licence
+[GPL](www.gnu.org/licenses/gpl-3.0.html)
