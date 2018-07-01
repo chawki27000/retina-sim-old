@@ -72,7 +72,7 @@ public class Simulator {
                             System.out.println(flit + " : NOT REMOVED");
                     } else {
                         System.out.println(flit + " : NOT REMOVED");
-                        event = new Event(EventType.SEND_HEAD_FLIT, clock + 300, router, direction, vcAllotted);
+                        event = new Event(EventType.SEND_HEAD_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }
 
@@ -96,7 +96,7 @@ public class Simulator {
                             System.out.println(flit + " : NOT REMOVED");
                     } else {
                         System.out.println(flit + " : NOT REMOVED");
-                        event = new Event(EventType.SEND_BODY_TAIL_FLIT, clock + 1, router, direction, vcAllotted);
+                        event = new Event(EventType.SEND_BODY_TAIL_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }
 
@@ -112,21 +112,18 @@ public class Simulator {
         if (direction == null) {
             ret = router.getInLocal().getVclist().get(vcAllotted).removeFlit(flit);
         } else {
-            if (direction == Direction.EAST){
+            if (direction == Direction.EAST) {
                 ret = router.getInRight().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " +router.getInRight().getVclist().get(vcAllotted).toString());
-            }
-            else if (direction == Direction.WEST){
+                System.out.println(router.toString() + " ++ " + router.getInRight().getVclist().get(vcAllotted).toString());
+            } else if (direction == Direction.WEST) {
                 ret = router.getInLeft().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " +router.getInLeft().getVclist().get(vcAllotted).toString());
-            }
-            else if (direction == Direction.NORTH){
+                System.out.println(router.toString() + " ++ " + router.getInLeft().getVclist().get(vcAllotted).toString());
+            } else if (direction == Direction.NORTH) {
                 ret = router.getInUp().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " +router.getInUp().getVclist().get(vcAllotted).toString());
-            }
-            else if (direction == Direction.SOUTH){
+                System.out.println(router.toString() + " ++ " + router.getInUp().getVclist().get(vcAllotted).toString());
+            } else if (direction == Direction.SOUTH) {
                 ret = router.getInDown().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " +router.getInDown().getVclist().get(vcAllotted).toString());
+                System.out.println(router.toString() + " ++ " + router.getInDown().getVclist().get(vcAllotted).toString());
             }
 
         }

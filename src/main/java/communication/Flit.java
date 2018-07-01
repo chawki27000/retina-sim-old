@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Flit {
 
     FlitType type;
-
+    private int id;
     private int timeBegin, timeEnd;
     // Only Header Flit
     private int dx, dy, packetID;
@@ -15,14 +15,19 @@ public class Flit {
 
     public HashMap<Router, Integer> vcAllottedMap = new HashMap<Router, Integer>();
 
-    public Flit(FlitType type, Packet packet, int timeBegin) {
+    public Flit(int id, FlitType type, Packet packet, int timeBegin) {
         this.type = type;
         this.timeBegin = timeBegin;
         this.packet = packet;
+        this.id = id;
     }
 
     public FlitType getType() {
         return type;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setTimeEnd(int timeEnd) {
@@ -94,7 +99,6 @@ public class Flit {
         this.dx = dx;
         this.dy = dy;
     }
-
 
     @Override
     public String toString() {
