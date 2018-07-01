@@ -114,16 +114,12 @@ public class Simulator {
         } else {
             if (direction == Direction.EAST) {
                 ret = router.getInRight().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " + router.getInRight().getVclist().get(vcAllotted).toString());
             } else if (direction == Direction.WEST) {
                 ret = router.getInLeft().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " + router.getInLeft().getVclist().get(vcAllotted).toString());
             } else if (direction == Direction.NORTH) {
                 ret = router.getInUp().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " + router.getInUp().getVclist().get(vcAllotted).toString());
             } else if (direction == Direction.SOUTH) {
                 ret = router.getInDown().getVclist().get(vcAllotted).removeFlit(flit);
-                System.out.println(router.toString() + " ++ " + router.getInDown().getVclist().get(vcAllotted).toString());
             }
 
         }
