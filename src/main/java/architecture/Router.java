@@ -173,7 +173,7 @@ public class Router implements Routing {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println(flit + " : Destination Reached");
+            System.out.println(time + " ==> " + flit + " : Destination Reached");
             return true;
         }
 
@@ -181,13 +181,13 @@ public class Router implements Routing {
         Event event;
 
         if (direction == Direction.WEST) {
-            System.out.println(flit + " : sent in WEST");
+            System.out.println(time + " ==> " + flit + " : sent in WEST");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
             if (vcAllotted < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -199,13 +199,13 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.EAST) {
-            System.out.println(flit + " : sent in EAST");
+            System.out.println(time + " ==> " + flit + " : sent in EAST");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
             if (vcAllotted < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -217,13 +217,13 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.NORTH) {
-            System.out.println(flit + " : sent in NORTH");
+            System.out.println(time + " ==> " + flit + " : sent in NORTH");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
             if (vcAllotted < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -235,13 +235,13 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.SOUTH) {
-            System.out.println(flit + " : sent in SOUTH");
+            System.out.println(time + " ==> " + flit + " : sent in SOUTH");
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
             if (vcAllotted < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -265,7 +265,7 @@ public class Router implements Routing {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println(flit + " : Destination Reached");
+            System.out.println(time + " ==> " + flit + " : Destination Reached");
             return true;
         }
 
@@ -273,12 +273,12 @@ public class Router implements Routing {
         int freeVC = -1;
 
         if (direction == Direction.WEST) {
-            System.out.println(flit + " : sent in WEST");
+            System.out.println(time + " ==> " + flit + " : sent in WEST");
 
             // Getting the first free VC
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
             if (freeVC < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -302,12 +302,12 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.EAST) {
-            System.out.println(flit + " : sent in EAST");
+            System.out.println(time + " ==> " + flit + " : sent in EAST");
 
             // Getting the first free VC
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
             if (freeVC < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -330,12 +330,12 @@ public class Router implements Routing {
             NextEvents(time, oRight.getDest(), Direction.WEST, freeVC);
 
         } else if (direction == Direction.NORTH) {
-            System.out.println(flit + " : sent in NORTH");
+            System.out.println(time + " ==> " + flit + " : sent in NORTH");
 
             // Getting the first free VC
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
             if (freeVC < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 
@@ -359,12 +359,12 @@ public class Router implements Routing {
 
 
         } else if (direction == Direction.SOUTH) {
-            System.out.println(flit + " : sent in SOUTH");
+            System.out.println(time + " ==> " + flit + " : sent in SOUTH");
 
             // Getting the first free VC
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
             if (freeVC < 0) {
-                System.out.println(flit + " : Blocking");
+                System.out.println(time + " ==> " + flit + " : Blocking");
                 return false;
             }
 

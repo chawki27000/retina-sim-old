@@ -67,11 +67,11 @@ public class Simulator {
                     result = router.sendHeadFlit(flit, clock + 1);
                     if (result) {
                         if (removeFlit(flit, router, vcAllotted, direction))
-                            System.out.println(flit + " : REMOVED");
+                            System.out.println(clock + " ==> " + flit + " : Credit Updated");
                         else
-                            System.out.println(flit + " : NOT REMOVED");
+                            System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
                     } else {
-                        System.out.println(flit + " : NOT REMOVED");
+                        System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
                         event = new Event(EventType.SEND_HEAD_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }
@@ -91,11 +91,11 @@ public class Simulator {
                     result = router.sendFlit(flit, clock + 1);
                     if (result) {
                         if (removeFlit(flit, router, vcAllotted, direction))
-                            System.out.println(flit + " : REMOVED");
+                            System.out.println(clock + " ==> " + flit + " : Credit Updated");
                         else
-                            System.out.println(flit + " : NOT REMOVED");
+                            System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
                     } else {
-                        System.out.println(flit + " : NOT REMOVED");
+                        System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
                         event = new Event(EventType.SEND_BODY_TAIL_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }

@@ -1,6 +1,6 @@
-# Retina Sim
+# ReTiNAS
 
-A Real-Time NoC simulator
+Real-Time Network-on-chip Analysis and Simulation
 
 ## Configuration
 
@@ -11,6 +11,7 @@ noc:
   dimension: 3 # NoC dimension (n*n)
   numberOfVC: 1 # number of VC per Input port
   VCBufferSize: 10 # VC buffer's size
+  quantum: 1 # Arbiter's Quantum RoundRobin 
 
 simulation:
   period: 40 # period of simulation
@@ -25,13 +26,13 @@ Also located in **input** package, it contains the scenario of routers communica
       "src": {"x": 0, "y": 0},
       "dest": {"x": 0, "y": 1},
       "message": 128, 
-      "time": 0 
+      "period": 30 
     },
     {
       "src": {"x": 1, "y": 1},
       "dest": {"x": 1, "y": 2},
       "message": 64,
-      "time": 1
+      "period": 15
     }
   ]
 }
@@ -56,4 +57,4 @@ $ mvn clean compile exec:java
 * **Mohammed Kamel BENHAOUA** - [LAPECI Lab](http://lapeci.org/) - Université d'Oran 1
 
 ## Licence
-[GPL](www.gnu.org/licenses/gpl-3.0.html)
+[GPL](http://www.gnu.org/licenses/gpl-3.0.html)
