@@ -17,6 +17,38 @@ public class Task {
         this.msg_size = msg_size;
     }
 
+    public int getSrc_x() {
+        return src_x;
+    }
+
+    public int getSrc_y() {
+        return src_y;
+    }
+
+    public int getDest_x() {
+        return dest_x;
+    }
+
+    public int getDest_y() {
+        return dest_y;
+    }
+
+    public int getT() {
+        return t;
+    }
+
+    public int getC() {
+        return c;
+    }
+
+    public int getD() {
+        return d;
+    }
+
+    public int getMsg_size() {
+        return msg_size;
+    }
+
     @Override
     public String toString() {
         return "src (" + src_x + "," + src_y + ") ==> dest(" + dest_x + "," + dest_y + ") size : " + msg_size +

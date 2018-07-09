@@ -61,9 +61,7 @@ public class Main {
 //        fileWriter.close();
 
         Generation generation = new Generation();
-        ArrayList<Task> tasks = generation.generateTasks();
-        for (Task ts : tasks) {
-            System.out.println(ts);
-        }
+        generation.generateJsonScenario();
+        generation.taskPrint();
     }
 }
