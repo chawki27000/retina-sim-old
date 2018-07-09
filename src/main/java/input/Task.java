@@ -16,4 +16,10 @@ public class Task {
         this.d = d;
         this.msg_size = msg_size;
     }
+
+    @Override
+    public String toString() {
+        return "src (" + src_x + "," + src_y + ") ==> dest(" + dest_x + "," + dest_y + ") size : " + msg_size +
+                " task (t : " + t + ", c : " + c + ", d : " + d + ")";
+    }
 }

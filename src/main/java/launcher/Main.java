@@ -2,6 +2,7 @@ package launcher;
 
 import architecture.NoC;
 import input.Generation;
+import input.Task;
 import input.Unifast;
 import output.FileWriter;
 import simulation_gen.ConfigParse;
@@ -13,6 +14,7 @@ import simulation_gen.Trace;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -59,6 +61,9 @@ public class Main {
 //        fileWriter.close();
 
         Generation generation = new Generation();
-        generation.generateTasks();
+        ArrayList<Task> tasks = generation.generateTasks();
+        for (Task ts : tasks) {
+            System.out.println(ts);
+        }
     }
 }

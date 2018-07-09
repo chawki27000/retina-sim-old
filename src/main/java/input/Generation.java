@@ -43,15 +43,17 @@ public class Generation {
     // Utilization Factors
     private ArrayList<Double> getUtilizationFactors() {
 
+        ArrayList<Double> utilizationArr = new ArrayList<>();
+
         Unifast unifast = new Unifast(15, 32, 2);
 
         double[] utilization_factors = unifast.generateUtilizations();
 
         for (double utilization_factor : utilization_factors) {
-            utilizationArray.add(utilization_factor);
+            utilizationArr.add(utilization_factor);
         }
 
-        return utilizationArray;
+        return utilizationArr;
     }
 
     private double getRandomUtilizFact() {
