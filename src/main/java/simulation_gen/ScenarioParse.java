@@ -47,7 +47,7 @@ public class ScenarioParse {
                 jsonObjectDest = (JSONObject) jsonObjectL2.get("dest");
 
                 // Event Creation
-                int time = ((Long) jsonObjectL2.get("time")).intValue();
+                int period = ((Long) jsonObjectL2.get("period")).intValue();
                 int message = ((Long) jsonObjectL2.get("message")).intValue();
                 int srx_x = ((Long) jsonObjectSrc.get("x")).intValue();
                 int srx_y = ((Long) jsonObjectSrc.get("y")).intValue();
@@ -55,7 +55,7 @@ public class ScenarioParse {
                 int dest_y = ((Long) jsonObjectDest.get("y")).intValue();
 
                 Event ev = new Event(EventType.MESSAGE_SEND,
-                        time,
+                        period,
                         noc.getRouter(srx_x, srx_y),
                         new int[]{dest_x, dest_y},
                         message);

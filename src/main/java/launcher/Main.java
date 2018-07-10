@@ -19,49 +19,48 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
+//        Generation generation = new Generation();
+//        generation.generateJsonScenario();
+//        generation.taskPrint();
 
         // Files Relative Path
-//        String configPath = System.getProperty("user.dir") + "/src/main/java/input/config.yml";
-//        String scenarioPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
-//        String logPath = System.getProperty("user.dir") + "/src/main/java/output/log.txt";
-//        String resultPath = System.getProperty("user.dir") + "/src/main/java/output/result.txt";
-//
-//        // Parsing config file
-//        ConfigParse configParse = new ConfigParse(configPath);
-//
-//        // NoC initialisation
-//        NoC noc = new NoC("Network-On-Chip",
-//                configParse.getDimension(),
-//                configParse.getNumberOfVC(),
-//                configParse.getVCBufferSize());
-//
-//        // EventList initialisation
-//        Simulator.eventList = new EventList();
-//
-//        // Parsing scenario file
-//        ScenarioParse scenarioParse = new ScenarioParse(noc, scenarioPath);
-//
-//        // Output File Preparing
-//        FileWriter fileWriter = new FileWriter(logPath, resultPath);
-//
-//        // START SIMULATING
-//        System.out.println("Simulation : Start");
-//        Simulator s = new Simulator(configParse.getPeriod());
-//        s.simulate();
-//        System.out.println("Simulation : End");
-//
-//        // Traces Writing
-//        System.out.println("\n");
-//        System.out.println("- - - - - - - - - - - - TRACE - - - - - - - - - - - -");
-//        for (Trace t : Simulator.traceList) {
-//            System.out.println(t.toString());
-//        }
-//
-//        // Close Output File Writer
-//        fileWriter.close();
+        String configPath = System.getProperty("user.dir") + "/src/main/java/input/config.yml";
+        String scenarioPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
+        String logPath = System.getProperty("user.dir") + "/src/main/java/output/log.txt";
+        String resultPath = System.getProperty("user.dir") + "/src/main/java/output/result.txt";
 
-        Generation generation = new Generation();
-        generation.generateJsonScenario();
-        generation.taskPrint();
+        // Parsing config file
+        ConfigParse configParse = new ConfigParse(configPath);
+
+        // NoC initialisation
+        NoC noc = new NoC("Network-On-Chip",
+                configParse.getDimension(),
+                configParse.getNumberOfVC(),
+                configParse.getVCBufferSize());
+
+        // EventList initialisation
+        Simulator.eventList = new EventList();
+
+        // Parsing scenario file
+        ScenarioParse scenarioParse = new ScenarioParse(noc, scenarioPath);
+
+        // Output File Preparing
+        FileWriter fileWriter = new FileWriter(logPath, resultPath);
+
+        // START SIMULATING
+        System.out.println("Simulation : Start");
+        Simulator s = new Simulator(configParse.getPeriod());
+        s.simulate();
+        System.out.println("Simulation : End");
+
+        // Traces Writing
+        System.out.println("\n");
+        System.out.println("- - - - - - - - - - - - TRACE - - - - - - - - - - - -");
+        for (Trace t : Simulator.traceList) {
+            System.out.println(t.toString());
+        }
+
+        // Close Output File Writer
+        fileWriter.close();
     }
 }

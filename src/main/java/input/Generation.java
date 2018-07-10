@@ -51,7 +51,7 @@ public class Generation {
             comObj.put("src", srcObj);
             comObj.put("dest", destObj);
             comObj.put("message", ts.getMsg_size());
-            comObj.put("time", ts.getT());
+            comObj.put("period", ts.getT());
 
             communications.add(comObj);
         }

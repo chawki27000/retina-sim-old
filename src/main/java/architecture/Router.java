@@ -2,7 +2,6 @@ package architecture;
 
 
 import communication.*;
-import output.FileWriter;
 import simulation.Event;
 import simulation.EventType;
 import simulation_gen.Simulator;
@@ -10,7 +9,7 @@ import simulation_gen.Trace;
 
 import java.util.ArrayList;
 
-public class Router implements Routing {
+public class Router implements IRouting {
 
     // Active Object attribute
     public int x_dest, y_dest, bits;
@@ -169,7 +168,7 @@ public class Router implements Routing {
         dx = flit.getDx();
         dy = flit.getDy();
 
-        // Get Routing Direction
+        // Get IRouting Direction
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
@@ -261,7 +260,7 @@ public class Router implements Routing {
         dx = flit.getDx();
         dy = flit.getDy();
 
-        // Get Routing Direction
+        // Get IRouting Direction
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
