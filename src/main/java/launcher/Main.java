@@ -4,6 +4,7 @@ import architecture.NoC;
 import input.Generation;
 import input.Task;
 import input.Unifast;
+import output.CSVWriter;
 import output.FileWriter;
 import simulation_gen.ConfigParse;
 import simulation_gen.ScenarioParse;
@@ -28,6 +29,7 @@ public class Main {
         String scenarioPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
         String logPath = System.getProperty("user.dir") + "/src/main/java/output/log.txt";
         String resultPath = System.getProperty("user.dir") + "/src/main/java/output/result.txt";
+        String csvPath = System.getProperty("user.dir") + "/src/main/java/output/result.csv";
 
         // Parsing config file
         ConfigParse configParse = new ConfigParse(configPath);
@@ -62,5 +64,8 @@ public class Main {
 
         // Close Output File Writer
         fileWriter.close();
+
+        // CSV File
+        CSVWriter.writeCsvFile(csvPath, Simulator.traceList);
     }
 }

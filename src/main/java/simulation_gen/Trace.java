@@ -19,6 +19,26 @@ public class Trace {
         this.vcAllotted = vcAllotted;
     }
 
+    public Flit getFlit() {
+        return flit;
+    }
+
+    public Router getSrc() {
+        return src;
+    }
+
+    public Router getDest() {
+        return dest;
+    }
+
+    public int getVcAllotted() {
+        return vcAllotted;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
     @Override
     public String toString() {
         return "Sent " + flit + " from " + src + " to " +
