@@ -107,6 +107,7 @@ public class Router implements IRouting {
 
             // To Output port
             sendPacket(packet, time);
+            time += Message.packetDefaultSize/Packet.FlitDefaultSize;
         }
 
     }
