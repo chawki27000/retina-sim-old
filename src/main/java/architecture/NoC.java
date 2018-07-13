@@ -25,9 +25,11 @@ public class NoC {
         routerMatrix = new Router[squareSize][squareSize];
 
         // Routers instantiation
+        int count = 1;
         for (int i = 0; i < squareSize; i++) {
             for (int j = 0; j < squareSize; j++) {
-                routerMatrix[i][j] = routerInitialisation(NBVC, VCSIZE, i, j);
+                routerMatrix[i][j] = routerInitialisation(count, NBVC, VCSIZE, i, j);
+                count++;
             }
         }
 
@@ -44,7 +46,7 @@ public class NoC {
      * @param y      Router position in Y axe
      * @return Router object
      */
-    private Router routerInitialisation(int NBVC, int VCSIZE, int x, int y) {
+    private Router routerInitialisation(int idx, int NBVC, int VCSIZE, int x, int y) {
 
         // Initialise Input ports
         InPort inUp = new InPort(0, NBVC, VCSIZE);
@@ -64,7 +66,7 @@ public class NoC {
         PE pe = new PE();
 
 
-        return new Router(x + " " + y, x, y,
+        return new Router(idx, x + " " + y, x, y,
                 inLeft, inRight, inUp, inDown, inLocal,
                 oLeft, oRight, oUp, oDown, pe);
     }

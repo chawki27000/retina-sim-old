@@ -54,6 +54,7 @@ public class ScenarioParse {
                 int dest_x = ((Long) jsonObjectDest.get("x")).intValue();
                 int dest_y = ((Long) jsonObjectDest.get("y")).intValue();
 
+                // TODO : make a period task until reaching the hyperperiod
                 Event ev = new Event(EventType.MESSAGE_SEND,
                         period,
                         noc.getRouter(srx_x, srx_y),

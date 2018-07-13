@@ -14,17 +14,18 @@ public class Router implements IRouting {
     // Active Object attribute
     public int x_dest, y_dest, bits;
 
-    int x, y;
+    int x, y, idx;
     private InPort inLeft, inRight, inUp, inDown, inLocal;
     private OutPort oLeft, oRight, oUp, oDown;
     public PE pe;
 
-    public Router(String name, int x, int y, InPort inLeft,
+    public Router(int idx, String name, int x, int y, InPort inLeft,
                   InPort inRight, InPort inUp,
                   InPort inDown, InPort inLocal,
                   OutPort oLeft, OutPort oRight,
                   OutPort oUp, OutPort oDown, PE pe) {
 
+        this.idx = idx;
         this.x = x;
         this.y = y;
         this.inLeft = inLeft;
@@ -87,6 +88,10 @@ public class Router implements IRouting {
         return oDown;
     }
 
+    public int getIdx() {
+        return idx;
+    }
+
     /**
      * Sending message function
      * It's the function which can initiate a sending data
@@ -107,7 +112,7 @@ public class Router implements IRouting {
 
             // To Output port
             sendPacket(packet, time);
-            time += Message.packetDefaultSize/Packet.FlitDefaultSize;
+            time += Message.packetDefaultSize / Packet.FlitDefaultSize;
         }
 
     }

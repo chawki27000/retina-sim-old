@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Simulator {
 
     public static EventList eventList;
-    private int simulationPeriod;
+    public static int simulationPeriod;
     public static int clock;
     public static ArrayList<Trace> traceList;
 

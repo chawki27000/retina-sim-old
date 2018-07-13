@@ -86,6 +86,7 @@ public class Generation {
             d = new Random().nextInt((t - lower_bound) + 1) + lower_bound;
 
             // TODO : define conflict factor
+
             // generate task
             task = new Task(0, 0, 2, 2, t, 0, d, msg_size);
             tasks.add(task);
@@ -99,7 +100,9 @@ public class Generation {
         }
     }
 
-    // Utilization Factors
+    /**
+     * Utilization Factors
+     */
     private ArrayList<Double> getUtilizationFactors() {
 
         ArrayList<Double> utilizationArr = new ArrayList<>();
@@ -124,7 +127,11 @@ public class Generation {
         return utilization_factor;
     }
 
-    // HyperPeriod Computation
+    //
+
+    /**
+     * HyperPeriod Computation
+     */
     private int getHyperPeriod() {
         int hyperperiod = 1;
 

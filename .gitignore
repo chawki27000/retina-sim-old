@@ -97,7 +97,7 @@ pom.xml.releaseBackup
 pom.xml.versionsBackup
 pom.xml.next
 release.properties
-dependency-reduced-pom.xml
+dependency-reduced-pom.xmlq
 buildNumber.properties
 .mvn/timing.properties
 
@@ -108,3 +108,4 @@ buildNumber.properties
 # My ignores
 log.txt
 result.txt
+result.csv
