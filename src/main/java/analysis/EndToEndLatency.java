@@ -11,10 +11,8 @@ public class EndToEndLatency {
         this.packet_router_lat = packet_router_lat;
     }
 
-    public int routingDistance(int sender, int receiver, int co) {
-        return (int) (Math.abs((sender % co) - (receiver % co)) +
-                Math.abs(Math.floor((float) sender / co) -
-                        Math.floor((float) receiver / co)) + 1);
+    public int routingDistance(int src_x, int srx_y, int dest_x, int dest_y) {
+        return Math.abs(dest_x - src_x) + Math.abs(dest_y - srx_y);
     }
 
     public static double numberIteration(int nP, int aVflow) {

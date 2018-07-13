@@ -1,5 +1,6 @@
 package launcher;
 
+import analysis.EndToEndLatency;
 import architecture.NoC;
 import input.Generation;
 import input.Task;
@@ -67,5 +68,9 @@ public class Main {
 
         // CSV File
         CSVWriter.writeCsvFile(csvPath, Simulator.traceList);
+
+        // Latency formulation
+        EndToEndLatency latency = new EndToEndLatency(0.123, 0.2635);
+        System.out.println("routing distance : "+latency.routingDistance(4,1, 1,2));
     }
 }
