@@ -112,7 +112,7 @@ public class Router implements IRouting {
 
             // To Output port
             sendPacket(packet, time);
-            time += Message.packetDefaultSize / Packet.FlitDefaultSize;
+            time++;
         }
 
     }
@@ -144,20 +144,24 @@ public class Router implements IRouting {
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
 
+        // get the first free VC in InLocal and hold it
+        int freeVC = inLocal.getFirstFreeVC();
+        inLocal.getVclist().get(freeVC).lockAllottedVC();
+
         // Flit preparation
         for (Flit flit : flitList) {
 
             // Flit pushing in local Inport into VC 0
-            inLocal.getVclist().get(0).enqueueFlit(flit);
+            inLocal.getVclist().get(freeVC).enqueueFlit(flit);
 
             // set coordinates in others flit
             flit.setDxDy(dx, dy);
 
             // Event pushing
             if (flit.getType() == FlitType.HEAD)
-                event = new Event(EventType.SEND_HEAD_FLIT, clock, this, (Direction) null, 0);
+                event = new Event(EventType.SEND_HEAD_FLIT, clock, this, (Direction) null, freeVC);
             else if (flit.getType() == FlitType.BODY || flit.getType() == FlitType.TAIL)
-                event = new Event(EventType.SEND_BODY_TAIL_FLIT, clock, this, (Direction) null, 0);
+                event = new Event(EventType.SEND_BODY_TAIL_FLIT, clock, this, (Direction) null, freeVC);
 
             Simulator.eventList.push(event);
 

@@ -55,7 +55,7 @@ public class NoC {
         InPort inLeft = new InPort(3, NBVC, VCSIZE);
 
         // Local Inport with a specific parameters
-        InPort inLocal = new InPort(4, 1, 40);
+        InPort inLocal = new InPort(4, 100, 40);
 
         // Initialise Output ports
         OutPort oUp = new OutPort(0);

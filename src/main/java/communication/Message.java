@@ -24,9 +24,9 @@ public class Message {
 
         for (int i = 0; i < numberOfPacket; i++) {
             packetList.add(new Packet(packetNum));
+            packetNum++;
         }
 
-        packetNum++;
     }
 
     public void setDestinationInfo(int[] dest) {
