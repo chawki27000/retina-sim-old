@@ -102,7 +102,7 @@ public class Router implements IRouting {
     public void sendMessage(int bits, int[] dest, int time) {
 
         // New message creation
-        Message message = new Message(bits);
+        Message message = new Message(bits, new int[]{this.getX(), this.getY()}, dest);
         message.setDestinationInfo(dest);
 
         // Slicing message in several packets

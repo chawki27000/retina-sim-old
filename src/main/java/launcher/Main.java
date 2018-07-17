@@ -37,15 +37,15 @@ public class Main {
 
         // NoC initialisation
         NoC noc = new NoC("Network-On-Chip",
-                configParse.getDimension(),
-                configParse.getNumberOfVC(),
-                configParse.getVCBufferSize());
+                ConfigParse.dimension,
+                ConfigParse.numberOfVC,
+                ConfigParse.VCBufferSize);
 
         // EventList initialisation
         Simulator.eventList = new EventList();
 
         // Simulator Initialisation
-        Simulator s = new Simulator(configParse.getPeriod());
+        Simulator s = new Simulator(ConfigParse.period);
 
         // Parsing scenario file
         ScenarioParse scenarioParse = new ScenarioParse(noc, scenarioPath);
@@ -70,8 +70,5 @@ public class Main {
 
         // CSV File
         CSVWriter.writeCsvFile(csvPath, Simulator.traceList);
-
-        // Latency formulation
-        EndToEndLatency latency = new EndToEndLatency(0.123, 0.2635);
     }
 }

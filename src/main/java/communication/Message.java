@@ -1,5 +1,8 @@
 package communication;
 
+import analysis.EndToEndLatency;
+import simulation_gen.ConfigParse;
+
 import java.util.ArrayList;
 
 public class Message {
@@ -8,7 +11,11 @@ public class Message {
     public static int packetNum = 0;
 
     ArrayList<Packet> packetList = new ArrayList<>();
-    int size;
+    int size, numberOfPacket;
+
+    // Analysis Attribute
+    private double e2eLatency;
+    private int[] src_coor, dest_coor;
 
     /**
      * Message class constructor
@@ -16,11 +23,13 @@ public class Message {
      *
      * @param size Message size
      */
-    public Message(int size) {
+    public Message(int size, int[] src_coor, int[] dest_coor) {
         this.size = size;
+        this.src_coor = src_coor;
+        this.dest_coor = dest_coor;
 
         // Message Building
-        int numberOfPacket = size / Message.packetDefaultSize;
+        numberOfPacket = size / Message.packetDefaultSize;
 
         for (int i = 0; i < numberOfPacket; i++) {
             packetList.add(new Packet(packetNum));
@@ -41,5 +50,29 @@ public class Message {
 
     public int getSize() {
         return size;
+    }
+
+    /**
+     * Analysis Function
+     */
+    public double getE2ELatency() {
+        // local variable
+        int nR;
+        double nI, nL;
+
+        // Routing Distance Computing
+        nR = EndToEndLatency.routingDistance(src_coor[0], src_coor[1],
+                dest_coor[0], dest_coor[1]);
+
+        // Iteration Number
+        nI = EndToEndLatency.numberIteration(numberOfPacket, ConfigParse.numberOfVC);
+
+        // Network Latency
+        // nI : Number of iteration
+        // oV : Total VC occupied (pessimistic)
+        // nR : Number of iteration
+        nL = EndToEndLatency.networkLatency(nI, ConfigParse.numberOfVC, nR);
+
+        return (EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL;
     }
 }

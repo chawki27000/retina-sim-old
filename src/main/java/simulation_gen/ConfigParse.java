@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class ConfigParse {
 
-    private int dimension;
-    private int numberOfVC;
-    private int VCBufferSize;
-    private int period;
+    public static int dimension;
+    public static int numberOfVC;
+    public static int VCBufferSize;
+    public static int period;
 
     public ConfigParse(String configPath) {
 
@@ -42,19 +42,4 @@ public class ConfigParse {
         }
     }
 
-    public int getDimension() {
-        return dimension;
-    }
-
-    public int getNumberOfVC() {
-        return numberOfVC;
-    }
-
-    public int getVCBufferSize() {
-        return VCBufferSize;
-    }
-
-    public int getPeriod() {
-        return period;
-    }
 }

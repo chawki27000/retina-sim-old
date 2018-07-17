@@ -18,6 +18,8 @@ public class Simulator {
     public static int clock;
     public static ArrayList<Trace> traceList;
 
+
+
     private int message;
     private int[] dest;
 
