@@ -5,4 +5,4 @@ noc:
   quantum: 1
 
 simulation:
-  period: 400
+  period: 100

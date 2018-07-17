@@ -44,6 +44,9 @@ public class Main {
         // EventList initialisation
         Simulator.eventList = new EventList();
 
+        // Simulator Initialisation
+        Simulator s = new Simulator(configParse.getPeriod());
+
         // Parsing scenario file
         ScenarioParse scenarioParse = new ScenarioParse(noc, scenarioPath);
 
@@ -52,7 +55,6 @@ public class Main {
 
         // START SIMULATING
         System.out.println("Simulation : Start");
-        Simulator s = new Simulator(configParse.getPeriod());
         s.simulate();
         System.out.println("Simulation : End");
 
@@ -71,6 +73,5 @@ public class Main {
 
         // Latency formulation
         EndToEndLatency latency = new EndToEndLatency(0.123, 0.2635);
-        System.out.println("routing distance : "+latency.routingDistance(4,1, 1,2));
     }
 }

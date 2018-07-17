@@ -54,15 +54,20 @@ public class ScenarioParse {
                 int dest_x = ((Long) jsonObjectDest.get("x")).intValue();
                 int dest_y = ((Long) jsonObjectDest.get("y")).intValue();
 
-                // TODO : make a period task until reaching the hyperperiod
-                Event ev = new Event(EventType.MESSAGE_SEND,
-                        period,
-                        noc.getRouter(srx_x, srx_y),
-                        new int[]{dest_x, dest_y},
-                        message);
+                // Periodic communication event creation
+                int count = 0;
+                while (count < Simulator.simulationPeriod) {
+                    Event ev = new Event(EventType.MESSAGE_SEND,
+                            count,
+                            noc.getRouter(srx_x, srx_y),
+                            new int[]{dest_x, dest_y},
+                            message);
 
-                // Event pushing
-                Simulator.eventList.push(ev);
+                    // Event pushing
+                    Simulator.eventList.push(ev);
+
+                    count += period;
+                }
             }
 
 
