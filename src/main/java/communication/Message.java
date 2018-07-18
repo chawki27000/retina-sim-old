@@ -7,11 +7,15 @@ import java.util.ArrayList;
 
 public class Message {
 
+
     public static int packetDefaultSize = 64;
     public static int packetNum = 0;
+    public static int messageNum = 0;
 
+    private int id, instance;
     ArrayList<Packet> packetList = new ArrayList<>();
     int size, numberOfPacket;
+
 
     // Analysis Attribute
     private double e2eLatency;
@@ -23,7 +27,9 @@ public class Message {
      *
      * @param size Message size
      */
-    public Message(int size, int[] src_coor, int[] dest_coor) {
+    public Message(int id, int instance, int size, int[] src_coor, int[] dest_coor) {
+        this.id = id;
+        this.instance = instance;
         this.size = size;
         this.src_coor = src_coor;
         this.dest_coor = dest_coor;
@@ -50,6 +56,14 @@ public class Message {
 
     public int getSize() {
         return size;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getInstance() {
+        return instance;
     }
 
     /**

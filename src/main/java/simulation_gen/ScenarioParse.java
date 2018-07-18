@@ -1,6 +1,7 @@
 package simulation_gen;
 
 import architecture.NoC;
+import communication.Message;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,13 +16,11 @@ import java.util.Iterator;
 
 public class ScenarioParse {
 
-
     private JSONObject jsonObjectL1;
     private JSONObject jsonObjectL2;
     private JSONObject jsonObjectSrc;
     private JSONObject jsonObjectDest;
     private JSONArray jsonArrayL1;
-
 
     public ScenarioParse(NoC noc, String scenarioPath) {
 
@@ -55,19 +54,23 @@ public class ScenarioParse {
                 int dest_y = ((Long) jsonObjectDest.get("y")).intValue();
 
                 // Periodic communication event creation
-                int count = 0;
+                int count = 0, instance = 0;
                 while (count < Simulator.simulationPeriod) {
                     Event ev = new Event(EventType.MESSAGE_SEND,
                             count,
                             noc.getRouter(srx_x, srx_y),
                             new int[]{dest_x, dest_y},
-                            message);
+                            message,
+                            instance,
+                            Message.messageNum);
 
                     // Event pushing
                     Simulator.eventList.push(ev);
 
-                    count += period;
+                    count += period; instance++;
                 }
+                // Increment messageID
+                Message.messageNum++;
             }
 
 

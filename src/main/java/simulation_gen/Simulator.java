@@ -20,7 +20,7 @@ public class Simulator {
 
 
 
-    private int message;
+    private int message, id, instance;
     private int[] dest;
 
     public Simulator(int simulationPeriod) {
@@ -52,8 +52,10 @@ public class Simulator {
 
                 case MESSAGE_SEND:
                     message = curr_ev.getMessageSize();
+                    id = curr_ev.getMessageID();
+                    instance = curr_ev.getInstance();
                     dest = curr_ev.getRouter_dest();
-                    router.sendMessage(message, dest, clock);
+                    router.sendMessage(id, instance, message, dest, clock);
                     break;
 
                 case SEND_HEAD_FLIT:
