@@ -37,7 +37,7 @@ public class CSVWriter {
 
                 if (!messageList.isEmpty() &&
                         messageList.contains(trace.getFlit().getPacket().getMessage().getId()))
-                    break;
+                    continue;
 
                 // Restriction
                 messageList.add(trace.getFlit().getPacket().getMessage().getId());
