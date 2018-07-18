@@ -2,6 +2,7 @@ package input;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simulation_gen.ConfigParse;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +30,6 @@ public class Generation {
 
         // Initial Root object
         JSONObject obj = new JSONObject();
-
 
 
         // Add communication Array object
@@ -75,6 +75,8 @@ public class Generation {
         double utilization_factor;
         int msg_size, t, c, d;
         int lower_bound;
+        ArrayList<Task> taskConflictArr;
+
         // loop
         while (!utilizationArray.isEmpty()) {
 
@@ -85,13 +87,61 @@ public class Generation {
             lower_bound = (int) (0.7 * t);
             d = new Random().nextInt((t - lower_bound) + 1) + lower_bound;
 
-            // TODO : define conflict factor
-
-            // generate task
-            task = new Task(0, 0, 2, 2, t, 0, d, msg_size);
+            // Generate task
+            int[] coord = randomCoordinate();
+            task = new Task(coord[0], coord[1], coord[2], coord[3], t, 0, d, msg_size);
             tasks.add(task);
+
+            // Generate task conflict
+            taskConflictArr = conflictTask(task.src_x, task.src_y, task.dest_x,
+                    task.dest_y, task.msg_size, task.t, task.d);
+
+            if (!taskConflictArr.isEmpty()) {
+                for (Task ta :
+                        taskConflictArr) {
+                    tasks.add(ta);
+                }
+            }
         }
 
+    }
+
+    /**
+     * Conflict Task Generation
+     */
+    private ArrayList<Task> conflictTask(int src_x, int src_y, int dest_x, int dest_y,
+                                         int msg_size, int t, int d) {
+
+        // Task Conflict ArrayList
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        // Left Task
+        if (src_y - 1 > 0)
+            tasks.add(new Task(src_x, src_y - 1, dest_x, dest_y, t, 0, d, msg_size));
+
+        // Right Task
+        if (src_y + 1 < ConfigParse.dimension)
+            tasks.add(new Task(src_x, src_y - 1, dest_x, dest_y, t, 0, d, msg_size));
+
+        return tasks;
+    }
+
+    private int[] randomCoordinate() {
+        int src_x, src_y, dest_x, dest_y;
+
+        // source router coordinate
+        src_x = new Random().nextInt(ConfigParse.dimension - 1);
+        src_y = new Random().nextInt(ConfigParse.dimension - 1);
+
+        // destination router coordinate
+        do {
+            dest_x = new Random().nextInt(ConfigParse.dimension - 1);
+        } while (src_x == dest_x);
+        do {
+            dest_y = new Random().nextInt(ConfigParse.dimension - 1);
+        } while (src_y == dest_y);
+
+        return new int[]{src_x, src_y, dest_x, dest_y};
     }
 
     public void taskPrint() {
