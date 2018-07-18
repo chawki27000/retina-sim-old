@@ -1,5 +1,5 @@
 noc:
-  dimension: 3
+  dimension: 8
   numberOfVC: 10
   VCBufferSize: 10
   quantum: 1

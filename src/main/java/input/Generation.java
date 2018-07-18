@@ -121,7 +121,7 @@ public class Generation {
 
         // Right Task
         if (src_y + 1 < ConfigParse.dimension)
-            tasks.add(new Task(src_x, src_y - 1, dest_x, dest_y, t, 0, d, msg_size));
+            tasks.add(new Task(src_x, src_y + 1, dest_x, dest_y, t, 0, d, msg_size));
 
         return tasks;
     }
@@ -130,16 +130,18 @@ public class Generation {
         int src_x, src_y, dest_x, dest_y;
 
         // source router coordinate
-        src_x = new Random().nextInt(ConfigParse.dimension - 1);
-        src_y = new Random().nextInt(ConfigParse.dimension - 1);
+        src_x = new Random().nextInt(ConfigParse.dimension);
+        src_y = new Random().nextInt(ConfigParse.dimension);
 
+        System.out.println("random src : (" + src_x + ", " + src_y + ")");
         // destination router coordinate
         do {
-            dest_x = new Random().nextInt(ConfigParse.dimension - 1);
+            dest_x = new Random().nextInt(ConfigParse.dimension);
         } while (src_x == dest_x);
         do {
-            dest_y = new Random().nextInt(ConfigParse.dimension - 1);
+            dest_y = new Random().nextInt(ConfigParse.dimension);
         } while (src_y == dest_y);
+        System.out.println("random dest : (" + dest_x + ", " + dest_y + ")");
 
         return new int[]{src_x, src_y, dest_x, dest_y};
     }
