@@ -9,6 +9,7 @@ public class Packet {
     public static int FlitDefaultSize = 16;
 
     int id;
+    Message message;
     ArrayList<Flit> flitList = new ArrayList<>();
 
     /**
@@ -17,8 +18,9 @@ public class Packet {
      *
      * @param id Packet index
      */
-    public Packet(int id) {
+    public Packet(int id, Message message) {
         this.id = id;
+        this.message = message;
 
         // Packet Building
         int numberOfFlit = Message.packetDefaultSize / Packet.FlitDefaultSize;
@@ -35,6 +37,10 @@ public class Packet {
 
     public int getId() {
         return id;
+    }
+
+    public Message getMessage() {
+        return message;
     }
 
     public Flit getHeaderFlit() {

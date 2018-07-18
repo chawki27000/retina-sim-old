@@ -18,6 +18,9 @@ public class CSVWriter {
 
     public static void writeCsvFile(String fileName, ArrayList<Trace> traceList) {
 
+        // Message Restriction Array
+        ArrayList<Integer> messageList = new ArrayList<>();
+
         FileWriter fileWriter = null;
 
         try {
@@ -32,12 +35,19 @@ public class CSVWriter {
             //Write a new trace object list to the CSV file
             for (Trace trace : traceList) {
 
+                if (!messageList.isEmpty() &&
+                        messageList.contains(trace.getFlit().getPacket().getMessage().getId()))
+                    break;
+
+                // Restriction
+                messageList.add(trace.getFlit().getPacket().getMessage().getId());
+
                 // Put ID
-                fileWriter.append(String.valueOf(trace.getFlit().getPacket().getId()));
+                fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getId()));
                 fileWriter.append(COMMA_DELIMITER);
 
                 // Put WCLA
-                fileWriter.append(String.valueOf(123));
+                fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getE2ELatency()));
                 fileWriter.append(COMMA_DELIMITER);
 
                 // Put L1

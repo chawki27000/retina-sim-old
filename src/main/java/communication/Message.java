@@ -38,7 +38,7 @@ public class Message {
         numberOfPacket = size / Message.packetDefaultSize;
 
         for (int i = 0; i < numberOfPacket; i++) {
-            packetList.add(new Packet(packetNum));
+            packetList.add(new Packet(packetNum, this));
             packetNum++;
         }
 
