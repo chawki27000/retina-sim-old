@@ -18,6 +18,9 @@ public class Simulator {
     public static int clock;
     public static ArrayList<Trace> traceList;
 
+    // Packet and Flit default size
+    public static int PACKET_DEFAULT_SIZE = 64;
+    public static int FLIT_DEFAULT_SIZE = 16;
 
 
     private int message, id, instance;

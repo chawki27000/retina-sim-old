@@ -426,7 +426,7 @@ public class Router implements IRouting {
 
     public void NextEvents(int time, Router router, Direction direction, int vcAllotted) {
 
-        int nbflit = Message.packetDefaultSize / Packet.FlitDefaultSize;
+        int nbflit = Simulator.PACKET_DEFAULT_SIZE / Simulator.FLIT_DEFAULT_SIZE;
         Event event = null;
         int clock = time;
 

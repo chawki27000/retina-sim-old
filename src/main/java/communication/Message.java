@@ -2,13 +2,13 @@ package communication;
 
 import analysis.EndToEndLatency;
 import simulation_gen.ConfigParse;
+import simulation_gen.Simulator;
 
 import java.util.ArrayList;
 
 public class Message {
 
 
-    public static int packetDefaultSize = 64;
     public static int packetNum = 0;
     public static int messageNum = 0;
 
@@ -35,7 +35,7 @@ public class Message {
         this.dest_coor = dest_coor;
 
         // Message Building
-        numberOfPacket = size / Message.packetDefaultSize;
+        numberOfPacket = size / Simulator.PACKET_DEFAULT_SIZE;
 
         for (int i = 0; i < numberOfPacket; i++) {
             packetList.add(new Packet(packetNum, this));

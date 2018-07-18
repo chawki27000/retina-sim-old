@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Packet {
 
-    public static int FlitDefaultSize = 16;
+
 
     int id;
     Message message;
@@ -23,7 +23,7 @@ public class Packet {
         this.message = message;
 
         // Packet Building
-        int numberOfFlit = Message.packetDefaultSize / Packet.FlitDefaultSize;
+        int numberOfFlit = Simulator.PACKET_DEFAULT_SIZE / Simulator.FLIT_DEFAULT_SIZE;
 
         for (int i = 0; i < numberOfFlit; i++) {
             if (i == 0) // Head Flit
