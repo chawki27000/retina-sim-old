@@ -66,6 +66,19 @@ public class Message {
         return instance;
     }
 
+    public Packet getFirstPacket() {
+        return packetList.get(0);
+    }
+
+    public Packet getLastPacket() {
+        return packetList.get(packetList.size() - 1);
+    }
+
+    public double latencyAnalysis() {
+        return packetList.get(packetList.size() - 1).getLastFlit().getTimeEnd()
+                - packetList.get(0).getLastFlit().getTimeEnd();
+    }
+
     /**
      * Analysis Function
      */

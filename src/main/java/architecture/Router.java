@@ -109,9 +109,9 @@ public class Router implements IRouting {
         ArrayList<Packet> packetList = message.getPacketList();
 
         for (Packet packet : packetList) {
-
             // To Output port
             sendPacket(packet, time);
+            time++;
         }
 
     }
@@ -190,6 +190,7 @@ public class Router implements IRouting {
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
+            flit.setTimeEnd(time);
             return 0;
         }
 
@@ -294,6 +295,7 @@ public class Router implements IRouting {
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
+            flit.setTimeEnd(time);
             return 0;
         }
 

@@ -5,6 +5,8 @@ import simulation_gen.Trace;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CSVWriter {
 
@@ -19,7 +21,7 @@ public class CSVWriter {
     public static void writeCsvFile(String fileName, ArrayList<Trace> traceList) {
 
         // Message Restriction Array
-        ArrayList<Integer> messageList = new ArrayList<>();
+        ArrayList<Column> messageList = new ArrayList<>();
 
         FileWriter fileWriter = null;
 
@@ -36,11 +38,14 @@ public class CSVWriter {
             for (Trace trace : traceList) {
 
                 if (!messageList.isEmpty() &&
-                        messageList.contains(trace.getFlit().getPacket().getMessage().getId()))
+                        messageList.contains(new Column(trace.getFlit().getPacket().getMessage().getId(),
+                                trace.getFlit().getPacket().getMessage().getInstance())))
                     continue;
 
+
                 // Restriction
-                messageList.add(trace.getFlit().getPacket().getMessage().getId());
+                messageList.add(new Column(trace.getFlit().getPacket().getMessage().getId(),
+                        trace.getFlit().getPacket().getMessage().getInstance()));
 
                 // Put ID
                 fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getId()));
@@ -51,19 +56,37 @@ public class CSVWriter {
                 fileWriter.append(COMMA_DELIMITER);
 
                 // Put L1
-                fileWriter.append(String.valueOf(1));
-                fileWriter.append(COMMA_DELIMITER);
+                if (trace.getFlit().getPacket().getMessage().getInstance() == 0) {
+                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                    fileWriter.append(COMMA_DELIMITER);
+
+                } else {
+                }
 
                 // Put L2
-                fileWriter.append(String.valueOf(2));
-                fileWriter.append(COMMA_DELIMITER);
+                if (trace.getFlit().getPacket().getMessage().getInstance() == 1) {
+                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                    fileWriter.append(COMMA_DELIMITER);
+                } else {
+                    fileWriter.append(String.valueOf(0));
+                    fileWriter.append(COMMA_DELIMITER);
+                }
 
                 // Put L3
-                fileWriter.append(String.valueOf(3));
-                fileWriter.append(COMMA_DELIMITER);
+                if (trace.getFlit().getPacket().getMessage().getInstance() == 2) {
+                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                    fileWriter.append(COMMA_DELIMITER);
+                } else {
+                    fileWriter.append(String.valueOf(0));
+                    fileWriter.append(COMMA_DELIMITER);
+                }
 
                 // Put L4
-                fileWriter.append(String.valueOf(4));
+                if (trace.getFlit().getPacket().getMessage().getInstance() == 3) {
+                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                } else {
+                    fileWriter.append(String.valueOf(0));
+                }
 
                 // New line
                 fileWriter.append(NEW_LINE_SEPARATOR);

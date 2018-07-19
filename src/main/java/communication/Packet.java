@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class Packet {
 
 
-
     int id;
     Message message;
     ArrayList<Flit> flitList = new ArrayList<>();
@@ -53,6 +52,10 @@ public class Packet {
 
     public Flit getFlit(int index) {
         return flitList.get(index);
+    }
+
+    public Flit getLastFlit() {
+        return flitList.get(flitList.size() - 1);
     }
 
     /*
