@@ -171,7 +171,15 @@ public class Router implements IRouting {
         return false;
     }
 
-    public boolean sendFlit(Flit flit, int time) {
+    /**
+     * 0 : true
+     * 1 : VC not allotted
+     * 2 : Full Buffer
+     * @param flit
+     * @param time
+     * @return
+     */
+    public int sendFlit(Flit flit, int time) {
 
         int dx, dy;
         dx = flit.getDx();
@@ -181,8 +189,8 @@ public class Router implements IRouting {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println(time + " ==> " + flit + " : Destination Reached");
-            return true;
+            System.out.println(flit + " : Destination Reached");
+            return 0;
         }
 
         boolean accepted;
@@ -196,7 +204,7 @@ public class Router implements IRouting {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
             if (vcAllotted < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Flit Sending
@@ -215,7 +223,7 @@ public class Router implements IRouting {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
             if (vcAllotted < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Flit Sending
@@ -234,7 +242,7 @@ public class Router implements IRouting {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
             if (vcAllotted < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Flit Sending
@@ -253,7 +261,7 @@ public class Router implements IRouting {
             int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
             if (vcAllotted < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Flit Sending
@@ -264,10 +272,18 @@ public class Router implements IRouting {
             Simulator.traceList.add(t);
 
         }
-        return true;
+        return 0;
     }
 
-    public boolean sendHeadFlit(Flit flit, int time) {
+    /**
+     * 0 : true
+     * 1 : VC not allotted
+     * 2 : Full Buffer
+     * @param flit
+     * @param time
+     * @return
+     */
+    public int sendHeadFlit(Flit flit, int time) {
 
         int dx, dy;
         dx = flit.getDx();
@@ -277,8 +293,8 @@ public class Router implements IRouting {
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
-            System.out.println(time + " ==> " + flit + " : Destination Reached");
-            return true;
+            System.out.println(flit + " : Destination Reached");
+            return 0;
         }
 
         boolean accepted;
@@ -292,7 +308,7 @@ public class Router implements IRouting {
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Lock the VC
@@ -321,7 +337,7 @@ public class Router implements IRouting {
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Lock the VC
@@ -349,7 +365,7 @@ public class Router implements IRouting {
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Lock the VC
@@ -378,7 +394,7 @@ public class Router implements IRouting {
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
             if (freeVC < 0) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
-                return false;
+                return 1;
             }
 
             // Lock the VC
@@ -400,7 +416,7 @@ public class Router implements IRouting {
             NextEvents(time, oDown.getDest(), Direction.NORTH, freeVC);
         }
 
-        return true;
+        return 0;
     }
 
     public Direction getRoutingDirection(int dx, int dy) {

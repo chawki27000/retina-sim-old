@@ -37,7 +37,7 @@ public class Simulator {
         Flit flit = null;
         int vcAllotted = -1;
         Direction direction;
-        boolean result;
+        int result;
         Event event;
 
         // Simulation Loop
@@ -71,13 +71,13 @@ public class Simulator {
                     flit = dequeueFlit(router, vcAllotted, direction, clock);
 
                     result = router.sendHeadFlit(flit, clock + 1);
-                    if (result) {
+                    if (result == 0) {
                         if (removeFlit(flit, router, vcAllotted, direction))
-                            System.out.println(clock + " ==> " + flit + " : Credit Updated");
+                            System.out.println(flit + " : Credit Updated");
                         else
-                            System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
-                    } else {
-                        System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
+                            System.out.println(flit + " : Credit Not Updated");
+                    } else if (result == 1) {
+                        System.out.println(flit + " : Credit Not Updated");
                         event = new Event(EventType.SEND_HEAD_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }
@@ -95,13 +95,13 @@ public class Simulator {
                     flit = dequeueFlit(router, vcAllotted, direction, clock);
 
                     result = router.sendFlit(flit, clock + 1);
-                    if (result) {
+                    if (result == 0) {
                         if (removeFlit(flit, router, vcAllotted, direction))
-                            System.out.println(clock + " ==> " + flit + " : Credit Updated");
+                            System.out.println(flit + " : Credit Updated");
                         else
-                            System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
-                    } else {
-                        System.out.println(clock + " ==> " + flit + " : Credit Not Updated");
+                            System.out.println(flit + " : Credit Not Updated");
+                    } else if (result == 1) {
+                        System.out.println(flit + " : Credit Not Updated");
                         event = new Event(EventType.SEND_BODY_TAIL_FLIT, (clock + flit.getId() + 1), router, direction, vcAllotted);
                         Simulator.eventList.push(event);
                     }
