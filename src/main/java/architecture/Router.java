@@ -177,7 +177,7 @@ public class Router implements IRouting {
         dx = flit.getDx();
         dy = flit.getDy();
 
-        // Get IRouting Direction
+        // Get Routing Direction
         Direction direction = getRoutingDirection(dx, dy);
 
         if (direction == null) {
@@ -185,7 +185,7 @@ public class Router implements IRouting {
             return true;
         }
 
-
+        boolean accepted;
         Event event;
 
         if (direction == Direction.WEST) {
@@ -199,7 +199,8 @@ public class Router implements IRouting {
                 return false;
             }
 
-            oLeft.getDest().getInRight().accepteFlit(flit, vcAllotted);
+            // Flit Sending
+            accepted = oLeft.getDest().getInRight().accepteFlit(flit, vcAllotted);
 
             // Tracing
             Trace t = new Trace(flit, this, oLeft.getDest(), vcAllotted, time);
@@ -217,7 +218,8 @@ public class Router implements IRouting {
                 return false;
             }
 
-            oRight.getDest().getInLeft().accepteFlit(flit, vcAllotted);
+            // Flit Sending
+            accepted = oRight.getDest().getInLeft().accepteFlit(flit, vcAllotted);
 
             // Tracing
             Trace t = new Trace(flit, this, oRight.getDest(), vcAllotted, time);
@@ -235,7 +237,8 @@ public class Router implements IRouting {
                 return false;
             }
 
-            oUp.getDest().getInDown().accepteFlit(flit, vcAllotted);
+            // Flit Sending
+            accepted = oUp.getDest().getInDown().accepteFlit(flit, vcAllotted);
 
             // Tracing
             Trace t = new Trace(flit, this, oUp.getDest(), vcAllotted, time);
@@ -253,7 +256,8 @@ public class Router implements IRouting {
                 return false;
             }
 
-            oDown.getDest().getInUp().accepteFlit(flit, vcAllotted);
+            // Flit Sending
+            accepted = oDown.getDest().getInUp().accepteFlit(flit, vcAllotted);
 
             // Tracing
             Trace t = new Trace(flit, this, oDown.getDest(), vcAllotted, time);
@@ -277,6 +281,7 @@ public class Router implements IRouting {
             return true;
         }
 
+        boolean accepted;
         // Free VC ID
         int freeVC = -1;
 
@@ -296,7 +301,7 @@ public class Router implements IRouting {
             System.out.println(direction + " VC (" + freeVC + ") of " + oLeft.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
-            oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
+            accepted = oLeft.getDest().getInRight().accepteFlit(flit, freeVC);
 
             // History writing
             flit.addVCAllotted(oLeft.getDest(), freeVC);
@@ -325,7 +330,7 @@ public class Router implements IRouting {
             System.out.println(direction + " VC (" + freeVC + ") of " + oRight.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
-            oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
+            accepted = oRight.getDest().getInLeft().accepteFlit(flit, freeVC);
 
             // History writing
             flit.addVCAllotted(oRight.getDest(), freeVC);
@@ -353,7 +358,7 @@ public class Router implements IRouting {
             System.out.println(direction + " VC (" + freeVC + ") of " + oUp.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
-            oUp.getDest().getInDown().accepteFlit(flit, freeVC);
+            accepted = oUp.getDest().getInDown().accepteFlit(flit, freeVC);
 
             // History writing
             flit.addVCAllotted(oUp.getDest(), freeVC);
@@ -382,7 +387,7 @@ public class Router implements IRouting {
             System.out.println(direction + " VC (" + freeVC + ") of " + oDown.getDest() + " LOCKED by " + flit + " at : " + time);
 
             // Flit Sending
-            oDown.getDest().getInUp().accepteFlit(flit, freeVC);
+            accepted = oDown.getDest().getInUp().accepteFlit(flit, freeVC);
 
             // History writing
             flit.addVCAllotted(oDown.getDest(), freeVC);

@@ -1,7 +1,7 @@
 noc:
   dimension: 8
   numberOfVC: 10
-  VCBufferSize: 10
+  VCBufferSize: 1
   quantum: 1
 
 simulation:

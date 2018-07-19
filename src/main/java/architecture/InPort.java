@@ -87,9 +87,8 @@ public class InPort {
         return null;
     }
 
-    public void accepteFlit(Flit flit, int freeVC) {
-
-        vclist.get(freeVC).enqueueFlit(flit);
+    public boolean accepteFlit(Flit flit, int freeVC) {
+        return vclist.get(freeVC).enqueueFlit(flit);
     }
 
 }
