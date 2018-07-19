@@ -14,6 +14,6 @@ public class EndToEndLatency {
     }
 
     public static double networkLatency(double nI, int oV, int nR) {
-        return ((nI * oV) + (nR - 1)) * PACKET_ROUTER_LAT;
+        return ((nI * oV) + (nR - 1));
     }
 }
