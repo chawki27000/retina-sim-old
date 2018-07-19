@@ -4,6 +4,7 @@ import architecture.Router;
 import communication.Direction;
 import communication.Flit;
 import communication.FlitType;
+import communication.Message;
 import output.FileWriter;
 import simulation.Event;
 import simulation.EventList;
@@ -17,6 +18,7 @@ public class Simulator {
     public static int simulationPeriod;
     public static int clock;
     public static ArrayList<Trace> traceList;
+    public static ArrayList<Message> messagesList;
 
     // Packet and Flit default size
     public static int PACKET_DEFAULT_SIZE = 64;
@@ -29,6 +31,7 @@ public class Simulator {
         this.simulationPeriod = simulationPeriod;
         clock = 0;
         traceList = new ArrayList<>();
+        messagesList = new ArrayList<>();
     }
 
     public void simulate() {

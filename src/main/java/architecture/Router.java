@@ -103,6 +103,7 @@ public class Router implements IRouting {
 
         // New message creation
         Message message = new Message(id, instance, bits, new int[]{this.getX(), this.getY()}, dest);
+        Simulator.messagesList.add(message);
         message.setDestinationInfo(dest);
 
         // Slicing message in several packets
@@ -113,7 +114,6 @@ public class Router implements IRouting {
             sendPacket(packet, time);
             time++;
         }
-
     }
 
     /**

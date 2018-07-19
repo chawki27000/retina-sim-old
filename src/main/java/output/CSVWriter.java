@@ -1,5 +1,7 @@
 package output;
 
+import communication.Message;
+import simulation_gen.Simulator;
 import simulation_gen.Trace;
 
 import java.io.FileWriter;
@@ -21,7 +23,7 @@ public class CSVWriter {
     public static void writeCsvFile(String fileName, ArrayList<Trace> traceList) {
 
         // Message Restriction Array
-        ArrayList<Column> messageList = new ArrayList<>();
+        ArrayList<Integer> messageList = new ArrayList<>();
 
         FileWriter fileWriter = null;
 
@@ -38,14 +40,14 @@ public class CSVWriter {
             for (Trace trace : traceList) {
 
                 if (!messageList.isEmpty() &&
-                        messageList.contains(new Column(trace.getFlit().getPacket().getMessage().getId(),
-                                trace.getFlit().getPacket().getMessage().getInstance())))
+                        messageList.contains(trace.getFlit().getPacket().getMessage().getId()))
                     continue;
 
-
                 // Restriction
-                messageList.add(new Column(trace.getFlit().getPacket().getMessage().getId(),
-                        trace.getFlit().getPacket().getMessage().getInstance()));
+                messageList.add(trace.getFlit().getPacket().getMessage().getId());
+
+                // get Latency analysis table
+                ArrayList<Integer> fetchedList = messageListFetch(trace.getFlit().getPacket().getMessage().getId());
 
                 // Put ID
                 fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getId()));
@@ -56,16 +58,18 @@ public class CSVWriter {
                 fileWriter.append(COMMA_DELIMITER);
 
                 // Put L1
-                if (trace.getFlit().getPacket().getMessage().getInstance() == 0) {
-                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                if (!fetchedList.isEmpty()) {
+                    fileWriter.append(String.valueOf(fetchedList.get(0)));
+                    fetchedList.remove(0);
                     fileWriter.append(COMMA_DELIMITER);
 
                 } else {
                 }
 
                 // Put L2
-                if (trace.getFlit().getPacket().getMessage().getInstance() == 1) {
-                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                if (!fetchedList.isEmpty()) {
+                    fileWriter.append(String.valueOf(fetchedList.get(0)));
+                    fetchedList.remove(0);
                     fileWriter.append(COMMA_DELIMITER);
                 } else {
                     fileWriter.append(String.valueOf(0));
@@ -73,8 +77,9 @@ public class CSVWriter {
                 }
 
                 // Put L3
-                if (trace.getFlit().getPacket().getMessage().getInstance() == 2) {
-                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                if (!fetchedList.isEmpty()) {
+                    fileWriter.append(String.valueOf(fetchedList.get(0)));
+                    fetchedList.remove(0);
                     fileWriter.append(COMMA_DELIMITER);
                 } else {
                     fileWriter.append(String.valueOf(0));
@@ -82,8 +87,9 @@ public class CSVWriter {
                 }
 
                 // Put L4
-                if (trace.getFlit().getPacket().getMessage().getInstance() == 3) {
-                    fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().latencyAnalysis()));
+                if (!fetchedList.isEmpty()) {
+                    fileWriter.append(String.valueOf(fetchedList.get(0)));
+                    fetchedList.remove(0);
                 } else {
                     fileWriter.append(String.valueOf(0));
                 }
@@ -103,5 +109,15 @@ public class CSVWriter {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static ArrayList<Integer> messageListFetch(int messageID) {
+        ArrayList<Integer> values = new ArrayList<>();
+        for (Message message : Simulator.messagesList) {
+            if (message.getId() == messageID)
+                values.add(message.latencyAnalysis());
+        }
+
+        return values;
     }
 }

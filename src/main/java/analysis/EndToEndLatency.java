@@ -9,11 +9,11 @@ public class EndToEndLatency {
         return Math.abs(dest_x - src_x) + Math.abs(dest_y - src_y);
     }
 
-    public static double numberIteration(int nP, int aVflow) {
+    public static int numberIteration(int nP, int aVflow) {
         return (int) Math.ceil((double) nP / aVflow);
     }
 
-    public static double networkLatency(double nI, int oV, int nR) {
-        return ((nI * oV) + (nR - 1));
+    public static int networkLatency(double nI, int oV, int nR) {
+        return (int) ((nI * oV) + (nR - 1));
     }
 }

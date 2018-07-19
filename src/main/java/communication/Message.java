@@ -74,7 +74,7 @@ public class Message {
         return packetList.get(packetList.size() - 1);
     }
 
-    public double latencyAnalysis() {
+    public int latencyAnalysis() {
         return packetList.get(packetList.size() - 1).getLastFlit().getTimeEnd()
                 - packetList.get(0).getLastFlit().getTimeEnd();
     }
@@ -82,10 +82,10 @@ public class Message {
     /**
      * Analysis Function
      */
-    public double getE2ELatency() {
+    public int getE2ELatency() {
         // local variable
         int nR;
-        double nI, nL;
+        int nI, nL;
 
         // Routing Distance Computing
         nR = EndToEndLatency.routingDistance(src_coor[0], src_coor[1],
@@ -98,8 +98,10 @@ public class Message {
         // nI : Number of iteration
         // oV : Total VC occupied (pessimistic)
         // nR : Number of iteration
-        nL = EndToEndLatency.networkLatency(nI, ConfigParse.numberOfVC, nR);
+        nL = EndToEndLatency.networkLatency(nI,
+                this.size/Simulator.PACKET_DEFAULT_SIZE,
+                nR);
 
-        return (EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL;
+        return (int) ((EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL);
     }
 }
