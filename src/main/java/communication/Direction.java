@@ -5,6 +5,7 @@ public enum Direction {
     NORTH ("North Direction"),
     EAST ("East Direction"),
     SOUTH ("South Direction");
+	// il manque pas le localport ici?
 
     private String name;
 

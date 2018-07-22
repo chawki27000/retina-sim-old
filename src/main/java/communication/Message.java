@@ -8,100 +8,77 @@ import java.util.ArrayList;
 
 public class Message {
 
-    //
-    public static int packetNum = 0;
-    public static int messageNum = 0;
+	public int getId() {
+		return id;
+	}
 
-    private int id, instance;
-    ArrayList<Packet> packetList = new ArrayList<>();
-    int size, numberOfPacket;
+	public void setId(int id) {
+		this.id = id;
+	}
 
+	public int getPeriod() {
+		return period;
+	}
 
-    // Analysis Attribute
-    private double e2eLatency;
-    private int[] src_coor, dest_coor;
+	public void setPeriod(int period) {
+		this.period = period;
+	}
 
-    /**
-     * Message class constructor
-     * It build a message and all inner packets
-     *
-     * @param size Message size
-     */
-    public Message(int id, int instance, int size, int[] src_coor, int[] dest_coor) {
-        this.id = id;
-        this.instance = instance;
-        this.size = size;
-        this.src_coor = src_coor;
-        this.dest_coor = dest_coor;
+	public Packet getPacket() {
+		return packet;
+	}
 
-        // Message Building
-        numberOfPacket = size / Simulator.PACKET_DEFAULT_SIZE;
+	public void setPacket(Packet packet) {
+		this.packet = packet;
+	}
 
-        for (int i = 0; i < numberOfPacket; i++) {
-            packetList.add(new Packet(packetNum, this));
-            packetNum++;
-        }
+	public coordinates getSrc_coor() {
+		return src_coor;
+	}
 
-    }
+	public void setSrc_coor(coordinates src_coor) {
+		this.src_coor = src_coor;
+	}
 
-    public void setDestinationInfo(int[] dest) {
-        for (Packet packet : packetList) {
-            packet.setDestinationInfo(dest);
-        }
-    }
+	public coordinates getDst_coor() {
+		return dst_coor;
+	}
 
-    public ArrayList<Packet> getPacketList() {
-        return packetList;
-    }
+	public void setDst_coor(coordinates dst_coor) {
+		this.dst_coor = dst_coor;
+	}
 
-    public int getSize() {
-        return size;
-    }
+	private int id;
+	int period;
+	Packet packet;
+	private coordinates src_coor, dst_coor;
 
-    public int getId() {
-        return id;
-    }
+	public Message(int id, int period, Packet packet, coordinates src, coordinates dst) {
+		this.id = id;
+		this.period = period;
+		this.src_coor = src;
+		this.dst_coor = dst;
+		this.packet = packet;
+	}
 
-    public int getInstance() {
-        return instance;
-    }
+	// Analysis Function
 
-    public Packet getFirstPacket() {
-        return packetList.get(0);
-    }
+	public int getE2ELatencyByAnalysis() {
+		// local variable
+		int nR;
+		int nI, nL;
 
-    public Packet getLastPacket() {
-        return packetList.get(packetList.size() - 1);
-    }
+		// Routing Distance Computing
+		nR = EndToEndLatency.routingDistance(src_coor, dst_coor);
 
-    public int latencyAnalysis() {
-        return packetList.get(packetList.size() - 1).getLastFlit().getTimeEnd()
-                - packetList.get(0).getLastFlit().getTimeEnd();
-    }
+		// Iteration Number
+		nI = EndToEndLatency.numberIteration(1, ConfigParse.numberOfVC);
 
-    /**
-     * Analysis Function
-     */
-    public int getE2ELatency() {
-        // local variable
-        int nR;
-        int nI, nL;
-
-        // Routing Distance Computing
-        nR = EndToEndLatency.routingDistance(src_coor[0], src_coor[1],
-                dest_coor[0], dest_coor[1]);
-
-        // Iteration Number
-        nI = EndToEndLatency.numberIteration(numberOfPacket, ConfigParse.numberOfVC);
-
-        // Network Latency
-        // nI : Number of iteration
-        // oV : Total VC occupied (pessimistic)
-        // nR : Number of iteration
-        nL = EndToEndLatency.networkLatency(nI,
-                this.size/Simulator.PACKET_DEFAULT_SIZE,
-                nR);
-
-        return (int) ((EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL);
-    }
+		// Network Latency
+		// nI : Number of iteration
+		// oV : Total VC occupied (pessimistic)
+		// nR : Number of iteration
+		nL = EndToEndLatency.networkLatency(nI, 1, nR);
+		return (int) ((EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL);
+	}
 }

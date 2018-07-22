@@ -99,21 +99,8 @@ public class Router implements IRouting {
      *
      * @param bits
      */
-    public void sendMessage(int id, int instance, int bits, int[] dest, int time) {
-
-        // New message creation
-        Message message = new Message(id, instance, bits, new int[]{this.getX(), this.getY()}, dest);
-        Simulator.messagesList.add(message);
-        message.setDestinationInfo(dest);
-
-        // Slicing message in several packets
-        ArrayList<Packet> packetList = message.getPacketList();
-
-        for (Packet packet : packetList) {
-            // To Output port
-            sendPacket(packet, time);
-            time++;
-        }
+    public void sendMessage(MessageInstance minst, int time) {
+            sendPacket(minst.getPacket(), time);
     }
 
     /**
@@ -124,7 +111,7 @@ public class Router implements IRouting {
      */
     private boolean sendPacket(Packet packet, int time) {
 
-        int dx, dy;
+
         Event event = null;
         int clock = time;
 
@@ -132,12 +119,11 @@ public class Router implements IRouting {
         Flit headerFlit = packet.getHeaderFlit();
 
         // Extract header flit information
-        dx = headerFlit.getDx();
-        dy = headerFlit.getDy();
+        coordinates dst_=  headerFlit.getDst();
 
 
         System.out.println("Sending packet : " + packet.getId() + " From : (" +
-                x + "," + y + ")" + " TO : (" + dx + "," + dy + ") at : " + time);
+                x + "," + y + ")" + " TO : (" + dst_.getX() + "," + dst_.getY()+ ") at : " + time);
 
 
         // Slicing each packet in several flits
@@ -154,7 +140,7 @@ public class Router implements IRouting {
             inLocal.getVclist().get(freeVC).enqueueFlit(flit);
 
             // set coordinates in others flit
-            flit.setDxDy(dx, dy);
+            flit.setDst(dst_);
 
             // Event pushing
             if (flit.getType() == FlitType.HEAD)
@@ -181,12 +167,12 @@ public class Router implements IRouting {
      */
     public int sendFlit(Flit flit, int time) {
 
-        int dx, dy;
-        dx = flit.getDx();
-        dy = flit.getDy();
-
+//        int dx, dy;
+//        dx = flit.getDx();
+//        dy = flit.getDy();
+    	
         // Get Routing Direction
-        Direction direction = getRoutingDirection(dx, dy);
+        Direction direction = getRoutingDirection(flit.getDst());
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
@@ -286,12 +272,9 @@ public class Router implements IRouting {
      */
     public int sendHeadFlit(Flit flit, int time) {
 
-        int dx, dy;
-        dx = flit.getDx();
-        dy = flit.getDy();
 
         // Get IRouting Direction
-        Direction direction = getRoutingDirection(dx, dy);
+        Direction direction = getRoutingDirection(flit.getDst());
 
         if (direction == null) {
             System.out.println(flit + " : Destination Reached");
@@ -421,24 +404,24 @@ public class Router implements IRouting {
         return 0;
     }
 
-    public Direction getRoutingDirection(int dx, int dy) {
+    public Direction getRoutingDirection(coordinates crd) {
         // On X axe
         // By the West
-        if (y > dy) {
+        if (y > crd.getY()) {
             return Direction.WEST;
         }
         // By the East
-        else if (y < dy) {
+        else if (y < crd.getY()) {
             return Direction.EAST;
         }
         // On Y axe
         else {
             // By the North
-            if (x > dx) {
+            if (x > crd.getX()) {
                 return Direction.NORTH;
             }
             // By the South
-            else if (x < dx) {
+            else if (x < crd.getX()) {
                 return Direction.SOUTH;
             } else {
                 // Destination Reached

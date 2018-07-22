@@ -2,6 +2,8 @@ package architecture;
 
 import java.util.ArrayList;
 
+import communication.coordinates;
+
 /**
  * This class aims to create and instantiate
  * a 2D NoC with all its components
@@ -130,8 +132,8 @@ public class NoC {
 
     }
 
-    public Router getRouter(int x, int y) {
-        return routerMatrix[x][y];
+    public Router getRouter(coordinates crd) {
+        return routerMatrix[crd.getX()][crd.getY()];
     }
 
     @Override

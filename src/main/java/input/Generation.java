@@ -15,7 +15,7 @@ public class Generation {
     String scenarioPath = System.getProperty("user.dir") + "/src/main/java/input/scenario.json";
 
     // Period Array
-    int[] period_array = new int[]{6, 7, 10, 14, 15, 30};
+    int[] period_array = new int[] {50, 100, 150, 200, 300, 600};
 
     // TaskSet
     ArrayList<Task> tasks = new ArrayList<>();

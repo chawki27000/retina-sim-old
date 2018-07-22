@@ -2,17 +2,17 @@ package simulation;
 
 import architecture.Router;
 import communication.Direction;
+import communication.MessageInstance;
 
 public class Event implements Comparable<Event> {
 
     private EventType eventType;
     private int time;
     private Router router_src;
-    private int[] router_dest;
-    private int message;
-    private int messageID;
-    private int instance;
+    private Router router_dest;
+    private MessageInstance message_instance;
 
+    
     // Flit case
     private Direction direction;
     private int vcAllotted;
@@ -23,18 +23,24 @@ public class Event implements Comparable<Event> {
         this.router_src = router_src;
     }
 
-    public Event(EventType eventType, int time, Router router_src, int[] router_dest,
-                 int message, int instance, int messageID) {
+    public Event(EventType eventType, int time, Router router_src, Router dst,
+                  MessageInstance message_instance) {
         this.eventType = eventType;
         this.time = time;
         this.router_src = router_src;
-        this.router_dest = router_dest;
-        this.message = message;
-        this.instance = instance;
-        this.messageID = messageID;
+        this.router_dest = dst;
+        this.message_instance = message_instance;
     }
 
-    public Event(EventType eventType, int time, Router router_src, Direction direction, int vcAllotted) {
+    public MessageInstance getMessage_instance() {
+		return message_instance;
+	}
+
+	public void setMessage_instance(MessageInstance message_instance) {
+		this.message_instance = message_instance;
+	}
+
+	public Event(EventType eventType, int time, Router router_src, Direction direction, int vcAllotted) {
         this.eventType = eventType;
         this.time = time;
         this.router_src = router_src;
@@ -58,25 +64,16 @@ public class Event implements Comparable<Event> {
         return router_src;
     }
 
-    public int[] getRouter_dest() {
+    public Router getRouter_dest() {
         return router_dest;
     }
 
-    public int getMessageSize() {
-        return message;
-    }
+
 
     public int getVcAllotted() {
         return vcAllotted;
     }
 
-    public int getMessageID() {
-        return messageID;
-    }
-
-    public int getInstance() {
-        return instance;
-    }
 
     @Override
     public int compareTo(Event o) {

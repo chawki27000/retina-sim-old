@@ -10,7 +10,7 @@ public class Flit {
     private int id;
     private int timeBegin, timeEnd;
     // Only Header Flit
-    private int dx, dy, packetID;
+    private coordinates dst;
     private Packet packet;
 
     public HashMap<Router, Integer> vcAllottedMap = new HashMap<Router, Integer>();
@@ -50,11 +50,9 @@ public class Flit {
     /*
     Only Header Flit
     */
-    public void setDestinationInfo(int dx, int dy, int packetID) {
+    public void setDestinationInfo(coordinates dst) {
         if (type == FlitType.HEAD) {
-            this.dx = dx;
-            this.dy = dy;
-            this.packetID = packetID;
+            this.dst = dst; 
         }
     }
 
@@ -76,17 +74,7 @@ public class Flit {
         return vcAllottedMap.toString();
     }
 
-    public int getDx() {
-        return dx;
-    }
-
-    public int getDy() {
-        return dy;
-    }
-
-    public int getPacketID() {
-        return packetID;
-    }
+    
 
     public Packet getPacket() {
         return packet;
@@ -97,11 +85,13 @@ public class Flit {
     /*
         Only Body and Tail Flit
          */
-    public void setDxDy(int dx, int dy) {
-        this.dx = dx;
-        this.dy = dy;
+    public void setDst(coordinates dst) {
+        this.dst = dst;
     }
 
+    public coordinates getDst() {
+        return this.dst;
+    }
     @Override
     public String toString() {
         return type + " Flit (Packet " + packet.getId() + ")";

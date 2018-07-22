@@ -5,6 +5,7 @@ import communication.Direction;
 import communication.Flit;
 import communication.FlitType;
 import communication.Message;
+import communication.coordinates;
 import output.FileWriter;
 import simulation.Event;
 import simulation.EventList;
@@ -25,7 +26,7 @@ public class Simulator {
     public static int FLIT_DEFAULT_SIZE = 16;
 
     private int message, id, instance;
-    private int[] dest;
+    private coordinates dest;
 
     public Simulator(int simulationPeriod) {
         this.simulationPeriod = simulationPeriod;
@@ -56,11 +57,7 @@ public class Simulator {
             switch (curr_ev.getEventType()) {
 
                 case MESSAGE_SEND:
-                    message = curr_ev.getMessageSize();
-                    id = curr_ev.getMessageID();
-                    instance = curr_ev.getInstance();
-                    dest = curr_ev.getRouter_dest();
-                    router.sendMessage(id, instance, message, dest, clock);
+                    router.sendMessage(curr_ev.getMessage_instance(), clock);
                     break;
 
                 case SEND_HEAD_FLIT:
