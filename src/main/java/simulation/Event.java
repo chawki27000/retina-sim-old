@@ -68,8 +68,6 @@ public class Event implements Comparable<Event> {
         return router_dest;
     }
 
-
-
     public int getVcAllotted() {
         return vcAllotted;
     }

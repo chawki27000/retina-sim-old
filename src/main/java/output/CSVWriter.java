@@ -1,6 +1,7 @@
 package output;
 
 import communication.Message;
+import communication.MessageInstance;
 import simulation_gen.Simulator;
 import simulation_gen.Trace;
 
@@ -46,53 +47,51 @@ public class CSVWriter {
                 // Restriction
                 messageList.add(trace.getFlit().getPacket().getMessage().getId());
 
-                // get Latency analysis table
-                ArrayList<Integer> fetchedList = messageListFetch(trace.getFlit().getPacket().getMessage().getId());
 
                 // Put ID
                 fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getId()));
                 fileWriter.append(COMMA_DELIMITER);
 
                 // Put WCLA
-                fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getE2ELatency()));
+                fileWriter.append(String.valueOf(trace.getFlit().getPacket().getMessage().getE2ELatencyByAnalysis()));
                 fileWriter.append(COMMA_DELIMITER);
 
-                // Put L1
-                if (!fetchedList.isEmpty()) {
-                    fileWriter.append(String.valueOf(fetchedList.get(0)));
-                    fetchedList.remove(0);
-                    fileWriter.append(COMMA_DELIMITER);
+                // Message Instance Array Fetching
+                for (MessageInstance instance : Simulator.messageInstancesList) {
+                    // Put L1
+                    if (instance.getInstNumber() == 0 && instance == trace.getFlit().getPacket().getMessage()) {
+                        fileWriter.append(String.valueOf(instance.latencyAnalysis()));
+                        fileWriter.append(COMMA_DELIMITER);
 
-                } else {
+                    } else {
+                    }
+
+                    // Put L2
+                    if (instance.getInstNumber() == 1 && instance == trace.getFlit().getPacket().getMessage()) {
+                        fileWriter.append(String.valueOf(instance.latencyAnalysis()));
+                        fileWriter.append(COMMA_DELIMITER);
+                    } else {
+                        fileWriter.append(String.valueOf(0));
+                        fileWriter.append(COMMA_DELIMITER);
+                    }
+
+                    // Put L3
+                    if (instance.getInstNumber() == 2 && instance == trace.getFlit().getPacket().getMessage()) {
+                        fileWriter.append(String.valueOf(instance.latencyAnalysis()));
+                        fileWriter.append(COMMA_DELIMITER);
+                    } else {
+                        fileWriter.append(String.valueOf(0));
+                        fileWriter.append(COMMA_DELIMITER);
+                    }
+
+                    // Put L4
+                    if (instance.getInstNumber() == 3 && instance == trace.getFlit().getPacket().getMessage()) {
+                        fileWriter.append(String.valueOf(instance.latencyAnalysis()));
+                    } else {
+                        fileWriter.append(String.valueOf(0));
+                    }
                 }
 
-                // Put L2
-                if (!fetchedList.isEmpty()) {
-                    fileWriter.append(String.valueOf(fetchedList.get(0)));
-                    fetchedList.remove(0);
-                    fileWriter.append(COMMA_DELIMITER);
-                } else {
-                    fileWriter.append(String.valueOf(0));
-                    fileWriter.append(COMMA_DELIMITER);
-                }
-
-                // Put L3
-                if (!fetchedList.isEmpty()) {
-                    fileWriter.append(String.valueOf(fetchedList.get(0)));
-                    fetchedList.remove(0);
-                    fileWriter.append(COMMA_DELIMITER);
-                } else {
-                    fileWriter.append(String.valueOf(0));
-                    fileWriter.append(COMMA_DELIMITER);
-                }
-
-                // Put L4
-                if (!fetchedList.isEmpty()) {
-                    fileWriter.append(String.valueOf(fetchedList.get(0)));
-                    fetchedList.remove(0);
-                } else {
-                    fileWriter.append(String.valueOf(0));
-                }
 
                 // New line
                 fileWriter.append(NEW_LINE_SEPARATOR);
@@ -111,12 +110,4 @@ public class CSVWriter {
         }
     }
 
-    public static ArrayList<Integer> messageListFetch(int messageID) {
-        ArrayList<Integer> values = new ArrayList<>();
-        for (Message message : Simulator.messagesList) {
-            if (message.getId() == messageID)
-                values.add(message.latencyAnalysis());
-        }
-        return values;
-    }
 }

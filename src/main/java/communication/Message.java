@@ -2,9 +2,6 @@ package communication;
 
 import analysis.EndToEndLatency;
 import simulation_gen.ConfigParse;
-import simulation_gen.Simulator;
-
-import java.util.ArrayList;
 
 public class Message {
 
@@ -77,7 +74,7 @@ public class Message {
 		// Network Latency
 		// nI : Number of iteration
 		// oV : Total VC occupied (pessimistic)
-		// nR : Number of iteration
+		// nR : Routing Distance
 		nL = EndToEndLatency.networkLatency(nI, 1, nR);
 		return (int) ((EndToEndLatency.NETWORK_ACCESS_LAT * 2) + nL);
 	}

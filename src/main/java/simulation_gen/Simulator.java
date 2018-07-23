@@ -1,11 +1,7 @@
 package simulation_gen;
 
 import architecture.Router;
-import communication.Direction;
-import communication.Flit;
-import communication.FlitType;
-import communication.Message;
-import communication.coordinates;
+import communication.*;
 import output.FileWriter;
 import simulation.Event;
 import simulation.EventList;
@@ -20,6 +16,7 @@ public class Simulator {
     public static int clock;
     public static ArrayList<Trace> traceList;
     public static ArrayList<Message> messagesList;
+    public static ArrayList<MessageInstance> messageInstancesList;
 
     // Packet and Flit default size
     public static int PACKET_DEFAULT_SIZE = 64;
@@ -33,6 +30,7 @@ public class Simulator {
         clock = 0;
         traceList = new ArrayList<>();
         messagesList = new ArrayList<>();
+        messageInstancesList = new ArrayList<>();
     }
 
     public void simulate() {

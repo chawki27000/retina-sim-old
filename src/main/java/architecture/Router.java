@@ -122,10 +122,6 @@ public class Router implements IRouting {
         coordinates dst_=  headerFlit.getDst();
 
 
-        System.out.println("Sending packet : " + packet.getId() + " From : (" +
-                x + "," + y + ")" + " TO : (" + dst_.getX() + "," + dst_.getY()+ ") at : " + time);
-
-
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
 
