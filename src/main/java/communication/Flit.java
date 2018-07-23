@@ -74,12 +74,10 @@ public class Flit {
         return vcAllottedMap.toString();
     }
 
-    
 
     public Packet getPacket() {
         return packet;
     }
-
 
 
     /*

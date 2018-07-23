@@ -62,6 +62,7 @@ public class ScenarioParse {
                 Packet p = new Packet(0, MessageSize);
                 Message m = new Message(id, period, p, new coordinates(src_x, src_y), new coordinates(dst_x, dst_y));
                 p.setMessage(m);
+                p.setDestinationInfo(new coordinates(dst_x, dst_y));
                 mset.addMessage(m);
                 id++;
             }

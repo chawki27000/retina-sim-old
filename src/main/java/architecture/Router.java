@@ -96,8 +96,6 @@ public class Router implements IRouting {
      * Sending message function
      * It's the function which can initiate a sending data
      * from a router to another
-     *
-     * @param bits
      */
     public void sendMessage(MessageInstance minst, int time) {
             sendPacket(minst.getPacket(), time);
@@ -120,7 +118,6 @@ public class Router implements IRouting {
 
         // Extract header flit information
         coordinates dst_=  headerFlit.getDst();
-
 
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
@@ -162,10 +159,6 @@ public class Router implements IRouting {
      * @return
      */
     public int sendFlit(Flit flit, int time) {
-
-//        int dx, dy;
-//        dx = flit.getDx();
-//        dy = flit.getDy();
     	
         // Get Routing Direction
         Direction direction = getRoutingDirection(flit.getDst());
