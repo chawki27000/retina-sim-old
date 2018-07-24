@@ -1,30 +1,36 @@
 package main;
 
 import architecture.InPort;
-import communication.Flit;
-import communication.FlitType;
-import communication.Packet;
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InportTest {
 
     static InPort inPort;
-    static Flit flit;
 
     @BeforeAll
     static void inport_initilisation() {
         inPort = new InPort(1, 4, 10);
-        flit = new Flit(1, FlitType.HEAD, new Packet(1, 1), 0);
     }
 
     @Test
     void inport_vc_test() {
         assertEquals(inPort.getFirstFreeVC(), 0);
 
-        inPort.accepteFlit(flit, 0);
-
+        inPort.getVclist().get(0).lockAllottedVC();
         assertEquals(inPort.getFirstFreeVC(), 1);
+
+        inPort.getVclist().get(1).lockAllottedVC();
+        assertEquals(inPort.getFirstFreeVC(), 2);
+
+        inPort.getVclist().get(2).lockAllottedVC();
+        assertEquals(inPort.getFirstFreeVC(), 3);
+
+        inPort.getVclist().get(3).lockAllottedVC();
+        assertEquals(inPort.getFirstFreeVC(), -1);
+
     }
 
 }
