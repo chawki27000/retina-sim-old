@@ -1,5 +1,8 @@
 package simulation;
 
+import architecture.Router;
+import communication.Direction;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +41,18 @@ public class EventList {
 
     public boolean isEmpty() {
         return eventQueue.isEmpty();
+    }
+
+    public int eventShift(Router router, int vcAllotted, Direction direction) {
+        int numberEventShifted = 0;
+        for (Event event : eventQueue) {
+            if (event.getRouter_src() == router && event.getVcAllotted() == vcAllotted
+                    && event.getDirection() == direction) {
+                event.shift();
+                numberEventShifted++;
+            }
+        }
+        return numberEventShifted;
     }
 
     @Override

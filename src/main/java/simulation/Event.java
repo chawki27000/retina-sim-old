@@ -72,6 +72,9 @@ public class Event implements Comparable<Event> {
         return vcAllotted;
     }
 
+    public void shift() {
+        time++;
+    }
 
     @Override
     public int compareTo(Event o) {

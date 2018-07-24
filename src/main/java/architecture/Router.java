@@ -98,7 +98,7 @@ public class Router implements IRouting {
      * from a router to another
      */
     public void sendMessage(MessageInstance minst, int time) {
-            sendPacket(minst.getPacket(), time);
+        sendPacket(minst.getPacket(), time);
     }
 
     /**
@@ -117,7 +117,7 @@ public class Router implements IRouting {
         Flit headerFlit = packet.getHeaderFlit();
 
         // Extract header flit information
-        coordinates dst_=  headerFlit.getDst();
+        coordinates dst_ = headerFlit.getDst();
 
         // Slicing each packet in several flits
         ArrayList<Flit> flitList = packet.getFlitList();
@@ -154,12 +154,13 @@ public class Router implements IRouting {
      * 0 : true
      * 1 : VC not allotted
      * 2 : Full Buffer
+     *
      * @param flit
      * @param time
      * @return
      */
     public int sendFlit(Flit flit, int time) {
-    	
+
         // Get Routing Direction
         Direction direction = getRoutingDirection(flit.getDst());
 
@@ -255,6 +256,7 @@ public class Router implements IRouting {
      * 0 : true
      * 1 : VC not allotted
      * 2 : Full Buffer
+     *
      * @param flit
      * @param time
      * @return
@@ -301,7 +303,7 @@ public class Router implements IRouting {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            NextEvents(time, oLeft.getDest(), Direction.EAST, freeVC);
+            NextEvents(time, oLeft.getDest(), Direction.EAST, freeVC, flit);
 
 
         } else if (direction == Direction.EAST) {
@@ -330,7 +332,7 @@ public class Router implements IRouting {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            NextEvents(time, oRight.getDest(), Direction.WEST, freeVC);
+            NextEvents(time, oRight.getDest(), Direction.WEST, freeVC, flit);
 
         } else if (direction == Direction.NORTH) {
             System.out.println(time + " ==> " + flit + " : sent in NORTH");
@@ -358,7 +360,7 @@ public class Router implements IRouting {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            NextEvents(time, oUp.getDest(), Direction.SOUTH, freeVC);
+            NextEvents(time, oUp.getDest(), Direction.SOUTH, freeVC, flit);
 
 
         } else if (direction == Direction.SOUTH) {
@@ -387,7 +389,7 @@ public class Router implements IRouting {
             Simulator.traceList.add(t);
 
             // Event Simulation Push
-            NextEvents(time, oDown.getDest(), Direction.NORTH, freeVC);
+            NextEvents(time, oDown.getDest(), Direction.NORTH, freeVC, flit);
         }
 
         return 0;
@@ -419,9 +421,9 @@ public class Router implements IRouting {
         }
     }
 
-    public void NextEvents(int time, Router router, Direction direction, int vcAllotted) {
+    public void NextEvents(int time, Router router, Direction direction, int vcAllotted, Flit flit) {
 
-        int nbflit = Simulator.PACKET_DEFAULT_SIZE / Simulator.FLIT_DEFAULT_SIZE;
+        int nbflit = (int) Math.ceil(flit.getPacket().getSize() / Simulator.FLIT_DEFAULT_SIZE);
         Event event = null;
         int clock = time;
 

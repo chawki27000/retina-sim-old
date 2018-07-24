@@ -6,77 +6,82 @@ import java.util.ArrayList;
 
 public class Packet {
 
-	int id;
-	int size;
-	Message message;
-	public Message getMessage() {
-		return message;
-	}
+    int id;
+    int size;
+    Message message;
 
-	public void setMessage(Message message) {
-		this.message = message;
-	}
+    public Message getMessage() {
+        return message;
+    }
 
-	ArrayList<Flit> flitList = new ArrayList<>();
+    public void setMessage(Message message) {
+        this.message = message;
+    }
 
-	/**
-	 * Packet class constructor It builds a packet and all inner flits
-	 *
-	 * @param id
-	 *            Packet index
-	 */
-	
-	public Packet(int id, int size) {
-		this.id = id;
-		this.size = size;
-		// Packet Building
-		int numberOfFlit = (int) (Math.ceil(this.size / Simulator.FLIT_DEFAULT_SIZE));
+    ArrayList<Flit> flitList = new ArrayList<>();
 
-		for (int i = 0; i < numberOfFlit; i++) {
-			if (i == 0) // Head Flit
-				flitList.add(new Flit(i, FlitType.HEAD, this, Simulator.clock));
-			else if (i == numberOfFlit - 1) // Tail Flit
-				flitList.add(new Flit(i, FlitType.TAIL, this, Simulator.clock));
-			else // Data Flit
-				flitList.add(new Flit(i, FlitType.BODY, this, Simulator.clock));
-		}
-	}
+    /**
+     * Packet class constructor It builds a packet and all inner flits
+     *
+     * @param id Packet index
+     */
 
-	public int getId() {
-		return id;
-	}
+    public Packet(int id, int size) {
+        this.id = id;
+        this.size = size;
+        // Packet Building
+        int numberOfFlit = (int) (Math.ceil(this.size / Simulator.FLIT_DEFAULT_SIZE));
+        System.out.println("Nombre de flit :" + numberOfFlit);
 
-	public Flit getHeaderFlit() {
-		return flitList.get(0);
-	}
+        for (int i = 0; i < numberOfFlit; i++) {
+            if (i == 0) // Head Flit
+                flitList.add(new Flit(i, FlitType.HEAD, this, Simulator.clock));
+            else if (i == numberOfFlit - 1) // Tail Flit
+                flitList.add(new Flit(i, FlitType.TAIL, this, Simulator.clock));
+            else // Data Flit
+                flitList.add(new Flit(i, FlitType.BODY, this, Simulator.clock));
+        }
+    }
 
-	public ArrayList<Flit> getFlitList() {
-		return flitList;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public Flit getFlit(int index) {
-		return flitList.get(index);
-	}
+    public Flit getHeaderFlit() {
+        return flitList.get(0);
+    }
 
-	public Flit getLastFlit() {
-		return flitList.get(flitList.size() - 1);
-	}
+    public ArrayList<Flit> getFlitList() {
+        return flitList;
+    }
 
-	/*
-	 * Header Flit Only
-	 */
-	public void setDestinationInfo(coordinates dst) {
-		// Get Header Flit
-		Flit flit = flitList.get(0);
-		flit.setDestinationInfo(dst);
-	}
+    public int getSize() {
+        return size;
+    }
 
-	public void addFlit(Flit flit) {
-		flitList.add(flit);
-	}
+    public Flit getFlit(int index) {
+        return flitList.get(index);
+    }
 
-	@Override
-	public String toString() {
-		return "Packet ID : " + id;
-	}
+    public Flit getLastFlit() {
+        return flitList.get(flitList.size() - 1);
+    }
+
+    /*
+     * Header Flit Only
+     */
+    public void setDestinationInfo(coordinates dst) {
+        // Get Header Flit
+        Flit flit = flitList.get(0);
+        flit.setDestinationInfo(dst);
+    }
+
+    public void addFlit(Flit flit) {
+        flitList.add(flit);
+    }
+
+    @Override
+    public String toString() {
+        return "Packet ID : " + id;
+    }
 }
