@@ -2,7 +2,7 @@ package communication;
 
 public enum FlitType {
 
-    HEAD("Head"),
+    HEAD("Header"),
     BODY("Body"),
     TAIL("Tail");
 

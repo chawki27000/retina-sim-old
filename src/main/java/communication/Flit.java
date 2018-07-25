@@ -102,6 +102,8 @@ public class Flit {
 
     @Override
     public String toString() {
-        return type + " Flit (Packet " + packet.getId() + ")";
+        return type + " Flit [M:" + packet.getMessage().getId() +
+                " P:" + packet.getId() +
+                " F:" + id + "]";
     }
 }
