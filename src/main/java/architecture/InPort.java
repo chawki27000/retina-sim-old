@@ -70,13 +70,13 @@ public class InPort {
         NumberofVCList = numberofVCList;
     }
 
-    public int getFirstFreeVC() {
+    public VirtualChannel getFirstFreeVC() {
         for (VirtualChannel channel : vclist) {
             if (channel.isFree())
-                return channel.getIdx();
+                return channel;
         }
 
-        return -1;
+        return null;
     }
 
     public VirtualChannel getFirstNonEmptyVC() {
@@ -87,8 +87,8 @@ public class InPort {
         return null;
     }
 
-    public boolean accepteFlit(Flit flit, int freeVC) {
-        return vclist.get(freeVC).enqueueFlit(flit);
+    public boolean accepteFlit(Flit flit, VirtualChannel VC) {
+        return VC.enqueueFlit(flit);
     }
 
 }

@@ -123,14 +123,14 @@ public class Router implements IRouting {
         ArrayList<Flit> flitList = packet.getFlitList();
 
         // get the first free VC in InLocal and hold it
-        int freeVC = inLocal.getFirstFreeVC();
-        inLocal.getVclist().get(freeVC).lockAllottedVC();
+        VirtualChannel freeVC = inLocal.getFirstFreeVC();
+        freeVC.lockAllottedVC();
 
         // Flit preparation
         for (Flit flit : flitList) {
 
             // Flit pushing in local Inport into VC 0
-            inLocal.getVclist().get(freeVC).enqueueFlit(flit);
+            freeVC.enqueueFlit(flit);
 
             // set coordinates in others flit
             flit.setDst(dst_);
@@ -178,8 +178,8 @@ public class Router implements IRouting {
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
-            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
-            if (vcAllotted < 0) {
+            VirtualChannel vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oLeft.getDest());
+            if (vcAllotted == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
@@ -197,8 +197,8 @@ public class Router implements IRouting {
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
-            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
-            if (vcAllotted < 0) {
+            VirtualChannel vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oRight.getDest());
+            if (vcAllotted == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
@@ -216,8 +216,8 @@ public class Router implements IRouting {
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
-            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
-            if (vcAllotted < 0) {
+            VirtualChannel vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oUp.getDest());
+            if (vcAllotted == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
@@ -235,8 +235,8 @@ public class Router implements IRouting {
 
             // getting VC Allotted from Head Flit
             Packet packet = flit.getPacket();
-            int vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
-            if (vcAllotted < 0) {
+            VirtualChannel vcAllotted = packet.getHeaderFlit().getVCAllottedFromRouter(oDown.getDest());
+            if (vcAllotted == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
@@ -275,20 +275,20 @@ public class Router implements IRouting {
 
         boolean accepted;
         // Free VC ID
-        int freeVC = -1;
+        VirtualChannel freeVC = null;
 
         if (direction == Direction.WEST) {
             System.out.println(time + " ==> " + flit + " : sent in WEST");
 
             // Getting the first free VC
             freeVC = oLeft.getDest().getInRight().getFirstFreeVC();
-            if (freeVC < 0) {
+            if (freeVC == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
 
             // Lock the VC
-            oLeft.getDest().getInRight().getVclist().get(freeVC).lockAllottedVC();
+            freeVC.lockAllottedVC();
 
             System.out.println(direction + " VC (" + freeVC + ") of " + oLeft.getDest() + " LOCKED by " + flit + " at : " + time);
 
@@ -311,13 +311,13 @@ public class Router implements IRouting {
 
             // Getting the first free VC
             freeVC = oRight.getDest().getInLeft().getFirstFreeVC();
-            if (freeVC < 0) {
+            if (freeVC == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
 
             // Lock the VC
-            oRight.getDest().getInLeft().getVclist().get(freeVC).lockAllottedVC();
+            freeVC.lockAllottedVC();
 
             System.out.println(direction + " VC (" + freeVC + ") of " + oRight.getDest() + " LOCKED by " + flit + " at : " + time);
 
@@ -339,13 +339,13 @@ public class Router implements IRouting {
 
             // Getting the first free VC
             freeVC = oUp.getDest().getInDown().getFirstFreeVC();
-            if (freeVC < 0) {
+            if (freeVC == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
 
             // Lock the VC
-            oUp.getDest().getInDown().getVclist().get(freeVC).lockAllottedVC();
+            freeVC.lockAllottedVC();
 
             System.out.println(direction + " VC (" + freeVC + ") of " + oUp.getDest() + " LOCKED by " + flit + " at : " + time);
 
@@ -368,13 +368,13 @@ public class Router implements IRouting {
 
             // Getting the first free VC
             freeVC = oDown.getDest().getInUp().getFirstFreeVC();
-            if (freeVC < 0) {
+            if (freeVC == null) {
                 System.out.println(time + " ==> " + flit + " : Blocking");
                 return 1;
             }
 
             // Lock the VC
-            oDown.getDest().getInUp().getVclist().get(freeVC).lockAllottedVC();
+            freeVC.lockAllottedVC();
 
             System.out.println(direction + " VC (" + freeVC + ") of " + oDown.getDest() + " LOCKED by " + flit + " at : " + time);
 
@@ -421,7 +421,7 @@ public class Router implements IRouting {
         }
     }
 
-    public void NextEvents(int time, Router router, Direction direction, int vcAllotted, Flit flit) {
+    public void NextEvents(int time, Router router, Direction direction, VirtualChannel vcAllotted, Flit flit) {
 
         int nbflit = (int) Math.ceil(flit.getPacket().getSize() / Simulator.FLIT_DEFAULT_SIZE);
         Event event = null;

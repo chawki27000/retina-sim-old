@@ -1,6 +1,7 @@
 package simulation;
 
 import architecture.Router;
+import architecture.VirtualChannel;
 import communication.Direction;
 import communication.MessageInstance;
 
@@ -12,10 +13,10 @@ public class Event implements Comparable<Event> {
     private Router router_dest;
     private MessageInstance message_instance;
 
-    
+
     // Flit case
     private Direction direction;
-    private int vcAllotted;
+    private VirtualChannel vcAllotted;
 
     public Event(EventType eventType, int time, Router router_src) {
         this.eventType = eventType;
@@ -24,7 +25,7 @@ public class Event implements Comparable<Event> {
     }
 
     public Event(EventType eventType, int time, Router router_src, Router dst,
-                  MessageInstance message_instance) {
+                 MessageInstance message_instance) {
         this.eventType = eventType;
         this.time = time;
         this.router_src = router_src;
@@ -33,14 +34,14 @@ public class Event implements Comparable<Event> {
     }
 
     public MessageInstance getMessage_instance() {
-		return message_instance;
-	}
+        return message_instance;
+    }
 
-	public void setMessage_instance(MessageInstance message_instance) {
-		this.message_instance = message_instance;
-	}
+    public void setMessage_instance(MessageInstance message_instance) {
+        this.message_instance = message_instance;
+    }
 
-	public Event(EventType eventType, int time, Router router_src, Direction direction, int vcAllotted) {
+    public Event(EventType eventType, int time, Router router_src, Direction direction, VirtualChannel vcAllotted) {
         this.eventType = eventType;
         this.time = time;
         this.router_src = router_src;
@@ -68,7 +69,7 @@ public class Event implements Comparable<Event> {
         return router_dest;
     }
 
-    public int getVcAllotted() {
+    public VirtualChannel getVcAllotted() {
         return vcAllotted;
     }
 

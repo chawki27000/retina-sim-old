@@ -1,6 +1,7 @@
 package communication;
 
 import architecture.Router;
+import architecture.VirtualChannel;
 
 import java.util.HashMap;
 
@@ -9,11 +10,12 @@ public class Flit {
     FlitType type;
     private int id;
     private int timeBegin, timeEnd;
+    private VirtualChannel actualVC;
     // Only Header Flit
     private coordinates dst;
     private Packet packet;
 
-    public HashMap<Router, Integer> vcAllottedMap = new HashMap<Router, Integer>();
+    public HashMap<Router, VirtualChannel> vcAllottedMap = new HashMap<Router, VirtualChannel>();
 
     public Flit(int id, FlitType type, Packet packet, int timeBegin) {
         this.type = type;
@@ -46,28 +48,35 @@ public class Flit {
         this.timeBegin = timeBegin;
     }
 
+    public VirtualChannel getActualVC() {
+        return actualVC;
+    }
+
+    public void setActualVC(VirtualChannel actualVC) {
+        this.actualVC = actualVC;
+    }
 
     /*
-    Only Header Flit
-    */
+        Only Header Flit
+        */
     public void setDestinationInfo(coordinates dst) {
         if (type == FlitType.HEAD) {
-            this.dst = dst; 
+            this.dst = dst;
         }
     }
 
     /*
     Only Header Flit
     */
-    public void addVCAllotted(Router router, int vcAllotted) {
-        vcAllottedMap.putIfAbsent(router, vcAllotted);
+    public void addVCAllotted(Router router, VirtualChannel VC) {
+        vcAllottedMap.putIfAbsent(router, VC);
     }
 
     /*
     Only Header Flit
     */
-    public int getVCAllottedFromRouter(Router router) {
-        return vcAllottedMap.getOrDefault(router, -1);
+    public VirtualChannel getVCAllottedFromRouter(Router router) {
+        return vcAllottedMap.getOrDefault(router, null);
     }
 
     public String afficherHashMap() {
@@ -90,6 +99,7 @@ public class Flit {
     public coordinates getDst() {
         return this.dst;
     }
+
     @Override
     public String toString() {
         return type + " Flit (Packet " + packet.getId() + ")";

@@ -1,6 +1,7 @@
 package simulation;
 
 import architecture.Router;
+import architecture.VirtualChannel;
 import communication.Direction;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class EventList {
         return eventQueue.isEmpty();
     }
 
-    public int eventShift(Router router, int vcAllotted, Direction direction) {
+    public int eventShift(Router router, VirtualChannel vcAllotted, Direction direction) {
         int numberEventShifted = 0;
         for (Event event : eventQueue) {
             if (event.getRouter_src() == router && event.getVcAllotted() == vcAllotted

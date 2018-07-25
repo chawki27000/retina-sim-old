@@ -1,6 +1,7 @@
 package simulation_gen;
 
 import architecture.Router;
+import architecture.VirtualChannel;
 import communication.Flit;
 
 public class Trace {
@@ -8,10 +9,10 @@ public class Trace {
     private Flit flit;
     private Router src;
     private Router dest;
-    private int vcAllotted;
+    private VirtualChannel vcAllotted;
     private int time;
 
-    public Trace(Flit flit, Router src, Router dest, int vcAllotted, int time) {
+    public Trace(Flit flit, Router src, Router dest, VirtualChannel vcAllotted, int time) {
         this.flit = flit;
         this.src = src;
         this.dest = dest;
@@ -31,7 +32,7 @@ public class Trace {
         return dest;
     }
 
-    public int getVcAllotted() {
+    public VirtualChannel getVcAllotted() {
         return vcAllotted;
     }
 
@@ -42,6 +43,6 @@ public class Trace {
     @Override
     public String toString() {
         return "Sent " + flit + " from " + src + " to " +
-                dest + " on VC (" + vcAllotted + ") at : " + time;
+                dest + " on " + vcAllotted + " at : " + time;
     }
 }

@@ -1,6 +1,7 @@
 package simulation_gen;
 
 import architecture.Router;
+import architecture.VirtualChannel;
 import communication.*;
 import output.FileWriter;
 import simulation.Event;
@@ -37,7 +38,7 @@ public class Simulator {
 
         // local variable
         Flit flit = null;
-        int vcAllotted = -1;
+        VirtualChannel vcAllotted = null;
         Direction direction;
         int result;
         Event event;
@@ -70,7 +71,7 @@ public class Simulator {
 
                     result = router.sendHeadFlit(flit, clock + 1);
                     if (result == 0) {
-                        if (removeFlit(flit, router, vcAllotted, direction))
+                        if (removeFlit(flit, vcAllotted, direction))
                             System.out.println(flit + " : Credit Updated");
                         else
                             System.out.println(flit + " : Credit Not Updated");
@@ -94,7 +95,7 @@ public class Simulator {
 
                     result = router.sendFlit(flit, clock + 1);
                     if (result == 0) {
-                        if (removeFlit(flit, router, vcAllotted, direction))
+                        if (removeFlit(flit, vcAllotted, direction))
                             System.out.println(flit + " : Credit Updated");
                         else
                             System.out.println(flit + " : Credit Not Updated");
@@ -110,45 +111,45 @@ public class Simulator {
         }
     }
 
-    private boolean removeFlit(Flit flit, Router router, int vcAllotted, Direction direction) {
+    private boolean removeFlit(Flit flit, VirtualChannel vcAllotted, Direction direction) {
         boolean ret = false;
 
         if (direction == null) {
-            ret = router.getInLocal().getVclist().get(vcAllotted).removeFlit(flit);
+            ret = vcAllotted.removeFlit(flit);
         } else {
             if (direction == Direction.EAST) {
-                ret = router.getInRight().getVclist().get(vcAllotted).removeFlit(flit);
+                ret = vcAllotted.removeFlit(flit);
             } else if (direction == Direction.WEST) {
-                ret = router.getInLeft().getVclist().get(vcAllotted).removeFlit(flit);
+                ret = vcAllotted.removeFlit(flit);
             } else if (direction == Direction.NORTH) {
-                ret = router.getInUp().getVclist().get(vcAllotted).removeFlit(flit);
+                ret = vcAllotted.removeFlit(flit);
             } else if (direction == Direction.SOUTH) {
-                ret = router.getInDown().getVclist().get(vcAllotted).removeFlit(flit);
+                ret = vcAllotted.removeFlit(flit);
             }
 
         }
         return ret;
     }
 
-    private Flit dequeueFlit(Router router, int vcAllotted, Direction direction, int time) {
+    private Flit dequeueFlit(Router router, VirtualChannel vcAllotted, Direction direction, int time) {
         Flit flit = null;
 
         if (direction == null) {
-            flit = router.getInLocal().getVclist().get(vcAllotted).dequeueFlit();
+            flit = vcAllotted.dequeueFlit();
         } else {
             if (direction == Direction.EAST)
-                flit = router.getInRight().getVclist().get(vcAllotted).dequeueFlit();
+                flit = vcAllotted.dequeueFlit();
             else if (direction == Direction.WEST)
-                flit = router.getInLeft().getVclist().get(vcAllotted).dequeueFlit();
+                flit = vcAllotted.dequeueFlit();
             else if (direction == Direction.NORTH)
-                flit = router.getInUp().getVclist().get(vcAllotted).dequeueFlit();
+                flit = vcAllotted.dequeueFlit();
             else if (direction == Direction.SOUTH)
-                flit = router.getInDown().getVclist().get(vcAllotted).dequeueFlit();
+                flit = vcAllotted.dequeueFlit();
 
         }
 
         if (flit.getType() == FlitType.TAIL) {
-            releaseVC(router, vcAllotted, direction);
+            releaseVC(vcAllotted, direction);
 
             if (direction != null)
                 FileWriter.log(direction + " VC (" + vcAllotted + ") of " + router + " RELEASED by " + flit + " at : " + time);
@@ -157,19 +158,19 @@ public class Simulator {
         return flit;
     }
 
-    private void releaseVC(Router router, int vcAllotted, Direction direction) {
+    private void releaseVC(VirtualChannel vcAllotted, Direction direction) {
 
         if (direction == null) {
             return;
         } else {
             if (direction == Direction.EAST)
-                router.getInRight().getVclist().get(vcAllotted).releaseAllottedVC();
+                vcAllotted.releaseAllottedVC();
             else if (direction == Direction.WEST)
-                router.getInLeft().getVclist().get(vcAllotted).releaseAllottedVC();
+                vcAllotted.releaseAllottedVC();
             else if (direction == Direction.NORTH)
-                router.getInUp().getVclist().get(vcAllotted).releaseAllottedVC();
+                vcAllotted.releaseAllottedVC();
             else if (direction == Direction.SOUTH)
-                router.getInDown().getVclist().get(vcAllotted).releaseAllottedVC();
+                vcAllotted.releaseAllottedVC();
         }
     }
 }
